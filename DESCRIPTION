@@ -1,0 +1,17 @@
+Package: scHOT
+Type: Package
+Title: single-cell higher order testing
+Version: 0.1.0
+Author: Shila Ghazanfar
+Maintainer: Shila Ghazanfar  <shazanfar@gmail.com>
+Description: A package to perform single-cell higher order testing
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports:
+    S4Vectors,
+    SingleCellExperiment,
+    Matrix,
+    SummarizedExperiment
+RoxygenNote: 7.0.2
