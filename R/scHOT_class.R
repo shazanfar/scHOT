@@ -1,5 +1,20 @@
 
 
+
+
+#' @importClassesFrom Matrix dgCMatrix
+#'
+
+setClassUnion("matrixORdgCMatrix", c("matrix", "dgCMatrix"))
+
+#' @importClassesFrom S4Vectors DataFrame DFrame
+#'
+
+setClassUnion("data.frameORDataFrame", c("data.frame", "DataFrame"))
+
+
+
+
 #' scHOT class
 #'
 #' @slot testingScaffold A matrix with rows for each testing combination
@@ -19,16 +34,4 @@ setClass("scHOT",
                    scHOT_output = "data.frameORDataFrame",
                    params = "list"),
          contains = "SingleCellExperiment")
-
-
-
-#' @importClassesFrom Matrix dgCMatrix
-#'
-
-setClassUnion("matrixORdgCMatrix", c("matrix", "dgCMatrix"))
-
-#' @importClassesFrom S4Vectors DataFrame DFrame
-#'
-
-setClassUnion("data.frameORDataFrame", c("data.frame", "DataFrame"))
 

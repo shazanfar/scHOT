@@ -13,5 +13,7 @@ Imports:
     S4Vectors,
     SingleCellExperiment,
     Matrix,
-    SummarizedExperiment
+    SummarizedExperiment,
+    methods,
+    stats
 RoxygenNote: 7.0.2

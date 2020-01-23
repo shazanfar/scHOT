@@ -2,7 +2,7 @@
 % Please edit documentation in R/build.R
 \name{scHOT_buildFromMatrix}
 \alias{scHOT_buildFromMatrix}
-\title{Create scHOT object from a matrix}
+\title{scHOT_buildFromMatrix}
 \usage{
 scHOT_buildFromMatrix(mat, cellData = NULL)
 }
@@ -13,4 +13,13 @@ scHOT_buildFromMatrix(mat, cellData = NULL)
 }
 \description{
 Create scHOT object from a matrix
+}
+\examples{
+
+dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
+colnames(dat) <- paste0("cell_", 1:ncol(dat))
+rownames(dat) <- c("T","Gata1", "Tal1")
+
+scHOT <-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+
 }

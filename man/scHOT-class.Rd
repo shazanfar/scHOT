@@ -10,7 +10,7 @@ scHOT class
 \section{Slots}{
 
 \describe{
-\item{\code{testingScaffold}}{A matrix of scaffold}
+\item{\code{testingScaffold}}{A matrix with rows for each testing combination}
 
 \item{\code{weightMatrix}}{A matrix or dgCMatrix indicates the weight matrix}
 
