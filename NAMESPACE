@@ -3,6 +3,8 @@
 export(scHOT_addTestingScaffold)
 export(scHOT_buildFromMatrix)
 export(scHOT_buildFromSCE)
+export(scHOT_calculateGlobalHigherOrderFunction)
+export(scHOT_setPermutationScaffold)
 export(scHOT_setWeightMatrix)
 export(spatialWeightMatrix)
 export(thin)

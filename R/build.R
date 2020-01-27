@@ -372,3 +372,203 @@ scHOT_setWeightMatrix <- function(scHOT,
   return(scHOT)
 }
 
+###################################################################
+
+
+functionOverScaffoldWithWeights = function(testingScaffold,
+                                           expressionData,
+                                           higherOrderFunction,
+                                           weightMatrix) {
+
+  # functionOverScaffoldWithWeights takes in a set of weights and
+  # applies a function to it selectively in such a way that it's
+  # equivalent to a block weight matrix set up
+  # higherOrderFunction must have same number of arguments as testingScaffold
+
+  sapply(1:nrow(weightMatrix), function(i) {
+    apply(testingScaffold, 1, function(x) {
+      argvals = split(expressionData[x, weightMatrix[i, , drop = FALSE] > 0, drop = FALSE],
+                      1:length(x))
+      names(argvals) <- names(formals(higherOrderFunction))[1:length(argvals)]
+      return(do.call(higherOrderFunction, args = argvals))
+    })
+  })
+}
+
+###################################################################
+
+weightedFunctionOverScaffold = function(testingScaffold,
+                                        expressionData,
+                                        weightedHigherOrderFunction,
+                                        weightMatrix) {
+
+  # weightedFunctionOverScaffold takes in a set of weights
+  # and applies a weighted function to it
+  #  weightedFunction must have sample weighting as its first argument
+
+  sapply(1:nrow(weightMatrix), function(i) {
+    apply(testingScaffold, 1, function(x) {
+      argvals = split(rbind(w = weightMatrix[i, , drop = FALSE],
+                            expressionData[x, , drop = FALSE]),
+                      1:(length(x) + 1))
+      names(argvals) <- names(formals(weightedHigherOrderFunction))[1:length(argvals)]
+      return(do.call(weightedHigherOrderFunction, args = argvals))
+    })
+  })
+}
+
+
+###################################################################
+
+
+#' Calculates the global higher order function
+#'
+#' @title scHOT_calculateGlobalHigherOrderFunction
+#'
+#' @description this calculates the global higher order function and stores it in the output
+#' if these aren't found in the params slot then they need to be specified here
+#'
+#' @param scHOT A scHOT object
+#' @param higherOrderFunction A function object indicates the higher order function
+#' @param higherOrderFunctionType is weighted or unweighted, determines if there
+#' is a weighting argument in the higher order function
+#'
+#' @importFrom SummarizedExperiment assay
+#'
+#'
+#' @export
+
+
+
+
+scHOT_calculateGlobalHigherOrderFunction <- function(scHOT,
+                                                    higherOrderFunction = NULL,
+                                                    higherOrderFunctionType = NULL) {
+
+  # this calculates the global higher order function and stores it in the output
+  # if these aren't found in the params slot then they need to be specified here
+  # higherOrderFunctionType is weighted or unweighted, determines if there
+  # is a weighting argument in the higher order function
+
+  if (!is.null(higherOrderFunctionType)) {
+    message("higherOrderFunctionType given will replace any stored param")
+    scHOT@params$higherOrderFunctionType <- higherOrderFunctionType
+  }
+
+  if (!higherOrderFunctionType %in% c("weighted","unweighted")) {
+    stop("higherOrderFunctionType must be either \"weighted\" or \"unweighted\"")
+  }
+
+  if (is.null(higherOrderFunctionType)) {
+    if (is.null(scHOT@params$higherOrderFunctionType)) {
+      stop("higherOrderFunctionType not given and not saved in params, please provide as either \"weighted\" or \"unweighted\"")
+    } else {
+      higherOrderFunctionType <- scHOT@params$higherOrderFunctionType
+    }
+  }
+
+  if (!is.null(higherOrderFunction)) {
+    message("higherOrderFunction given will replace any stored param")
+    scHOT@params$higherOrderFunction <- higherOrderFunction
+  }
+  if (class(higherOrderFunction) != "function") {
+    stop("higherOrderFunction must be a function object")
+  }
+  if (is.null(higherOrderFunction)) {
+    if (is.null(scHOT@params$higherOrderFunction)) {
+      stop("higherOrderFunction not given and not saved in params, please provide as function object")
+    } else {
+      higherOrderFunction <- scHOT@params$higherOrderFunction
+    }
+  }
+
+  testingScaffold = scHOT@testingScaffold
+
+  if (is.null(testingScaffold)) {
+    stop("No testingScaffold found in the scHOT object, please provide one!")
+  }
+
+  expressionData = SummarizedExperiment::assay(scHOT, "expression")
+
+  if (is.null(expressionData)) {
+    stop("No expressionData found, please provide an assay(scHOT, \"expression\") slot")
+  }
+
+  weightMatrix_trivial = matrix(1,nrow = 1, ncol = ncol(expressionData))
+
+  if (higherOrderFunctionType == "unweighted") {
+    global = functionOverScaffoldWithWeights(testingScaffold,
+                                             expressionData,
+                                             higherOrderFunction,
+                                             weightMatrix_trivial)
+  } else {
+    # for weighted
+    global = weightedFunctionOverScaffold(testingScaffold,
+                                          expressionData,
+                                          higherOrderFunction,
+                                          weightMatrix_trivial)
+  }
+
+  if (nrow(scHOT@scHOT_output) == 0) {
+    scHOT@scHOT_output = DataFrame(
+      testingScaffold
+    )
+  }
+  scHOT@scHOT_output$globalHigherOrderFunction <- global
+
+  return(scHOT)
+}
+
+###################################################################
+
+stratifiedSample = function(stats, length = 100) {
+  nsamps = 5
+  ranges = range(stats[is.finite(stats)])
+  fac = cut(stats, seq(from = ranges[1] - 1e-04, to = ranges[2],
+                       length.out = ceiling(length/nsamps)))
+  sampleindices = unlist(tapply(1:length(stats), fac, function(x) {
+    if (length(x) < nsamps)
+      return(x)
+    sample(x, nsamps, replace = FALSE)
+  }))
+  sampleindices = unique(sampleindices[!is.na(sampleindices)])
+  return(sampleindices)
+}
+
+
+
+
+###################################################################
+
+
+#' Set permutation scaffold
+#'
+#' @title scHOT_setPermutationScaffold
+#'
+#' @param scHOT A scHOT object
+#' @param numberPermutations The number of permutatuion, set as 1000 by default
+#' @param numberScaffold The number of scaffold, set as 100 by default
+#'
+#' @export
+
+
+
+
+
+scHOT_setPermutationScaffold = function(scHOT,
+                                        numberPermutations = 1000,
+                                        numberScaffold = 100) {
+
+  # if you want all combinations to do permutations then set numberScaffold much higher than the testingScaffold
+
+  if (is.null(scHOT@scHOT_output$globalHigherOrderFunction)) {
+    stop("need scHOT@scHOT_output$globalHigherOrderFunction to take random sample")
+  }
+
+  scHOT@scHOT_output$numberPermutations = 0
+  scHOT@scHOT_output$numberPermutations[stratifiedSample(scHOT@scHOT_output$globalHigherOrderFunction, length = numberScaffold)] <- numberPermutations
+
+  return(scHOT)
+}
+
+

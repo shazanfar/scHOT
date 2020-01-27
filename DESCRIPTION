@@ -17,3 +17,6 @@ Imports:
     methods,
     stats
 RoxygenNote: 7.0.2
+Suggests: knitr, rmarkdown
+VignetteBuilder: rmarkdown
+

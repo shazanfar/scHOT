@@ -1,0 +1,103 @@
+---
+title: "scHOT"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{scHOT}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r}
+library(SingleCellExperiment)
+library(scHOT)
+```
+
+
+```{r}
+
+dat = rbind(rnorm(50), rnorm(50), rnorm(50))
+colnames(dat) <- paste0("cell_", 1:ncol(dat))
+rownames(dat) <- c("T","Gata1", "Tal1")
+
+
+
+sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
+
+scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+scHOT = scHOT_buildFromSCE(sce)
+
+scHOT
+
+
+scaffoldtwo = rbind(c("Tal1","Gata1"),
+                    c("T", "Tal1"),
+                    c("Gata1", "T"))
+
+
+scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo)
+scHOT@testingScaffold
+
+
+
+colData(scHOT)[,"traj"] <- rep(1:5, each = 10)
+colData(scHOT)[,"spat_x"] <- rnorm(50)
+colData(scHOT)[,"spat_y"] <- rnorm(50)
+colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10))
+
+scHOT <- scHOT_setWeightMatrix(scHOT,
+                               cellPosition = "traj",
+                               positionType = "trajectory",
+                               nrow.out = 20,
+                               type = "triangular",
+                               span = 0.1,
+                               averageAcrossTrajectoryTies = TRUE)
+
+scHOT <- scHOT_setWeightMatrix(scHOT,
+                               cellPosition = "trajWithNA",
+                               positionType = "trajectory",
+                               nrow.out = 20,
+                               type = "triangular",
+                               span = 0.1,
+                               averageAcrossTrajectoryTies = FALSE)
+
+scHOT <- scHOT_setWeightMatrix(scHOT,
+                               cellPosition = c("spat_x","spat_y"),
+                               positionType = "spatial",
+                               nrow.out = 20,
+                               # type = "triangular",
+                               span = 0.1,
+                               # averageAcrossTrajectoryTies = FALSE
+)
+
+
+
+
+weightedPearson2 = function (w = 1, x, y) {
+  if (length(x) != length(y)) 
+    stop("data must be the same length")
+  if (length(w) == 1) {
+    w <- rep(w, length(x))
+  }
+  nw = sum(w)
+  wssx = nw * sum(w * (x^2)) - sum(w * x)^2
+  wssy = nw * sum(w * (y^2)) - sum(w * y)^2
+  wssxy = nw * sum(w * x * y) - sum(w * x) * sum(w * y)
+  wcor = wssxy/sqrt(wssx * wssy)
+  return(wcor)
+}
+
+
+scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT, 
+                                                  higherOrderFunction = weightedPearson2,
+                                                  higherOrderFunctionType = "weighted")
+
+
+
+scHOT <- scHOT_setPermutationScaffold(scHOT, numberPermutations = 1000,
+                                      numberScaffold = 100)
+
+
+scHOT
+
+```
