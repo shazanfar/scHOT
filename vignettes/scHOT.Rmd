@@ -73,7 +73,7 @@ scHOT <- scHOT_setWeightMatrix(scHOT,
 
 
 
-weightedPearson2 = function (w = 1, x, y) {
+weightedPearson2 = function(w = 1, x, y) {
   if (length(x) != length(y)) 
     stop("data must be the same length")
   if (length(w) == 1) {
@@ -93,6 +93,7 @@ scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT,
                                                   higherOrderFunctionType = "weighted")
 
 
+scHOT@scHOT_output
 
 scHOT <- scHOT_setPermutationScaffold(scHOT, numberPermutations = 1000,
                                       numberScaffold = 100)
@@ -100,4 +101,9 @@ scHOT <- scHOT_setPermutationScaffold(scHOT, numberPermutations = 1000,
 
 scHOT
 
+
+scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT,
+                                                  higherOrderSummaryFunction = sd)
+
+scHOT@scHOT_output
 ```
