@@ -1,10 +1,11 @@
 ---
 title: "scHOT"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{scHOT}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 
@@ -95,7 +96,8 @@ scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT,
 
 scHOT@scHOT_output
 
-scHOT <- scHOT_setPermutationScaffold(scHOT, numberPermutations = 1000,
+scHOT <- scHOT_setPermutationScaffold(scHOT, 
+                                      numberPermutations = 1000,
                                       numberScaffold = 100)
 
 
@@ -106,4 +108,18 @@ scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT,
                                                   higherOrderSummaryFunction = sd)
 
 scHOT@scHOT_output
+
+set.seed(2020)
+system.time(scHOT_noParallel <- scHOT_performPermutationTest(scHOT, 
+                                                  verbose = TRUE,
+                                                  parallel = FALSE))
+
+set.seed(2020)
+system.time(scHOT_parallel <- scHOT_performPermutationTest(scHOT, 
+                                                           verbose = TRUE,
+                                                           parallel = TRUE,
+                                                           BPPARAM = MulticoreParam(workers = 4)))
+
+scHOT_noParallel@scHOT_output
+scHOT_parallel@scHOT_output
 ```

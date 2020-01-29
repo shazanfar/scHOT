@@ -548,27 +548,49 @@ stratifiedSample = function(stats, length = 100) {
 #' @param scHOT A scHOT object
 #' @param numberPermutations The number of permutatuion, set as 1000 by default
 #' @param numberScaffold The number of scaffold, set as 100 by default
+#' @param storePermutations  a logical flag on whether
+#' Permutations should be stored, or discarded
 #'
 #' @export
 
 
 
 
-
 scHOT_setPermutationScaffold = function(scHOT,
                                         numberPermutations = 1000,
-                                        numberScaffold = 100) {
+                                        numberScaffold = 100,
+                                        storePermutations = TRUE) {
 
-  # if you want all combinations to do permutations then set numberScaffold much higher than the testingScaffold
+  # if you want all combinations to do permutations then set
+  # numberScaffold much higher than the testingScaffold
+  # storePermutations is a logical flag on whether
+  # Permutations should be stored,
+  # or discarded
 
-  if (is.null(scHOT@scHOT_output$globalHigherOrderFunction)) {
-    stop("need scHOT@scHOT_output$globalHigherOrderFunction to take random sample")
+  if (nrow(scHOT@scHOT_output) == 0) {
+    scHOT@scHOT_output = DataFrame(
+      testingScaffold
+    )
   }
 
-  scHOT@scHOT_output$numberPermutations = 0
-  scHOT@scHOT_output$numberPermutations[stratifiedSample(scHOT@scHOT_output$globalHigherOrderFunction, length = numberScaffold)] <- numberPermutations
+  if (numberScaffold > nrow(scHOT@testingScaffold)) {
+    message(paste0("numberScaffold set higher than the scaffold,",
+                   " performing permutations for all tests"))
+    scHOT@scHOT_output$numberPermutations = numberPermutations
+  } else {
+
+    if (is.null(scHOT@scHOT_output$globalHigherOrderFunction)) {
+      stop(paste("need scHOT@scHOT_output$globalHigherOrderFunction to",
+                 " take random stratified sample"))
+    }
+
+    scHOT@scHOT_output$numberPermutations = 0
+    scHOT@scHOT_output$numberPermutations[
+      stratifiedSample(
+        scHOT@scHOT_output$globalHigherOrderFunction,
+        length = numberScaffold)] <- numberPermutations
+  }
+  scHOT@scHOT_output$storePermutations = storePermutations
 
   return(scHOT)
 }
-
-

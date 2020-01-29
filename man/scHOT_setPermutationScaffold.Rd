@@ -7,7 +7,8 @@
 scHOT_setPermutationScaffold(
   scHOT,
   numberPermutations = 1000,
-  numberScaffold = 100
+  numberScaffold = 100,
+  storePermutations = TRUE
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ scHOT_setPermutationScaffold(
 \item{numberPermutations}{The number of permutatuion, set as 1000 by default}
 
 \item{numberScaffold}{The number of scaffold, set as 100 by default}
+
+\item{storePermutations}{a logical flag on whether
+Permutations should be stored, or discarded}
 }
 \description{
 Set permutation scaffold
