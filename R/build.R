@@ -567,6 +567,12 @@ scHOT_setPermutationScaffold = function(scHOT,
   # Permutations should be stored,
   # or discarded
 
+  testingScaffold = scHOT@testingScaffold
+
+  if (is.null(testingScaffold)) {
+    stop("No testingScaffold found in the scHOT object, please provide one!")
+  }
+
   if (nrow(scHOT@scHOT_output) == 0) {
     scHOT@scHOT_output = DataFrame(
       testingScaffold

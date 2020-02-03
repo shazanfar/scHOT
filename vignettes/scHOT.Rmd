@@ -1,13 +1,11 @@
 ---
-title: "scHOT"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{scHOT}
+  %\VignetteIndexEntry{Getting start: scHOT}
   %\usepackage[UTF-8]{inputenc}
 ---
-
 
 ```{r}
 library(SingleCellExperiment)
@@ -122,4 +120,13 @@ system.time(scHOT_parallel <- scHOT_performPermutationTest(scHOT,
 
 scHOT_noParallel@scHOT_output
 scHOT_parallel@scHOT_output
+
+
+scHOT_parallel <- scHOT_estimatePvalues(scHOT_parallel)
+scHOT_parallel@scHOT_output
+```
+
+
+```{r}
+sessionInfo()
 ```

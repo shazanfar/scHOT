@@ -20,6 +20,9 @@ scHOT_performPermutationTest(
 
 \item{BPPARAM}{A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().}
 }
+\value{
+scHOT A scHOT object with results stored in scHOT_output slot
+}
 \description{
 Perform permutation test
 }

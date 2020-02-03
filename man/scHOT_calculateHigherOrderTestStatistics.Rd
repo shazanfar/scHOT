@@ -17,6 +17,9 @@ scHOT_calculateHigherOrderTestStatistics(
 
 \item{...}{parameters for higherOrderSummaryFunction}
 }
+\value{
+scHOT A scHOT object with results stored in scHOT_output slot
+}
 \description{
 Calculate and store the higherOrderSequence and higherOrderTestStatistic
 }

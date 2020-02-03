@@ -14,6 +14,8 @@
 #' @importFrom SummarizedExperiment assay
 #' @importFrom IRanges NumericList
 #'
+#' @return scHOT A scHOT object with results stored in scHOT_output slot
+#'
 #' @export
 
 
@@ -103,6 +105,10 @@ scHOT_calculateHigherOrderTestStatistics <- function(
 }
 
 
+
+###################################################################
+
+
 #' Perform permutation test
 #'
 #' @title scHOT_performPermutationTest
@@ -116,6 +122,8 @@ scHOT_calculateHigherOrderTestStatistics <- function(
 #' @importFrom IRanges NumericList
 #' @importFrom stats p.adjust na.omit
 #' @importFrom BiocParallel bplapply SerialParam
+#'
+#' @return scHOT A scHOT object with results stored in scHOT_output slot
 #'
 #' @export
 
@@ -271,3 +279,186 @@ scHOT_performPermutationTest <- function(scHOT,
   return(scHOT)
 
 }
+
+
+
+###################################################################
+#'
+#' @importFrom reshape sort_df
+#'
+
+estimatePvalues <- function(stats,
+                           globalCors,
+                           permstats,
+                           usenperm = FALSE,
+                           nperm = 10000,
+                           maxDist = 0.1,
+                           plot = FALSE,
+                           verbose = FALSE) {
+
+  if (plot) {
+    plot(globalCors[names(permstats)],
+         unlist(lapply(permstats,
+                       function(x) mean(unlist(x)))),
+         xlab = "Global Spearman correlation",
+         ylab = "Mean of permuted statistics")
+  }
+
+
+  # melt permstats list
+  permstatsDF = data.frame(
+    genepair = rep(names(permstats),
+                   times = unlist(
+                     lapply(permstats, function(x) length(unlist(x))))),
+    stat = unlist(permstats))
+
+  # add globalCor in the permstats data frame
+  permstatsDF$globalCor = globalCors[as.character(permstatsDF$genepair)]
+
+
+  # this can be do it in parallel
+  results = sapply(names(stats), function(genepair) {
+
+    if (verbose) {
+      print(genepair)
+    }
+
+    stat = stats[genepair]
+    globalCor = globalCors[genepair]
+
+    permstatsDF$dist = abs(permstatsDF$globalCor - globalCor)
+
+    if (usenperm) {
+      if (nperm >= nrow(permstatsDF)) {
+        message(paste0("nperm given is larger than or equal to total",
+                       " number of permutations... using all",
+                       " permutations"))
+        permstatsDF_sorted_sub = permstatsDF
+      }
+      else {
+        permstatsDF_sorted = reshape::sort_df(permstatsDF, "dist")
+        permstatsDF_sorted_sub = permstatsDF_sorted[1:nperm, ]
+      }
+    }
+    else {
+      if (is.null(maxDist)) {
+        message(paste0("usenperm set as FALSE, but maxDist not",
+                       " given... defaulting to maxDist = 0.1"))
+        maxDist = 0.1
+      }
+      permstatsDF_sorted_sub = subset(permstatsDF, dist <
+                                        maxDist)
+      if (nrow(permstatsDF_sorted_sub) == 0) {
+        message(paste0("no permutations found within given",
+                       " maxDist... using all permutations instead"))
+        permstatsDF_sorted_sub = permstatsDF
+      }
+    }
+    permstats_sub = permstatsDF_sorted_sub$stat
+
+
+    if (length(permstats_sub) == 0)
+      stop("please set a larger maxDist, or set a larger usenperm")
+
+    pval = mean(permstats_sub >= stat)
+    if (pval == 0) {
+      pval = 1/(1 + length(permstats_sub))
+    }
+    nperm = nrow(permstatsDF_sorted_sub)
+    globalCorMin = min(permstatsDF_sorted_sub$globalCor)
+    globalCorMax = max(permstatsDF_sorted_sub$globalCor)
+    return(data.frame(genepair = genepair,
+                      stat = stat,
+                      globalCor = globalCor,
+                      pval = pval,
+                      nperm = nperm,
+                      globalCorMin = globalCorMin,
+                      globalCorMax = globalCorMax))
+  }, simplify = FALSE)
+
+  resultsDF = do.call(rbind, results)
+  return(resultsDF)
+}
+
+
+
+###################################################################
+
+#' Estimate p-values based on already run permutation tests
+#'
+#' @title scHOT_estimatePvalues
+#'
+#' @param scHOT A scHOT object
+#' @param usenperm SHILA to write
+#' @param nperm number of permutation
+#' @param maxDist SHILA to write
+#' @param plot A logical input indicates whether the results are plotted
+#' @param verbose A logical input indicates whether the intermediate steps will be printed
+#'
+#' @return scHOT A scHOT object with results stored in scHOT_output slot
+#'
+#'
+#' @importFrom stats p.adjust
+#'
+#' @export
+#'
+
+scHOT_estimatePvalues <- function(scHOT,
+                                 usenperm = FALSE,
+                                 nperm = 10000,
+                                 maxDist = 0.1,
+                                 plot = FALSE,
+                                 verbose = FALSE) {
+
+  stats = scHOT@scHOT_output$higherOrderStatistic
+  globalCors = scHOT@scHOT_output$globalHigherOrderFunction
+  permstats = as.list(scHOT@scHOT_output$permutations)
+
+
+  # check the input
+
+  if (is.null(stats)) {
+    stop("No higherOrderStatistic found in scHOT object's scHOT_output slot,
+         please run function scHOT_calculateHigherOrderTestStatistics!")
+  }
+
+  if (is.null(globalCors)) {
+    stop("No globalHigherOrderFunction found in scHOT object's scHOT_output slot,
+         please run function scHOT_calculateGlobalHigherOrderFunction!")
+  }
+
+  if (is.null(permstats)) {
+    stop("No permutations found in scHOT object's scHOT_output slot,
+         please run function scHOT_performPermutationTest!")
+  }
+
+
+
+
+  if (is.null(names(stats))) {
+    names(stats) <- paste0("stat_", 1:length(stats))
+  }
+
+  names(globalCors) <- names(stats)
+  names(permstats) <- names(stats)
+
+  out = estimatePvalues(stats,
+                        globalCors,
+                        permstats,
+                        usenperm,
+                        nperm,
+                        maxDist,
+                        plot,
+                        verbose)
+
+
+  scHOT@scHOT_output$numberPermutationsEstimated = out$nperm
+  scHOT@scHOT_output$globalLowerRangeEstimated = out$globalCorMin
+  scHOT@scHOT_output$globalUpperRangeEstimated = out$globalCorMax
+  scHOT@scHOT_output$pvalEstimated = out$pval
+  scHOT@scHOT_output$FDREstimated = stats::p.adjust(
+    scHOT@scHOT_output$pvalEstimated, method = "BH")
+
+  return(scHOT)
+}
+
