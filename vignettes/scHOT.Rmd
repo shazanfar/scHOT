@@ -177,6 +177,39 @@ scHOT <- scHOT_estimatePvalues(scHOT)
 
 ```
 
+
+```{r}
+dat = rbind(rnorm(500), rnorm(500), rnorm(500))
+colnames(dat) <- paste0("cell_", 1:ncol(dat))
+rownames(dat) <- c("T","Gata1", "Tal1")
+
+
+
+sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
+
+scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+scHOT = scHOT_buildFromSCE(sce)
+
+scHOT
+
+
+scaffoldtwo = rbind(c("Tal1","Gata1"),
+                    c("T", "Tal1"),
+                    c("Gata1", "T"))
+
+
+scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo)
+scHOT@testingScaffold
+
+
+
+colData(scHOT)[,"traj"] <- rep(1:5, each = 100)
+
+plotColouredExpression(scHOT, c("Tal1", "Gata1"), "traj", n = 2)
+
+plotColouredExpression(scHOT, c("Tal1", "Gata1"), NULL, n = 3)
+```
+
 ```{r}
 sessionInfo()
 ```

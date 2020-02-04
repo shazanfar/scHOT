@@ -343,7 +343,7 @@ scHOT_setWeightMatrix <- function(scHOT,
 
       weightMatrix = trajectoryWeightMatrix(n, ...)
       colnames(weightMatrix) <- colnames(scHOT)
-      weightMatrix = weightMatrix[ , order(colData(scHOT)[,cellPosition], na.last = NA), drop = FALSE]
+      weightMatrix = weightMatrix[ , order(colData(scHOT)[, cellPosition], na.last = NA), drop = FALSE]
 
       if (averageAcrossTrajectoryTies) {
         # average across ties
@@ -356,7 +356,7 @@ scHOT_setWeightMatrix <- function(scHOT,
     }
 
     if (positionType == "spatial") {
-      weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[,cellPosition]), ...)
+      weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[, cellPosition]), ...)
       colnames(weightMatrix) <- colnames(scHOT)
     }
 

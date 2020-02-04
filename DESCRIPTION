@@ -18,7 +18,8 @@ Imports:
     methods,
     stats,
     BiocParallel,
-    reshape
+    reshape,
+    ggplot2
 RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
