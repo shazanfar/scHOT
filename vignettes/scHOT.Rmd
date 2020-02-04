@@ -128,5 +128,55 @@ scHOT_parallel@scHOT_output
 
 
 ```{r}
+
+sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
+
+scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+
+
+scHOT = scHOT_buildFromSCE(sce)
+
+scaffoldtwo = rbind(c("Tal1","Gata1"),
+                    c("T", "Tal1"),
+                    c("Gata1", "T"))
+
+scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo)
+
+colData(scHOT)[,"traj"] <- rep(1:5, each = 10)
+colData(scHOT)[,"spat_x"] <- rnorm(50)
+colData(scHOT)[,"spat_y"] <- rnorm(50)
+colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10))
+
+scHOT <- scHOT_setWeightMatrix(scHOT,
+                               cellPosition = "traj",
+                               positionType = "trajectory",
+                               nrow.out = 20,
+                               type = "triangular",
+                               span = 0.1,
+                               averageAcrossTrajectoryTies = TRUE)
+
+scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT, 
+                                                  higherOrderFunction = weightedPearson2,
+                                                  higherOrderFunctionType = "weighted")
+
+
+scHOT <- scHOT_setPermutationScaffold(scHOT, 
+                                      numberPermutations = 1000,
+                                      numberScaffold = 100)
+
+
+scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT,
+                                                  higherOrderSummaryFunction = sd)
+
+scHOT <- scHOT_performPermutationTest(scHOT, 
+                                      verbose = TRUE,
+                                      parallel = TRUE,
+                                      BPPARAM = MulticoreParam(workers = 4))
+
+scHOT <- scHOT_estimatePvalues(scHOT)
+
+```
+
+```{r}
 sessionInfo()
 ```
