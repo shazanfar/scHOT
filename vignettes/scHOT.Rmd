@@ -208,6 +208,10 @@ colData(scHOT)[,"traj"] <- rep(1:5, each = 100)
 plotColouredExpression(scHOT, c("Tal1", "Gata1"), "traj", n = 2)
 
 plotColouredExpression(scHOT, c("Tal1", "Gata1"), NULL, n = 3)
+
+
+plotOrderedExpression(scHOT, c("Tal1", "Gata1"), branches = "traj", facet = "branch")
+plotOrderedExpression(scHOT, c("Tal1", "Gata1"), facet = FALSE)
 ```
 
 ```{r}
