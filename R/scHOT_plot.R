@@ -1,12 +1,3 @@
-# yes 	 plotColouredExpression
-# yes 	 plotEgoNetwork
-# yes 	 plotNetworkPathway
-# yes 	 plotOrderedExpression
-# yes 	 plotWCorLine
-# yes 	 plotWcorsClusterPathway
-
-
-
 
 
 ##############################################
@@ -287,5 +278,204 @@ plotOrderedExpression = function(scHOT,
 }
 
 
+##############################################
+
+#' the plotEgoNetwork function plots network graphs with edges coloured by weights in the network
+#'
+#' @title plotEgoNetwork
+#' @param scHOT a scHOT object
+#' @param hubnode is a character vector of node(s) to include as hub nodes
+#' @param network is an igraph network
+#' @param weight A string indicates the column name stored in scHOT_output slot that are used as the weights of the network
+#' @param subset is a logical asking if you should subset based on the weight (default FALSE)
+#' @param thresh is the subset weight threshold
+#' @return \code{igraph} object containing the network graphed. Produces an igraph plot
+#'
+#'
+#' @import igraph
+#' @importFrom graphics plot
+#'
+#' @export
+
+
+plotEgoNetwork = function(scHOT, hubnode, network,
+                          weight = "higherOrderStatistic",
+                          subset = FALSE,
+                          thresh = NULL) {
+
+
+  # hubnode is a character vector of node(s) to include as hub nodes
+  # g is an igraph network, with E(g)[[weight]] given as DCARS test statistics
+  # weight is a character vector containing edge weights, associated with different branches
+  # subset is a logical asking if you should subset based on the weight
+  # thresh is the subset weight threshold
+
+  if (is.null(weight)) {
+    igraph::E(network)$weight <- rep(1, ncol(scHOT))
+  } else {
+    if (!(weight %in% colnames(scHOT@scHOT_output))) {
+      stop("weight provided is not found in scHOT_output")
+    }
+
+    igraph::E(network)$weight <- scHOT@scHOT_output[, weight]
+  }
+
+  if (!hubnode %in% names(V(network))) {
+    stop("The provided hubnode is not a node in the network")
+  }
+
+
+  nodes = unique(names(unlist(igraph::neighborhood(network, nodes = hubnode))))
+  subego = igraph::induced.subgraph(network, vids = nodes)
+  subego = igraph::simplify(subego, edge.attr.comb = "mean")
+
+  if (subset) {
+    if (!all(weight %in% names(edge_attr(subego)))) {
+      stop("at least one weight missing from edge attributes, either re-specify weights or rerun with subset = FALSE")
+    }
+    if (is.null(thresh)) {
+      message("no threshold given, using 0 as default")
+      thresh = 0
+    }
+    keepedges = apply(sapply(weight, function(w) igraph::edge_attr(subego)[[w]] > thresh,
+                             simplify = TRUE),1,any)
+    subego = igraph::subgraph.edges(subego, which(keepedges))
+  }
+
+  igraph::V(subego)$color = "beige"
+  igraph::V(subego)$label.color = "black"
+  igraph::V(subego)$label.family = "sans"
+  igraph::V(subego)$label.cex = 0.7
+  igraph::V(subego)$size = 20
+  igraph::V(subego)$frame.color = "black"
+  igraph::V(subego)$frame.size = 5
+  lyout = igraph::layout.davidson.harel(subego)
+  width = 5
+
+  maxval = ceiling(max(50*unlist(edge_attr(subego)[["weight"]])))
+  colvals = grDevices::colorRampPalette(c("grey","red"))(maxval)
+
+  graphics::plot(subego, layout = lyout,
+                 edge.color = colvals[ceiling(50*edge_attr(subego)[["weight"]])],
+                 edge.width = width,
+                 # xlab = "weight",
+                 main = hubnode)
+
+  # par(mfrow = c(1,length(weight)))
+  #
+  # for (i in weight) {
+  #   plot(subego, layout = lyout,
+  #        edge.color = colvals[ceiling(50*edge_attr(subego)[["weight"]])],
+  #        edge.width = width,
+  #        xlab = i,
+  #        main = hubnode)
+  # }
+  return(subego)
+}
+
+
+##############################################
+
+
+#' the plotHigherOrderSequence function plots weighted correlation vectors (stored in higherOrderSequence) as line plots
+#'
+#' @title plotHigherOrderSequence
+#' @param scHOT A scHOT object with higherOrderSequence in scHOT_output slot
+#' @param gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
+#' @param branches A character indicates that the colnames stored the branch information in colData
+#' @return \code{ggplot} object with line plots
+#'
+#'
+#'
+#'
+#' @importFrom reshape melt
+#' @import ggplot2
+#'
+#' @export
+#'
+plotHigherOrderSequence <- function(scHOT, gene, branches = NULL) {
+
+  # wcorsList is a list of matrices, with each matrix gene pair x samples weighted correlation vectors,
+  # assumed that they have same number of rows
+  # gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
+  # matchExact matches gene names by splitting instead of using grep, but is slower
+
+  if (!("higherOrderSequence" %in% colnames(scHOT@scHOT_output))) {
+    stop("higherOrderSequence is not found in scHOT_output")
+  }
+
+  wcor <- as.matrix(scHOT@scHOT_output$higherOrderSequence)
+  rownames(wcor) <- paste(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
+
+  if (is.null(branches)) {
+    message("branches information is not provided")
+    wcorsList = list(Branch = wcor)
+  } else {
+    if (!(branches %in% colnames(colData(scHOT)))) {
+      stop("branches provided is not found in colData(scHOT)")
+    }
+
+    branch_info <- SummarizedExperiment::colData(scHOT)[, branches]
+
+    wcorsList <- lapply(split(seq_along(branch_info), branch_info),
+                         function(idx) wcor[, idx])[order(unique(branch_info))]
+  }
+
+
+
+  if (is.null(names(wcorsList))) {
+    names(wcorsList) <- paste0("Branch_",1:length(wcorsList))
+  }
+
+  if (is.logical(gene[1])) {
+
+    if (length(unique(unlist(lapply(wcorsList,nrow)))) > 1) {
+      stop("cannot use logical subset when weighted correlation matrices have differing rows")
+    }
+
+    if (length(gene) != nrow(wcorsList[[1]])) {
+      stop("cannot use logical subset when length of gene doesn't match nrow of wcorsList matrices")
+    }
+
+    wcors_longList = lapply(wcorsList,function(branch){
+      reshape::melt(t(branch[gene,]))
+    })
+
+    gene = ""
+  } else {
+
+    gene = paste0(sort(gene), collapse = "|")
+
+    wcors_longList = lapply(wcorsList,function(branch){
+      reshape::melt(t(branch[grepl(gene,rownames(branch)),]))
+    })
+
+  }
+
+  branch_long = do.call(rbind,wcors_longList)
+  branch_long = cbind(
+    rep(names(wcors_longList), unlist(lapply(wcors_longList,nrow))),
+    branch_long)
+  colnames(branch_long) = c("branch","SampleOrder", "GenePair","WeightedCorrelation")
+
+
+  g <- ggplot(branch_long,
+             aes(x = branch_long$SampleOrder,
+                 y = branch_long$WeightedCorrelation,
+                 group = branch_long$GenePair,
+                 col = branch_long$GenePair)) +
+    geom_line(size = 2, alpha = 0.6) +
+    facet_grid(~branch, scales = "free_x") +
+    theme_minimal() +
+    ylim(c(-1,1)) +
+    geom_hline(yintercept = 0, size = 1, colour = "grey") +
+    ggtitle(gene) +
+    xlab("Sample Order") +
+    ylab("Weighted Correlation") +
+    labs(col = "Gene Pair") +
+    NULL
+
+  return(g)
+}
 
 

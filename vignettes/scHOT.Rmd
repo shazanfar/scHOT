@@ -127,92 +127,116 @@ scHOT_parallel@scHOT_output
 ```
 
 
-```{r}
+<!-- ```{r} -->
 
-sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
+<!-- sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat)) -->
 
-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
-
-
-scHOT = scHOT_buildFromSCE(sce)
-
-scaffoldtwo = rbind(c("Tal1","Gata1"),
-                    c("T", "Tal1"),
-                    c("Gata1", "T"))
-
-scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo)
-
-colData(scHOT)[,"traj"] <- rep(1:5, each = 10)
-colData(scHOT)[,"spat_x"] <- rnorm(50)
-colData(scHOT)[,"spat_y"] <- rnorm(50)
-colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10))
-
-scHOT <- scHOT_setWeightMatrix(scHOT,
-                               cellPosition = "traj",
-                               positionType = "trajectory",
-                               nrow.out = 20,
-                               type = "triangular",
-                               span = 0.1,
-                               averageAcrossTrajectoryTies = TRUE)
-
-scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT, 
-                                                  higherOrderFunction = weightedPearson2,
-                                                  higherOrderFunctionType = "weighted")
+<!-- scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat))) -->
 
 
-scHOT <- scHOT_setPermutationScaffold(scHOT, 
-                                      numberPermutations = 1000,
-                                      numberScaffold = 100)
+<!-- scHOT = scHOT_buildFromSCE(sce) -->
+
+<!-- scaffoldtwo = rbind(c("Tal1","Gata1"), -->
+<!--                     c("T", "Tal1"), -->
+<!--                     c("Gata1", "T")) -->
+
+<!-- scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo) -->
+
+<!-- colData(scHOT)[,"traj"] <- rep(1:5, each = 10) -->
+<!-- colData(scHOT)[,"spat_x"] <- rnorm(50) -->
+<!-- colData(scHOT)[,"spat_y"] <- rnorm(50) -->
+<!-- colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10)) -->
+
+<!-- scHOT <- scHOT_setWeightMatrix(scHOT, -->
+<!--                                cellPosition = "traj", -->
+<!--                                positionType = "trajectory", -->
+<!--                                nrow.out = 20, -->
+<!--                                type = "triangular", -->
+<!--                                span = 0.1, -->
+<!--                                averageAcrossTrajectoryTies = TRUE) -->
+
+<!-- scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT,  -->
+<!--                                                   higherOrderFunction = weightedPearson2, -->
+<!--                                                   higherOrderFunctionType = "weighted") -->
 
 
-scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT,
-                                                  higherOrderSummaryFunction = sd)
-
-scHOT <- scHOT_performPermutationTest(scHOT, 
-                                      verbose = TRUE,
-                                      parallel = TRUE,
-                                      BPPARAM = MulticoreParam(workers = 4))
-
-scHOT <- scHOT_estimatePvalues(scHOT)
-
-```
+<!-- scHOT <- scHOT_setPermutationScaffold(scHOT,  -->
+<!--                                       numberPermutations = 1000, -->
+<!--                                       numberScaffold = 100) -->
 
 
-```{r}
-dat = rbind(rnorm(500), rnorm(500), rnorm(500))
-colnames(dat) <- paste0("cell_", 1:ncol(dat))
-rownames(dat) <- c("T","Gata1", "Tal1")
+<!-- scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT, -->
+<!--                                                   higherOrderSummaryFunction = sd) -->
+
+<!-- scHOT <- scHOT_performPermutationTest(scHOT,  -->
+<!--                                       verbose = TRUE, -->
+<!--                                       parallel = TRUE, -->
+<!--                                       BPPARAM = MulticoreParam(workers = 4)) -->
+
+<!-- scHOT <- scHOT_estimatePvalues(scHOT) -->
+
+<!-- ``` -->
 
 
+<!-- ```{r} -->
 
-sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
+<!-- sce = SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = SKCM)) -->
 
-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
-scHOT = scHOT_buildFromSCE(sce)
+<!-- scHOT = scHOT_buildFromSCE(sce) -->
 
-scHOT
-
-
-scaffoldtwo = rbind(c("Tal1","Gata1"),
-                    c("T", "Tal1"),
-                    c("Gata1", "T"))
-
-
-scHOT = scHOT_addTestingScaffold(scHOT, scaffoldtwo)
-scHOT@testingScaffold
+<!-- scHOT -->
 
 
 
-colData(scHOT)[,"traj"] <- rep(1:5, each = 100)
-
-plotColouredExpression(scHOT, c("Tal1", "Gata1"), "traj", n = 2)
-
-plotColouredExpression(scHOT, c("Tal1", "Gata1"), NULL, n = 3)
+<!-- STRING_subset <- STRING[sample(nrow(STRING), 30),] -->
+<!-- scHOT = scHOT_addTestingScaffold(scHOT, STRING_subset) -->
+<!-- scHOT@testingScaffold -->
 
 
-plotOrderedExpression(scHOT, c("Tal1", "Gata1"), branches = "traj", facet = "branch")
-plotOrderedExpression(scHOT, c("Tal1", "Gata1"), facet = FALSE)
-```
+
+<!-- colData(scHOT)[,"traj"] <- c(rep(1, 100), rep(2, 70), rep(3, 50)) -->
+
+<!-- plotColouredExpression(scHOT, c("SKP1", "SKP2"), "traj", n = 2) -->
+
+<!-- plotColouredExpression(scHOT, c("SKP1", "SKP2"), NULL, n = 3) -->
+
+
+<!-- plotOrderedExpression(scHOT, c("SKP1", "SKP2"), branches = "traj", facet = "branch") -->
+<!-- plotOrderedExpression(scHOT, c("SKP1", "SKP2"), facet = FALSE) -->
+
+
+<!-- scHOT <- scHOT_setWeightMatrix(scHOT, -->
+<!--                                cellPosition = "traj", -->
+<!--                                positionType = "trajectory", -->
+<!--                                nrow.out = 20, -->
+<!--                                type = "triangular", -->
+<!--                                span = 0.1, -->
+<!--                                averageAcrossTrajectoryTies = TRUE) -->
+
+<!-- scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT,  -->
+<!--                                                   higherOrderFunction = weightedPearson2, -->
+<!--                                                   higherOrderFunctionType = "weighted") -->
+
+
+<!-- scHOT <- scHOT_setPermutationScaffold(scHOT,  -->
+<!--                                       numberPermutations = 1000, -->
+<!--                                       numberScaffold = 100) -->
+
+
+<!-- scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT, -->
+<!--                                                   higherOrderSummaryFunction = sd) -->
+
+<!-- scHOT <- scHOT_performPermutationTest(scHOT,  -->
+<!--                                       verbose = TRUE, -->
+<!--                                       parallel = TRUE, -->
+<!--                                       BPPARAM = MulticoreParam(workers = 2)) -->
+
+<!-- scHOT <- scHOT_estimatePvalues(scHOT) -->
+
+<!-- SKCM_graph = graph.edgelist(STRING_subset, directed = FALSE) -->
+<!-- plotEgoNetwork(scHOT, hubnode = c("MCM5"), network = SKCM_graph) -->
+<!-- ``` -->
+
 
 ```{r}
 sessionInfo()

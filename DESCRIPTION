@@ -19,7 +19,9 @@ Imports:
     stats,
     BiocParallel,
     reshape,
-    ggplot2
+    ggplot2,
+    igraph,
+    grDevices
 RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

@@ -145,7 +145,7 @@ scHOT_performPermutationTest <- function(scHOT,
 
   higherOrderFunction <- scHOT@params$higherOrderFunction
   if (is.null(higherOrderFunction)) {
-   stop("No higherOrderFunction found in scHOT object's params slot, please provide one
+    stop("No higherOrderFunction found in scHOT object's params slot, please provide one
          or run scHOT_calculateGlobalHigherOrderFunction!")  }
 
 
@@ -284,24 +284,25 @@ scHOT_performPermutationTest <- function(scHOT,
 
 ###################################################################
 #'
+#' @importFrom graphics plot
 #' @importFrom reshape sort_df
 #'
 
 estimatePvalues <- function(stats,
-                           globalCors,
-                           permstats,
-                           usenperm = FALSE,
-                           nperm = 10000,
-                           maxDist = 0.1,
-                           plot = FALSE,
-                           verbose = FALSE) {
+                            globalCors,
+                            permstats,
+                            usenperm = FALSE,
+                            nperm = 10000,
+                            maxDist = 0.1,
+                            plot = FALSE,
+                            verbose = FALSE) {
 
   if (plot) {
-    plot(globalCors[names(permstats)],
-         unlist(lapply(permstats,
-                       function(x) mean(unlist(x)))),
-         xlab = "Global Spearman correlation",
-         ylab = "Mean of permuted statistics")
+    graphics::plot(globalCors[names(permstats)],
+                   unlist(lapply(permstats,
+                                 function(x) mean(unlist(x)))),
+                   xlab = "Global Spearman correlation",
+                   ylab = "Mean of permuted statistics")
   }
 
 
@@ -333,27 +334,29 @@ estimatePvalues <- function(stats,
         message(paste0("nperm given is larger than or equal to total",
                        " number of permutations... using all",
                        " permutations"))
-        permstatsDF_sorted_sub = permstatsDF
+        # permstatsDF_sorted_sub = permstatsDF
+        permstatsDF_sorted_sub = na.omit(permstatsDF)
       }
       else {
-        permstatsDF_sorted = reshape::sort_df(permstatsDF, "dist")
+        permstatsDF_sorted = reshape::sort_df(na.omit(permstatsDF), "dist")
         permstatsDF_sorted_sub = permstatsDF_sorted[1:nperm, ]
       }
-    }
-    else {
+    } else {
       if (is.null(maxDist)) {
         message(paste0("usenperm set as FALSE, but maxDist not",
                        " given... defaulting to maxDist = 0.1"))
         maxDist = 0.1
       }
-      permstatsDF_sorted_sub = subset(permstatsDF, dist <
+
+      permstatsDF_sorted_sub = subset(na.omit(permstatsDF), dist <
                                         maxDist)
       if (nrow(permstatsDF_sorted_sub) == 0) {
         message(paste0("no permutations found within given",
                        " maxDist... using all permutations instead"))
-        permstatsDF_sorted_sub = permstatsDF
+        permstatsDF_sorted_sub = na.omit(permstatsDF)
       }
     }
+
     permstats_sub = permstatsDF_sorted_sub$stat
 
 
@@ -404,11 +407,11 @@ estimatePvalues <- function(stats,
 #'
 
 scHOT_estimatePvalues <- function(scHOT,
-                                 usenperm = FALSE,
-                                 nperm = 10000,
-                                 maxDist = 0.1,
-                                 plot = FALSE,
-                                 verbose = FALSE) {
+                                  usenperm = FALSE,
+                                  nperm = 10000,
+                                  maxDist = 0.1,
+                                  plot = FALSE,
+                                  verbose = FALSE) {
 
   stats = scHOT@scHOT_output$higherOrderStatistic
   globalCors = scHOT@scHOT_output$globalHigherOrderFunction
