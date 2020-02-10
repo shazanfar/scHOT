@@ -17,5 +17,9 @@ scHOT class
 \item{\code{scHOT_output}}{A data.frame or DtatFrame to store output from scHOT}
 
 \item{\code{params}}{A list of parameters}
+
+\item{\code{positionType}}{A character indicates the type of the position, either trajectory or spatial}
+
+\item{\code{positionColData}}{A vector indicates column names of colData that stored the postion informaton}
 }}
 

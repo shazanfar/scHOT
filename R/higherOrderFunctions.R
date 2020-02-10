@@ -95,9 +95,9 @@ weightedZIKendall <- function(x, y, w = 1) {
 #' the weightedPearson function
 #'
 #' @title weightedPearson
+#' @param w weight vector, values should be between 0 and 1
 #' @param x x and y are data vectors
 #' @param y x and y are data vectors
-#' @param w weight vector, values should be between 0 and 1
 #' @return \code{numeric} weighted correlation value between x and y
 
 #' @examples
@@ -132,9 +132,9 @@ weightedPearson = function(x, y, w = 1) {
 #' the weightedSpearman function
 #'
 #' @title weightedSpearman
+#' @param w weight vector, values should be between 0 and 1
 #' @param x x and y are data vectors
 #' @param y x and y are data vectors
-#' @param w weight vector, values should be between 0 and 1
 #' @return \code{numeric} weighted correlation value between x and y
 
 #' @examples
@@ -146,7 +146,7 @@ weightedPearson = function(x, y, w = 1) {
 #'
 #' @export
 
-weightedSpearman = function(x,y,w = 1) {
+weightedSpearman = function(x, y, w = 1) {
 
   if (length(x) != length(y)) {
     stop("x and y should have the same length")
@@ -159,7 +159,7 @@ weightedSpearman = function(x,y,w = 1) {
 
   xr = rank(x[keep])
   yr = rank(y[keep])
-  return(weightedPearson(xr, yr, w[keep]))
+  return(weightedPearson(x = xr, y = yr, w =w[keep]))
 }
 
 
@@ -172,9 +172,9 @@ weightedSpearman = function(x,y,w = 1) {
 #' the weightedVariance function
 #'
 #' @title weightedVariance
+#' @param w weight vector, values should be between 0 and 1
 #' @param x x is a data vector
 #' @param y default to NULL, if given it is ignored
-#' @param w weight vector, values should be between 0 and 1
 #' @return \code{numeric} weighted variance value for x
 
 #' @examples
@@ -205,9 +205,9 @@ weightedVariance = function(x, y = NULL, w) {
 #' the weightedZISpearman function calculates weighted rho\*, where rho\* is described in Pimentel et al (2009). This association measure is defined for zero-inflated, non-negative random variables.
 #'
 #' @title weightedZISpearman
+#' @param w weight vector, values should be between 0 and 1
 #' @param x x and y are non-negative data vectors
 #' @param y x and y are non-negative data vectors
-#' @param w weight vector, values should be between 0 and 1
 #' @return \code{numeric} weighted rho* association value between x and y
 #'
 #'  Pimentel, Ronald Silva, "Kendall's Tau and Spearman's Rho for Zero-Inflated Data" (2009). Dissertations. 721. https://scholarworks.wmich.edu/dissertations/721
@@ -243,12 +243,12 @@ weightedZISpearman <- function(x, y, w = 1) {
   p_00 = sum(w * (!posx & !posy))/sum(w)
   p_01 = sum(w * (!posx & posy))/sum(w)
   p_10 = sum(w * (posx & !posy))/sum(w)
-  rho_11 = weightedSpearman(x[pospos], y[pospos], w = w[pospos])
+  rho_11 = weightedSpearman(x = x[pospos], y = y[pospos], w = w[pospos])
   rho_star = p_11 * (p_01 + p_11) * (p_10 + p_11) * rho_11 + 3*(p_00 * p_11 - p_10 * p_01)
 
   if (is.na(rho_star)) {
     print("Zero inflated Spearman correlation is undefined, returning Spearman correlation")
-    rho = weightedSpearman(x, y, w = w)
+    rho = weightedSpearman(x = x, y = y, w = w)
     return(rho)
   }
 

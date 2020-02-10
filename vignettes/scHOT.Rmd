@@ -39,26 +39,26 @@ scHOT@testingScaffold
 
 
 
-colData(scHOT)[,"traj"] <- rep(1:5, each = 10)
+# colData(scHOT)[,"traj"] <- rep(1:5, each = 10)
 colData(scHOT)[,"spat_x"] <- rnorm(50)
 colData(scHOT)[,"spat_y"] <- rnorm(50)
-colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10))
-
-scHOT <- scHOT_setWeightMatrix(scHOT,
-                               cellPosition = "traj",
-                               positionType = "trajectory",
-                               nrow.out = 20,
-                               type = "triangular",
-                               span = 0.1,
-                               averageAcrossTrajectoryTies = TRUE)
-
-scHOT <- scHOT_setWeightMatrix(scHOT,
-                               cellPosition = "trajWithNA",
-                               positionType = "trajectory",
-                               nrow.out = 20,
-                               type = "triangular",
-                               span = 0.1,
-                               averageAcrossTrajectoryTies = FALSE)
+# colData(scHOT)[,"trajWithNA"] <- c(rep(NA, 10), rep(1:4, each = 10))
+# 
+# scHOT <- scHOT_setWeightMatrix(scHOT,
+#                                cellPosition = "traj",
+#                                positionType = "trajectory",
+#                                nrow.out = 20,
+#                                type = "triangular",
+#                                span = 0.1,
+#                                averageAcrossTrajectoryTies = TRUE)
+# 
+# scHOT <- scHOT_setWeightMatrix(scHOT,
+#                                cellPosition = "trajWithNA",
+#                                positionType = "trajectory",
+#                                nrow.out = 20,
+#                                type = "triangular",
+#                                span = 0.1,
+#                                averageAcrossTrajectoryTies = FALSE)
 
 scHOT <- scHOT_setWeightMatrix(scHOT,
                                cellPosition = c("spat_x","spat_y"),
@@ -72,23 +72,10 @@ scHOT <- scHOT_setWeightMatrix(scHOT,
 
 
 
-weightedPearson2 = function(w = 1, x, y) {
-  if (length(x) != length(y)) 
-    stop("data must be the same length")
-  if (length(w) == 1) {
-    w <- rep(w, length(x))
-  }
-  nw = sum(w)
-  wssx = nw * sum(w * (x^2)) - sum(w * x)^2
-  wssy = nw * sum(w * (y^2)) - sum(w * y)^2
-  wssxy = nw * sum(w * x * y) - sum(w * x) * sum(w * y)
-  wcor = wssxy/sqrt(wssx * wssy)
-  return(wcor)
-}
 
 
 scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT, 
-                                                  higherOrderFunction = weightedPearson2,
+                                                  higherOrderFunction = weightedSpearman,
                                                   higherOrderFunctionType = "weighted")
 
 

@@ -5,10 +5,14 @@
 #'
 #' @param mat A matrix with rows for genes and columns for cells
 #' @param cellData A dataframe or DataFrame object with rows for cells
+#' @param positionType A string indicates the position type, either trajectory or spatial
+#' @param positionColData Strings indicate the position information stored in colData.
+#' If positionType is "trajectory" then cellPosition should be a sortable vector
+#' if positionType is "spatial" then cellPosition should be a matrix type object.
 #'
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom methods as
+#' @importFrom methods as validObject
 #'
 #' @examples
 #'
@@ -22,7 +26,13 @@
 
 
 
-scHOT_buildFromMatrix <- function(mat, cellData = NULL) {
+scHOT_buildFromMatrix <- function(mat,
+                                  cellData = NULL,
+                                  positionType = NULL,
+                                  positionColData = NULL) {
+
+
+
 
   if (is.null(cellData)) {
     cellData <- S4Vectors::DataFrame(row.names = colnames(mat))
@@ -35,7 +45,15 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL) {
   SCE <- SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(expression = mat),
                                                     colData = cellData)
 
-  methods::as(SCE, "scHOT")
+  scHOT <- methods::as(SCE, "scHOT")
+
+  scHOT@positionType <- positionType
+
+  scHOT@positionColData <- positionColData
+
+  methods::validObject(scHOT)
+
+  return(scHOT)
 }
 
 ###################################################################
@@ -48,11 +66,15 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL) {
 #'
 #' @param sce A SingleCellExperiment object
 #' @param assayName is a single assay to pull out from sce
+#' @param positionType A string indicates the position type, either trajectory or spatial
+#' @param positionColData Strings indicate the position information stored in colData.
+#' If positionType is "trajectory" then cellPosition should be a sortable vector
+#' if positionType is "spatial" then cellPosition should be a matrix type object.
 #'
 #' @importFrom S4Vectors SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay
-#' @importFrom methods as
+#' @importFrom methods as validObject
 #' @examples
 #'
 #' library(SingleCellExperiment)
@@ -67,14 +89,26 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL) {
 
 
 
-scHOT_buildFromSCE <- function(sce, assayName = "counts") {
+scHOT_buildFromSCE <- function(sce,
+                               assayName = "counts",
+                               positionType = NULL,
+                               positionColData = NULL) {
 
   # will keep the colData but nothing else
 
   SCE <- SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(expression = SummarizedExperiment::assay(sce, assayName)),
                                                     colData = SummarizedExperiment::colData(sce))
 
-  methods::as(SCE, "scHOT")
+
+  scHOT <- methods::as(SCE, "scHOT")
+
+  scHOT@positionType <- positionType
+
+  scHOT@positionColData <- positionColData
+
+  methods::validObject(scHOT)
+
+  return(scHOT)
 }
 
 
@@ -369,6 +403,10 @@ scHOT_setWeightMatrix <- function(scHOT,
   weightMatrix <- methods::as(weightMatrix, "dgCMatrix")
   scHOT@weightMatrix <- weightMatrix
 
+
+  scHOT@positionType <- positionType
+  scHOT@positionColData <- cellPosition
+
   return(scHOT)
 }
 
@@ -408,8 +446,8 @@ weightedFunctionOverScaffold = function(testingScaffold,
 
   sapply(1:nrow(weightMatrix), function(i) {
     apply(testingScaffold, 1, function(x) {
-      argvals = split(rbind(w = weightMatrix[i, , drop = FALSE],
-                            expressionData[x, , drop = FALSE]),
+      argvals = split(rbind(expressionData[x, , drop = FALSE],
+                            w = weightMatrix[i, , drop = FALSE]),
                       1:(length(x) + 1))
       names(argvals) <- names(formals(weightedHigherOrderFunction))[1:length(argvals)]
       return(do.call(weightedHigherOrderFunction, args = argvals))
@@ -442,8 +480,8 @@ weightedFunctionOverScaffold = function(testingScaffold,
 
 
 scHOT_calculateGlobalHigherOrderFunction <- function(scHOT,
-                                                    higherOrderFunction = NULL,
-                                                    higherOrderFunctionType = NULL) {
+                                                     higherOrderFunction = NULL,
+                                                     higherOrderFunctionType = NULL) {
 
   # this calculates the global higher order function and stores it in the output
   # if these aren't found in the params slot then they need to be specified here

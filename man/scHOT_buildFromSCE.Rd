@@ -4,12 +4,23 @@
 \alias{scHOT_buildFromSCE}
 \title{scHOT_buildFromSCE}
 \usage{
-scHOT_buildFromSCE(sce, assayName = "counts")
+scHOT_buildFromSCE(
+  sce,
+  assayName = "counts",
+  positionType = NULL,
+  positionColData = NULL
+)
 }
 \arguments{
 \item{sce}{A SingleCellExperiment object}
 
 \item{assayName}{is a single assay to pull out from sce}
+
+\item{positionType}{A string indicates the position type, either trajectory or spatial}
+
+\item{positionColData}{Strings indicate the position information stored in colData.
+If positionType is "trajectory" then cellPosition should be a sortable vector
+if positionType is "spatial" then cellPosition should be a matrix type object.}
 }
 \description{
 Create scHOT object from a SingleCellExperiment object

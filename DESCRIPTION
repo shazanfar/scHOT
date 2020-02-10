@@ -21,7 +21,8 @@ Imports:
     reshape,
     ggplot2,
     igraph,
-    grDevices
+    grDevices,
+    ggforce
 RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

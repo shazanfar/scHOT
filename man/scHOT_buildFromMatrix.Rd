@@ -4,12 +4,23 @@
 \alias{scHOT_buildFromMatrix}
 \title{scHOT_buildFromMatrix}
 \usage{
-scHOT_buildFromMatrix(mat, cellData = NULL)
+scHOT_buildFromMatrix(
+  mat,
+  cellData = NULL,
+  positionType = NULL,
+  positionColData = NULL
+)
 }
 \arguments{
 \item{mat}{A matrix with rows for genes and columns for cells}
 
 \item{cellData}{A dataframe or DataFrame object with rows for cells}
+
+\item{positionType}{A string indicates the position type, either trajectory or spatial}
+
+\item{positionColData}{Strings indicate the position information stored in colData.
+If positionType is "trajectory" then cellPosition should be a sortable vector
+if positionType is "spatial" then cellPosition should be a matrix type object.}
 }
 \description{
 Create scHOT object from a matrix
