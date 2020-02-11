@@ -6,7 +6,7 @@
 #'
 #' @title plotColouredExpression
 #'
-#' @param scHOT A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".
+#' @param scHOT A scHOT object.
 #' @param genepair is either a single character string with an underscore, or a two length character vector
 #' @param branches A character indicates that the colnames stored the branch information in colData
 #' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time,
@@ -14,6 +14,7 @@
 #' @param subsetBranch subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
 #' @param n number of panels to split ranked samples into, default 3.
 #' @param fittedline logical default TRUE, add a lm straight line to the plot
+#' @param assayName the name of the assay that are used to plot.
 #' @return \code{ggplot} a ggplot object of scatterplots of expression split by sample ordering
 #'
 #'
@@ -31,7 +32,8 @@ plotColouredExpression = function(scHOT,
                                   ranked_by = NULL,
                                   subsetBranch = NULL,
                                   n = 3,
-                                  fittedline = TRUE) {
+                                  fittedline = TRUE,
+                                  assayName = NULL) {
 
 
   if (length(genepair) == 1) {
@@ -45,7 +47,12 @@ plotColouredExpression = function(scHOT,
     stop("genepair is either a single character string with an underscore, or a two length character vector")
   }
 
-  branchData <- SummarizedExperiment::assay(scHOT, "expression")
+  if (is.null(assayName)) {
+    assayName <- "expression"
+  }
+
+
+  branchData <- SummarizedExperiment::assay(scHOT, assayName)
 
 
 
@@ -139,11 +146,15 @@ plotColouredExpression = function(scHOT,
 #' @title plotOrderedExpression
 #' @param scHOT A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".
 #' @param genepair is either a single character string with an underscore, or a two length character vector
+#' @param positionType A string indicates the position type, either trajectory or spatial
 #' @param branches A character indicates that the colnames stored the branch information in colData
 #' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time
 #' @param xvals A character indicates that the colnames stored in colData of the x-values associated with the samples in branchData
 #' @param subsetBranch subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
 #' @param facet can either be FALSE, "branch", "gene", or "both"
+#' @param positionColData A vector indicates column names of colData that stored the postion informaton (for spatial type of data)
+#' @param assayName the name of the assay that are used to plot.
+#'
 #' @return \code{ggplot} a ggplot object for ribbon plot with points
 #'
 #'
@@ -155,11 +166,14 @@ plotColouredExpression = function(scHOT,
 #'
 plotOrderedExpression = function(scHOT,
                                  genepair,
+                                 positionType = NULL,
                                  branches = NULL,
                                  ranked_by = NULL,
                                  xvals = NULL,
                                  subsetBranch = NULL,
-                                 facet = FALSE) {
+                                 facet = FALSE,
+                                 positionColData = NULL,
+                                 assayName = NULL) {
 
   # branchData is a list containing matrices of the cell expression per branch
   # assumed that the columns of each matrix in branchData is ordered by pseudotime
@@ -169,6 +183,16 @@ plotOrderedExpression = function(scHOT,
   # subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
   # facet can either be FALSE, "branch", "gene", or "both"
 
+
+  if (is.null(positionType)) {
+
+    if (is.null(scHOT@positionType)) {
+      stop("Both positionType and scHOT@positionType are NULL.")
+    } else {
+      positionType <- scHOT@positionType
+    }
+
+  }
 
   if (length(genepair) == 1) {
     genepair = unlist(strsplit(genepair, "_"))
@@ -181,7 +205,11 @@ plotOrderedExpression = function(scHOT,
     stop("genepair is either a single character string with an underscore, or a two length character vector")
   }
 
-  branchData <- SummarizedExperiment::assay(scHOT, "expression")
+  if (is.null(assayName)) {
+    assayName <- "expression"
+  }
+
+  branchData <- SummarizedExperiment::assay(scHOT, assayName)
 
   if (scHOT@positionType == "trajectory") {
 
@@ -278,10 +306,21 @@ plotOrderedExpression = function(scHOT,
 
   if (scHOT@positionType == "spatial") {
 
-    coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, scHOT@positionColData])
+    if (is.null(positionColData)) {
+
+      if (is.null(scHOT@positionColData)) {
+        stop("Both positionColData and scHOT@positionColData are NULL.")
+      } else {
+        positionColData <- scHOT@positionColData
+      }
+
+    }
+
+    coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, positionColData])
+    colnames(coords_info) <- positionColData
 
     branch_long <- reshape::melt(cbind(coords_info, t(branchData[genepair, , drop = FALSE])),
-                                 id.vars = scHOT@positionColData)
+                                 id.vars = positionColData)
 
 
     colnames(branch_long) <- c("x", "y", "genepair", "value")
@@ -415,7 +454,9 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 #' @title plotHigherOrderSequence
 #' @param scHOT A scHOT object with higherOrderSequence in scHOT_output slot
 #' @param gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
-#' @param branches A character indicates that the colnames stored the branch information in colData
+#' @param positionType A string indicates the position type, either trajectory or spatial
+#' @param branches A character indicates that the colnames stored the branch information in colData (for trajectory type of data)
+#' @param positionColData A vector indicates column names of colData that stored the postion informaton (for spatial type of data)
 #' @return \code{ggplot} object with line plots
 #'
 #'
@@ -427,7 +468,11 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 #'
 #' @export
 #'
-plotHigherOrderSequence <- function(scHOT, gene, branches = NULL) {
+plotHigherOrderSequence <- function(scHOT,
+                                    gene,
+                                    positionType = NULL,
+                                    branches = NULL,
+                                    positionColData = NULL) {
 
   # wcorsList is a list of matrices, with each matrix gene pair x samples weighted correlation vectors,
   # assumed that they have same number of rows
@@ -441,8 +486,26 @@ plotHigherOrderSequence <- function(scHOT, gene, branches = NULL) {
   wcor <- as.matrix(scHOT@scHOT_output$higherOrderSequence)
   rownames(wcor) <- paste(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
 
+  if (ncol(wcor) != ncol(scHOT)) {
+    warning("Not all the cell position has higherOrderSequence statistics, set nrow.out = NULL in scHOT_setWeightMatrix to calculate higherOrderSequence for all positions!")
+  }
 
-  if (scHOT@positionType == "trajectory") {
+  if (is.null(positionType)) {
+
+    if (is.null(scHOT@positionType)) {
+      stop("Both positionType and scHOT@positionType are NULL.")
+    } else {
+      positionType <- scHOT@positionType
+    }
+
+  }
+
+  positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
+
+
+
+
+  if (positionType == "trajectory") {
 
     if (is.null(branches)) {
       message("branches information is not provided")
@@ -514,17 +577,12 @@ plotHigherOrderSequence <- function(scHOT, gene, branches = NULL) {
   }
 
 
+  # spatial case
 
-
-  if (scHOT@positionType == "spatial") {
-
-
-
-
-
+  if (positionType == "spatial") {
     if (is.logical(gene[1])) {
 
-      if (length(unique(unlist(lapply(wcorsList,nrow)))) > 1) {
+      if (length(unique(unlist(lapply(wcorsList, nrow)))) > 1) {
         stop("cannot use logical subset when weighted correlation matrices have differing rows")
       }
 
@@ -548,20 +606,30 @@ plotHigherOrderSequence <- function(scHOT, gene, branches = NULL) {
         } else {
           stop("gene pairs has no higherOrderSequence ")
         }
-
       }
+    }
 
+    if (is.null(positionColData)) {
 
+      if (is.null(scHOT@positionColData)) {
+        stop("Both positionColData and scHOT@positionColData are NULL.")
+      } else {
+        positionColData <- scHOT@positionColData
+      }
 
     }
 
+    coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, positionColData])
+    colnames(coords_info) <- positionColData
+
+    wcor_all <- matrix(NA, nrow = length(gene), ncol = ncol(scHOT))
+    rownames(wcor_all) <- gene
+    colnames(wcor_all) <- seq_len(ncol(scHOT))
+    wcor_all[gene, rownames(scHOT@weightMatrix)] <- wcor[gene, , drop = FALSE]
 
 
-    coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, scHOT@positionColData])
-
-    branch_long <- reshape::melt(cbind(coords_info, t(wcor[gene, , drop = FALSE])),
-                                 id.vars = scHOT@positionColData)
-
+    branch_long <- reshape::melt(cbind(coords_info, t(wcor_all)),
+                                 id.vars = positionColData)
 
     colnames(branch_long) <- c("x", "y", "genepair", "value")
 

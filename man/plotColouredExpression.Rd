@@ -11,11 +11,12 @@ plotColouredExpression(
   ranked_by = NULL,
   subsetBranch = NULL,
   n = 3,
-  fittedline = TRUE
+  fittedline = TRUE,
+  assayName = NULL
 )
 }
 \arguments{
-\item{scHOT}{A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".}
+\item{scHOT}{A scHOT object.}
 
 \item{genepair}{is either a single character string with an underscore, or a two length character vector}
 
@@ -29,6 +30,8 @@ If it is NULL, it will be ranked based on the branch information.}
 \item{n}{number of panels to split ranked samples into, default 3.}
 
 \item{fittedline}{logical default TRUE, add a lm straight line to the plot}
+
+\item{assayName}{the name of the assay that are used to plot.}
 }
 \value{
 \code{ggplot} a ggplot object of scatterplots of expression split by sample ordering

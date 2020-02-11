@@ -14,13 +14,13 @@ scHOT_buildFromSCE(
 \arguments{
 \item{sce}{A SingleCellExperiment object}
 
-\item{assayName}{is a single assay to pull out from sce}
+\item{assayName}{is a single assay to pull out from sce as the expression matrix input of scHOT}
 
 \item{positionType}{A string indicates the position type, either trajectory or spatial}
 
 \item{positionColData}{Strings indicate the position information stored in colData.
-If positionType is "trajectory" then cellPosition should be a sortable vector
-if positionType is "spatial" then cellPosition should be a matrix type object.}
+If positionType is "trajectory" then positionColData should be a sortable vector
+if positionType is "spatial" then positionColData should be a matrix type object.}
 }
 \description{
 Create scHOT object from a SingleCellExperiment object

@@ -7,8 +7,8 @@
 #' @param cellData A dataframe or DataFrame object with rows for cells
 #' @param positionType A string indicates the position type, either trajectory or spatial
 #' @param positionColData Strings indicate the position information stored in colData.
-#' If positionType is "trajectory" then cellPosition should be a sortable vector
-#' if positionType is "spatial" then cellPosition should be a matrix type object.
+#' If positionType is "trajectory" then positionColData should be a sortable vector
+#' if positionType is "spatial" then positionColData should be a matrix type object.
 #'
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
@@ -65,11 +65,11 @@ scHOT_buildFromMatrix <- function(mat,
 #' @title scHOT_buildFromSCE
 #'
 #' @param sce A SingleCellExperiment object
-#' @param assayName is a single assay to pull out from sce
+#' @param assayName is a single assay to pull out from sce as the expression matrix input of scHOT
 #' @param positionType A string indicates the position type, either trajectory or spatial
 #' @param positionColData Strings indicate the position information stored in colData.
-#' If positionType is "trajectory" then cellPosition should be a sortable vector
-#' if positionType is "spatial" then cellPosition should be a matrix type object.
+#' If positionType is "trajectory" then positionColData should be a sortable vector
+#' if positionType is "spatial" then positionColData should be a matrix type object.
 #'
 #' @importFrom S4Vectors SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
@@ -299,7 +299,9 @@ thin = function(W, n = 100) {
 
   index = seq(from = 1, to = N, by = new_n)
 
-  return(W[index,])
+  W <- W[index,]
+  rownames(W) <- index
+  return(W)
 }
 
 
@@ -313,8 +315,8 @@ thin = function(W, n = 100) {
 #' @param scHOT A scHOT object
 #' @param weightMatrix A matrix indicates the weight matrix for scHOT analysis
 #' @param positionType A string indicates the position type, either trajectory or spatial
-#' @param cellPosition If positionType is "trajectory" then cellPosition should be a sortable vector
-#' if positionType is "spatial" then cellPosition should be a matrix type object.
+#' @param positionColData If positionType is "trajectory" then positionColData should be a sortable vector
+#' if positionType is "spatial" then positionColData should be a matrix type object.
 #' It should be stored in colData (SHILA to check).
 #' @param nrow.out SHILA to input
 #' @param averageAcrossTrajectoryTies SHILA to input
@@ -327,7 +329,7 @@ thin = function(W, n = 100) {
 scHOT_setWeightMatrix <- function(scHOT,
                                   weightMatrix = NULL,
                                   positionType = "trajectory",
-                                  cellPosition = NULL,
+                                  positionColData = NULL,
                                   nrow.out = NULL,
                                   averageAcrossTrajectoryTies = FALSE,
                                   # type = NULL,
@@ -335,8 +337,8 @@ scHOT_setWeightMatrix <- function(scHOT,
                                   ...) {
 
   # either set own weight matrix in object or generate a new one using parameters
-  # if positionType is "trajectory" then cellPosition should be a sortable vector
-  # if positionType is "spatial" then cellPosition should be a matrix type object
+  # if positionType is "trajectory" then positionColData should be a sortable vector
+  # if positionType is "spatial" then positionColData should be a matrix type object
 
 
   # input check
@@ -351,6 +353,8 @@ scHOT_setWeightMatrix <- function(scHOT,
       stop("Provided weightMatrix must have same number of columns as scHOT object!")
     }
 
+    rownames(weightMatrix) <- seq_len(nrow(weightMatrix))
+
   } else {
 
 
@@ -363,25 +367,38 @@ scHOT_setWeightMatrix <- function(scHOT,
     #   stop("select either \"trajectory\", or \"spatial\" as positionType")
     # }
 
+
+    if (is.null(positionType)) {
+
+      if (is.null(scHOT@positionType)) {
+        stop("Both positionType and scHOT@positionType are NULL.")
+      } else {
+        positionType <- scHOT@positionType
+      }
+
+    }
+
     positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
 
-    if (!all(cellPosition %in% colnames(colData(scHOT)))) {
-      stop("at least one cellPosition column names not found in colData(scHOT)")
+
+
+    if (!all(positionColData %in% colnames(colData(scHOT)))) {
+      stop("at least one positionColData column names not found in colData(scHOT)")
     }
 
     if (positionType == "trajectory") {
 
-      if (length(cellPosition) > 1) {
-        stop("only one cellPosition column name to be given for trajectory")
+      if (length(positionColData) > 1) {
+        stop("only one positionColData column name to be given for trajectory")
       }
 
       weightMatrix = trajectoryWeightMatrix(n, ...)
       colnames(weightMatrix) <- colnames(scHOT)
-      weightMatrix = weightMatrix[ , order(colData(scHOT)[, cellPosition], na.last = NA), drop = FALSE]
+      weightMatrix = weightMatrix[ , order(colData(scHOT)[, positionColData], na.last = NA), drop = FALSE]
 
       if (averageAcrossTrajectoryTies) {
         # average across ties
-        weightMatrixTied = t(apply(weightMatrix,1,function(x, y = colData(scHOT)[, cellPosition]){
+        weightMatrixTied = t(apply(weightMatrix,1,function(x, y = colData(scHOT)[, positionColData]){
           unsplit(tapply(x,y,mean),y)
         }))
         colnames(weightMatrixTied) <- colnames(weightMatrix)
@@ -390,22 +407,25 @@ scHOT_setWeightMatrix <- function(scHOT,
     }
 
     if (positionType == "spatial") {
-      weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[, cellPosition]), ...)
+      weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[, positionColData]), ...)
       colnames(weightMatrix) <- colnames(scHOT)
     }
 
     if (!is.null(nrow.out)) {
-      weightMatrix = thin(weightMatrix, n = nrow.out)
+      weightMatrix <- thin(weightMatrix, n = nrow.out)
+    } else {
+      rownames(weightMatrix) <- seq_len(nrow(weightMatrix))
     }
 
   }
 
   weightMatrix <- methods::as(weightMatrix, "dgCMatrix")
+
   scHOT@weightMatrix <- weightMatrix
 
 
   scHOT@positionType <- positionType
-  scHOT@positionColData <- cellPosition
+  scHOT@positionColData <- positionColData
 
   return(scHOT)
 }

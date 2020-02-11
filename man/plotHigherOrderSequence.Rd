@@ -4,14 +4,24 @@
 \alias{plotHigherOrderSequence}
 \title{plotHigherOrderSequence}
 \usage{
-plotHigherOrderSequence(scHOT, gene, branches = NULL)
+plotHigherOrderSequence(
+  scHOT,
+  gene,
+  positionType = NULL,
+  branches = NULL,
+  positionColData = NULL
+)
 }
 \arguments{
 \item{scHOT}{A scHOT object with higherOrderSequence in scHOT_output slot}
 
 \item{gene}{is either a logical vector matching rows of entries in wcorsList, or a character of a gene}
 
-\item{branches}{A character indicates that the colnames stored the branch information in colData}
+\item{positionType}{A string indicates the position type, either trajectory or spatial}
+
+\item{branches}{A character indicates that the colnames stored the branch information in colData (for trajectory type of data)}
+
+\item{positionColData}{A vector indicates column names of colData that stored the postion informaton (for spatial type of data)}
 }
 \value{
 \code{ggplot} object with line plots

@@ -7,17 +7,22 @@
 plotOrderedExpression(
   scHOT,
   genepair,
+  positionType = NULL,
   branches = NULL,
   ranked_by = NULL,
   xvals = NULL,
   subsetBranch = NULL,
-  facet = FALSE
+  facet = FALSE,
+  positionColData = NULL,
+  assayName = NULL
 )
 }
 \arguments{
 \item{scHOT}{A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".}
 
 \item{genepair}{is either a single character string with an underscore, or a two length character vector}
+
+\item{positionType}{A string indicates the position type, either trajectory or spatial}
 
 \item{branches}{A character indicates that the colnames stored the branch information in colData}
 
@@ -28,6 +33,10 @@ plotOrderedExpression(
 \item{subsetBranch}{subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches}
 
 \item{facet}{can either be FALSE, "branch", "gene", or "both"}
+
+\item{positionColData}{A vector indicates column names of colData that stored the postion informaton (for spatial type of data)}
+
+\item{assayName}{the name of the assay that are used to plot.}
 }
 \value{
 \code{ggplot} a ggplot object for ribbon plot with points

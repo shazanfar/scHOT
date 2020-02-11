@@ -22,10 +22,9 @@
 
 
 
-scHOT_calculateHigherOrderTestStatistics <- function(
-  scHOT,
-  higherOrderSummaryFunction = NULL,
-  ...) {
+scHOT_calculateHigherOrderTestStatistics <- function(scHOT,
+                                                     higherOrderSummaryFunction = NULL,
+                                                     ...) {
   # calculate and store the higherOrderSequence and higherOrderTestStatistic
 
   higherOrderFunctionType <- scHOT@params$higherOrderFunctionType
@@ -91,8 +90,16 @@ scHOT_calculateHigherOrderTestStatistics <- function(
     )
   }
 
-  scHOT@scHOT_output$higherOrderSequence = split(
-    higherOrderSequence, 1:nrow(higherOrderSequence))
+  if (is.null(nrow(higherOrderSequence))) {
+    # when only one pair to test
+    scHOT@scHOT_output$higherOrderSequence = split(
+      higherOrderSequence, 1)
+  } else {
+    scHOT@scHOT_output$higherOrderSequence = split(
+      higherOrderSequence, 1:nrow(higherOrderSequence))
+  }
+
+
 
   scHOT@scHOT_output$higherOrderSequence <- IRanges::NumericList(
     scHOT@scHOT_output$higherOrderSequence)

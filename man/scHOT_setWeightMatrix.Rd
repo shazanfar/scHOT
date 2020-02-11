@@ -8,7 +8,7 @@ scHOT_setWeightMatrix(
   scHOT,
   weightMatrix = NULL,
   positionType = "trajectory",
-  cellPosition = NULL,
+  positionColData = NULL,
   nrow.out = NULL,
   averageAcrossTrajectoryTies = FALSE,
   ...
@@ -21,8 +21,8 @@ scHOT_setWeightMatrix(
 
 \item{positionType}{A string indicates the position type, either trajectory or spatial}
 
-\item{cellPosition}{If positionType is "trajectory" then cellPosition should be a sortable vector
-if positionType is "spatial" then cellPosition should be a matrix type object.
+\item{positionColData}{If positionType is "trajectory" then positionColData should be a sortable vector
+if positionType is "spatial" then positionColData should be a matrix type object.
 It should be stored in colData (SHILA to check).}
 
 \item{nrow.out}{SHILA to input}
