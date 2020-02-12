@@ -1,25 +1,159 @@
 ---
+title: "Getting start: scHOT"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{Getting start: scHOT}
   %\usepackage[UTF-8]{inputenc}
-  ---
-  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  comment = "#>"
+)
+```
+
+
+
 ```{r}
 library(SingleCellExperiment)
 library(scHOT)
 ```
-  
-# Spatial data
+
+
+# Trajectory data: liver
+
+```{r}
+load("data/liver.Rda", verbose = TRUE)
+```
+
+
+```{r}
+n_first = length(intersect(colnames(liver_branch_chol), colnames(liver_branch_hep)))
+
+gene_to_test <- cbind(c("Birc5", "H2afz", "Tacc3"),
+                      c("Birc5", "H2afz", "Tacc3"))
+
+weightedVar2 <- function(x, y, w) {
+  weightedVar2 <- weightedVar(x, w)
+}
+```
+
+## Hepatocytes branch
+
+```{r}
+scHOT_trajectory_hepatocytes <- scHOT_buildFromMatrix(mat = liver_branch_hep,
+                                                      cellData = list(pseudotime = liver_pseudotime_hep),
+                                                      positionType = "trajectory",
+                                                      positionColData = "pseudotime")
+
+
+scHOT_trajectory_hepatocytes <- scHOT_addTestingScaffold(scHOT_trajectory_hepatocytes, gene_to_test)
+
+scHOT_trajectory_hepatocytes <- scHOT_setWeightMatrix(scHOT_trajectory_hepatocytes,
+                                                      positionColData = c("pseudotime"),
+                                                      positionType = "trajectory",
+                                                      nrow.out = NULL,
+                                                      span = 0.5*n_first/ncol(liver_branch_hep))
+
+
+scHOT_trajectory_hepatocytes <- scHOT_calculateGlobalHigherOrderFunction(scHOT_trajectory_hepatocytes, 
+                                                                         higherOrderFunction = weightedVar2,
+                                                                         higherOrderFunctionType = "weighted")
+
+
+scHOT_trajectory_hepatocytes@scHOT_output
+
+scHOT_trajectory_hepatocytes <- scHOT_setPermutationScaffold(scHOT_trajectory_hepatocytes, 
+                                                             numberPermutations = 100)
+
+
+scHOT_trajectory_hepatocytes@scHOT_output
+
+
+scHOT_trajectory_hepatocytes <- scHOT_calculateHigherOrderTestStatistics(scHOT_trajectory_hepatocytes,
+                                                                         higherOrderSummaryFunction = sd)
+
+scHOT_trajectory_hepatocytes@scHOT_output
+
+
+
+
+system.time(scHOT_trajectory_hepatocytes <- scHOT_performPermutationTest(scHOT_trajectory_hepatocytes, 
+                                                                         verbose = TRUE,
+                                                                         parallel = TRUE,
+                                                                         BPPARAM = MulticoreParam(workers = 4)))
+
+
+
+
+
+scHOT_trajectory_hepatocytes <- scHOT_estimatePvalues(scHOT_trajectory_hepatocytes)
+scHOT_trajectory_hepatocytes@scHOT_output
+
+scHOT_trajectory_hepatocytes@scHOT_output$higherOrderSequence
+
+plotHigherOrderSequence(scHOT_trajectory_hepatocytes, "Tacc3")
+```
+
+## Branch: Cholangiocytes
+
+Perform similar analysis using `scHOT` wrap up function for the cholangiocytes branch
+
+```{r}
+
+
+scHOT_trajectory_cholangiocytes <- scHOT_buildFromMatrix(mat = liver_branch_chol,
+                                                         cellData = list(pseudotime = liver_pseudotime_chol),
+                                                         positionType = "trajectory",
+                                                         positionColData = "pseudotime")
+
+
+scHOT_trajectory_cholangiocytes <- scHOT(scHOT_trajectory_cholangiocytes,
+                       testingScaffold = matrix(c("Tacc3", "Tacc3"), 
+                                                ncol = 2, byrow = TRUE),
+                       positionType = "trajectory",
+                       positionColData = c("pseudotime"),
+                       nrow.out = NULL,
+                       higherOrderFunction = weightedVar2,
+                       higherOrderFunctionType = 'weighted',
+                       numberPermutations = 100,
+                       higherOrderSummaryFunction = sd,
+                       parallel = TRUE,
+                       BPPARAM = MulticoreParam(workers = 4),
+                       verbose = TRUE,
+                       span = 0.5*n_first/ncol(liver_branch_chol))
+
+plotHigherOrderSequence(scHOT_trajectory_cholangiocytes, "Tacc3")
+
+
+```
+
+
+
+
+
+# Spatial data: MOB
 
 ## Perform scHOT step by step
-  
+
 ```{r}
 load("data/MOB_subset.Rda", verbose = TRUE)
 sce_MOB_subset
+
+
+scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+                                    assayName = "counts",
+                                    positionType = "spatial",
+                                    positionColData = c("x", "y"))
 ```
+
+
+
 
 ```{r}
 
@@ -98,6 +232,7 @@ plotOrderedExpression(scHOT_spatial, "Dnm1l_Gucy1b3",
 ```
 
 ## Perform scHOT using `scHOT` wrap-up function
+
 
 ```{r}
 

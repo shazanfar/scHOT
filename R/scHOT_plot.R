@@ -485,6 +485,7 @@ plotHigherOrderSequence <- function(scHOT,
 
   wcor <- as.matrix(scHOT@scHOT_output$higherOrderSequence)
   rownames(wcor) <- paste(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
+  colnames(wcor) <- NULL
 
   if (ncol(wcor) != ncol(scHOT)) {
     warning("Not all the cell position has higherOrderSequence statistics, set nrow.out = NULL in scHOT_setWeightMatrix to calculate higherOrderSequence for all positions!")
@@ -547,17 +548,25 @@ plotHigherOrderSequence <- function(scHOT,
       gene = paste0(sort(gene), collapse = "|")
 
       wcors_longList = lapply(wcorsList,function(branch){
-        reshape::melt(t(branch[grepl(gene,rownames(branch)),]))
+        reshape::melt(t(branch[grepl(gene, rownames(branch)), , drop = FALSE]))
       })
 
     }
 
-    branch_long = do.call(rbind,wcors_longList)
+    branch_long = do.call(rbind, wcors_longList)
     branch_long = cbind(
-      rep(names(wcors_longList), unlist(lapply(wcors_longList,nrow))),
+      rep(names(wcors_longList), unlist(lapply(wcors_longList, nrow))),
       branch_long)
-    colnames(branch_long) = c("branch","SampleOrder", "GenePair","WeightedCorrelation")
+    # colnames(branch_long) = c("branch","SampleOrder", "GenePair","WeightedCorrelation")
+    colnames(branch_long) = c("branch","SampleOrder", "GenePair", "WeightedCorrelation")
 
+
+
+    if (max(abs(branch_long$WeightedCorrelation)) < 1) {
+      ylimit <- ylim(c(-1, 1))
+    } else {
+      ylimit <- NULL
+    }
 
     g <- ggplot(branch_long,
                 aes(x = branch_long$SampleOrder,
@@ -567,13 +576,15 @@ plotHigherOrderSequence <- function(scHOT,
       geom_line(size = 2, alpha = 0.6) +
       facet_grid(~branch, scales = "free_x") +
       theme_minimal() +
-      ylim(c(-1,1)) +
+      ylimit +
       geom_hline(yintercept = 0, size = 1, colour = "grey") +
       ggtitle(gene) +
       xlab("Sample Order") +
       ylab("Weighted Correlation") +
       labs(col = "Gene Pair") +
       NULL
+
+
   }
 
 
