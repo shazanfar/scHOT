@@ -100,6 +100,8 @@ scHOT_trajectory_hepatocytes@scHOT_output$higherOrderSequence
 plotHigherOrderSequence(scHOT_trajectory_hepatocytes, "Tacc3")
 ```
 
+
+
 ## Branch: Cholangiocytes
 
 Perform similar analysis using `scHOT` wrap up function for the cholangiocytes branch
@@ -233,11 +235,13 @@ plotOrderedExpression(scHOT_spatial, "Dnm1l_Gucy1b3",
 
 ## Perform scHOT using `scHOT` wrap-up function
 
+Please strip the scHOT output using `scHOT_stripOutput` before rerun scHOT. 
+```{r}
+scHOT_spatial <- scHOT_stripOutput(scHOT_spatial, force = TRUE)
+```
+
 
 ```{r}
-
-scHOT_spatial@scHOT_output <- DataFrame(NULL)
-
 scHOT_spatial <- scHOT(scHOT_spatial,
                        testingScaffold = matrix(c("Arrb1", "Mtor"), 
                                                 ncol = 2, byrow = TRUE),

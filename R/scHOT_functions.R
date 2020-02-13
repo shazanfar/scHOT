@@ -90,6 +90,8 @@ scHOT_calculateHigherOrderTestStatistics <- function(scHOT,
     )
   }
 
+  scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
+
   if (is.null(nrow(higherOrderSequence))) {
     # when only one pair to test
     scHOT@scHOT_output$higherOrderSequence = split(
