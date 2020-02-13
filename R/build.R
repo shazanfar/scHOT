@@ -572,6 +572,9 @@ scHOT_calculateGlobalHigherOrderFunction <- function(scHOT,
       testingScaffold
     )
   }
+
+  scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
+
   scHOT@scHOT_output$globalHigherOrderFunction <- global
 
   return(scHOT)
@@ -637,6 +640,8 @@ scHOT_setPermutationScaffold = function(scHOT,
     )
   }
 
+  scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
+
   if (numberScaffold > nrow(scHOT@testingScaffold)) {
     message(paste0("numberScaffold set higher than the scaffold,",
                    " performing permutations for all tests"))
@@ -658,3 +663,61 @@ scHOT_setPermutationScaffold = function(scHOT,
 
   return(scHOT)
 }
+
+
+###################################################################
+
+
+#' Strip the scHOT output
+#'
+#' @title scHOT_stripOutput
+#'
+#' @param scHOT A scHOT object
+#' @param force A logical indicates whther forcing stripping the scHOT output
+#' @param store A logical flag on whether the scHOT should be stored as .rds file
+#' @param file_name A string indicates the file name of the scHOT will be stored
+#'
+#' @export
+
+
+
+scHOT_stripOutput <- function(scHOT, force = TRUE, store = FALSE, file_name = NULL) {
+
+
+  scHOT_output <- scHOT@scHOT_output
+
+  if (!is.null(scHOT_output)) {
+    current_testing <-  paste(scHOT@testingScaffold[, 1], scHOT@testingScaffold[, 2], sep = "_")
+    current_output_testing <- paste(scHOT_output$gene_1, scHOT_output$gene_2, sep = "_")
+
+    if (force | !all(current_testing %in% current_output_testing) | length(current_testing) != length(current_output_testing)) {
+
+      warnings("The current testing scaffold does not match with the current scHOT_output. The scHOT_output will be stripped out.")
+      scHOT_output <- DataFrame(NULL)
+
+      if (store) {
+
+        if (is.null(file_name)) {
+          file_name <- "scHOT.rds"
+        } else {
+          file_name <- paste0(file_name, ".rds")
+        }
+
+        message(paste0("The current scHOT wil be stored as ", file_name))
+        saveRDS(scHOT, file = file_name)
+
+      }
+
+    }
+
+  } else {
+    scHOT_output <- DataFrame(NULL)
+  }
+
+
+
+  scHOT@scHOT_output <- scHOT_output
+
+  return(scHOT)
+}
+
