@@ -28,7 +28,7 @@ library(scHOT)
 # Trajectory data: liver
 
 ```{r}
-load("data/liver.Rda", verbose = TRUE)
+load("../data/liver.Rda", verbose = TRUE)
 ```
 
 
@@ -144,7 +144,7 @@ plotHigherOrderSequence(scHOT_trajectory_cholangiocytes, "Tacc3")
 ## Perform scHOT step by step
 
 ```{r}
-load("data/MOB_subset.Rda", verbose = TRUE)
+load("../data/MOB_subset.Rda", verbose = TRUE)
 sce_MOB_subset
 
 
