@@ -63,7 +63,7 @@ setClass("scHOT",
          contains = "SingleCellExperiment")
 
 
-# @importFrom S4Vectors coolcat
+#' @importFrom S4Vectors coolcat
 #' @importFrom methods callNextMethod
 #'
 #'
@@ -72,8 +72,8 @@ setMethod("show", "scHOT", function(object) {
   methods::callNextMethod()
   cat("testingScaffold dim:", dim(object@testingScaffold), "\n")
   cat("weightMatrix dim:", dim(object@weightMatrix), "\n")
-  coolcat("scHOT_output colnames (%d): %s\n", colnames(object@scHOT_output))
-  coolcat("param names (%d): %s\n", names(object@params))
+  S4Vectors::coolcat("scHOT_output colnames (%d): %s\n", colnames(object@scHOT_output))
+  S4Vectors::coolcat("param names (%d): %s\n", names(object@params))
   cat("position type:", as.character(object@positionType),"\n")
 })
 
