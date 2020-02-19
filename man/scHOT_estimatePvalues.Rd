@@ -16,15 +16,15 @@ scHOT_estimatePvalues(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{usenperm}{SHILA to write}
+\item{usenperm}{Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used}
 
-\item{nperm}{number of permutation}
+\item{nperm}{Number of neighbouring permutations to use for p-value estimation}
 
-\item{maxDist}{SHILA to write}
+\item{maxDist}{max difference of global higher order statistic to use for p-value estimation (default 0.1)}
 
-\item{plot}{A logical input indicates whether the results are plotted}
+\item{plot}{A logical input indicating whether the results are plotted}
 
-\item{verbose}{A logical input indicates whether the intermediate steps will be printed}
+\item{verbose}{A logical input indicating whether the intermediate steps will be printed}
 }
 \value{
 scHOT A scHOT object with results stored in scHOT_output slot

@@ -30,7 +30,7 @@ Create scHOT object from a SingleCellExperiment object
 library(SingleCellExperiment)
 dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 colnames(dat) <- paste0("cell_", 1:ncol(dat))
-rownames(dat) <- c("T","Gata1", "Tal1")
+rownames(dat) <- c("gene_1","gene_2", "gene_2")
 
 sce <- SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
 scHOT <- scHOT_buildFromSCE(sce)

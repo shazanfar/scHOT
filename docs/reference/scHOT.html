@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="scHOT — scHOT" />
-<meta property="og:description" content="A wrap up function to perform scHOT" />
+<meta property="og:description" content="A wrapper function to perform scHOT" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,7 +109,7 @@
     </div>
 
     <div class="ref-description">
-    <p>A wrap up function to perform scHOT</p>
+    <p>A wrapper function to perform scHOT</p>
     </div>
 
     <pre class="usage"><span class='fu'>scHOT</span>(
@@ -153,21 +153,19 @@
     </tr>
     <tr>
       <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
+      <td><p>A string indicating the position type, either "trajectory" or "spatial"</p></td>
     </tr>
     <tr>
       <th>positionColData</th>
-      <td><p>If positionType is "trajectory" then positionColData should be a sortable vector
-if positionType is "spatial" then positionColData should be a matrix type object.
-It should be stored in colData (SHILA to check).</p></td>
+      <td><p>Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.</p></td>
     </tr>
     <tr>
       <th>nrow.out</th>
-      <td><p>SHILA to input</p></td>
+      <td><p>The number of weightings to include for testing, a smaller value is faster for computation</p></td>
     </tr>
     <tr>
       <th>averageAcrossTrajectoryTies</th>
-      <td><p>SHILA to input</p></td>
+      <td><p>Logical indicating whether ties in the trajectory should be given the same local weights</p></td>
     </tr>
     <tr>
       <th>higherOrderFunction</th>
@@ -175,28 +173,28 @@ It should be stored in colData (SHILA to check).</p></td>
     </tr>
     <tr>
       <th>higherOrderFunctionType</th>
-      <td><p>is weighted or unweighted, determines if there
+      <td><p>is "weighted" or "unweighted", determines if there
 is a weighting argument in the higher order function</p></td>
     </tr>
     <tr>
       <th>numberPermutations</th>
-      <td><p>The number of permutatuion, set as 1000 by default</p></td>
+      <td><p>The number of permutations, set as 1000 by default</p></td>
     </tr>
     <tr>
       <th>numberScaffold</th>
-      <td><p>The number of scaffold, set as 100 by default</p></td>
+      <td><p>The number of testing scaffolds to perform permutations, set as 100 by default</p></td>
     </tr>
     <tr>
       <th>storePermutations</th>
-      <td><p>a logical flag on whether</p></td>
+      <td><p>a logical flag on whether permutation values should be saved</p></td>
     </tr>
     <tr>
       <th>higherOrderSummaryFunction</th>
-      <td><p>A functon indicates the higher order summary function (SHILA to check)</p></td>
+      <td><p>A functon indicating the higher order summary function (default is standard deviation `sd`)</p></td>
     </tr>
     <tr>
       <th>parallel</th>
-      <td><p>A logical input indicates whether run the permutation test using multiple cores in parallel.</p></td>
+      <td><p>A logical input indicating whether to run the permutation test using multiple cores in parallel.</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>
@@ -204,23 +202,23 @@ is a weighting argument in the higher order function</p></td>
     </tr>
     <tr>
       <th>usenperm</th>
-      <td><p>SHILA to write</p></td>
+      <td><p>Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used</p></td>
     </tr>
     <tr>
       <th>nperm</th>
-      <td><p>number of permutation</p></td>
+      <td><p>Number of neighbouring permutations to use for p-value estimation</p></td>
     </tr>
     <tr>
       <th>maxDist</th>
-      <td><p>SHILA to write</p></td>
+      <td><p>max difference of global higher order statistic to use for p-value estimation (default 0.1)</p></td>
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>A logical input indicates whether the results are plotted</p></td>
+      <td><p>A logical input indicating whether the results are plotted</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>A logical input indicates whether the intermediate steps will be printed</p></td>
+      <td><p>A logical input indicating whether the intermediate steps will be printed</p></td>
     </tr>
     <tr>
       <th>...</th>

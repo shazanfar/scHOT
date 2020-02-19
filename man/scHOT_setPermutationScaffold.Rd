@@ -14,12 +14,12 @@ scHOT_setPermutationScaffold(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{numberPermutations}{The number of permutatuion, set as 1000 by default}
+\item{numberPermutations}{The number of permutations, set as 1000 by default}
 
-\item{numberScaffold}{The number of scaffold, set as 100 by default}
+\item{numberScaffold}{The number of scaffold, set as 100 by default. if you want all combinations to do permutations then set, numberScaffold much higher than the testingScaffold}
 
 \item{storePermutations}{a logical flag on whether
-Permutations should be stored, or discarded}
+Permutations should be stored, or discarded once used}
 }
 \description{
 Set permutation scaffold

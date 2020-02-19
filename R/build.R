@@ -5,7 +5,7 @@
 #'
 #' @param mat A matrix with rows for genes and columns for cells
 #' @param cellData A dataframe or DataFrame object with rows for cells
-#' @param positionType A string indicates the position type, either trajectory or spatial
+#' @param positionType A string indicating the position type, either "trajectory" or "spatial"
 #' @param positionColData Strings indicate the position information stored in colData.
 #' If positionType is "trajectory" then positionColData should be a sortable vector
 #' if positionType is "spatial" then positionColData should be a matrix type object.
@@ -18,7 +18,7 @@
 #'
 #' dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 #' colnames(dat) <- paste0("cell_", 1:ncol(dat))
-#' rownames(dat) <- c("T","Gata1", "Tal1")
+#' rownames(dat) <- c("gene_1","gene_2", "gene_2")
 #'
 #' scHOT <-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
 #'
@@ -80,7 +80,7 @@ scHOT_buildFromMatrix <- function(mat,
 #' library(SingleCellExperiment)
 #' dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 #' colnames(dat) <- paste0("cell_", 1:ncol(dat))
-#' rownames(dat) <- c("T","Gata1", "Tal1")
+#' rownames(dat) <- c("gene_1","gene_2", "gene_2")
 #'
 #' sce <- SingleCellExperiment::SingleCellExperiment(assays = S4Vectors::SimpleList(counts = dat))
 #' scHOT <- scHOT_buildFromSCE(sce)
@@ -118,7 +118,7 @@ scHOT_buildFromSCE <- function(sce,
 #' @title scHOT_addTestingScaffold
 #'
 #' @param scHOT A scHOT object
-#' @param testingScaffold A matrix with rows for each testing combination
+#' @param testingScaffold A matrix with rows for each testing combination, and columns for level of dimensionality (1 for single gene etc.)
 #'
 #' @export
 
@@ -153,8 +153,8 @@ scHOT_addTestingScaffold <- function(scHOT, testingScaffold) {
 #' @title trajectoryWeightMatrix
 #'
 #' @param n indicates the number of cels
-#' @param type Type of weight matrix, one of "harmonic", "triangular", "block"
-#' @param span proportion of samples to include on either side, default is 0.5
+#' @param type Type of weight matrix, one of "triangular" (default), "block", and "harmonic"
+#' @param span proportion of samples to include on either side, default is 0.25
 #'
 #' @examples
 #'
@@ -183,12 +183,12 @@ trajectoryWeightMatrix <- function(n, type = NULL, span = NULL) {
 
   if (type != "harmonic") {
     if (is.null(span)) {
-      span = 0.5
-      message("span not specified, defaulting to 0.5")
+      span = 0.25
+      message("span not specified, defaulting to 0.25")
     }
     if (span < 0 | span > 1) {
-      span = 0.5
-      message("span specified not between 0 and 1, defaulting to 0.5")
+      span = 0.25
+      message("span specified not between 0 and 1, defaulting to 0.25")
     }
   }
 
@@ -230,8 +230,8 @@ trajectoryWeightMatrix <- function(n, type = NULL, span = NULL) {
 #'
 #' @title spatialWeightMatrix
 #'
-#' @param x a matrix with rows corresponding to cells and columns corresponding to dimensions to calculate distance
-#' @param span proportion of samples to include on either side, default is 0.5
+#' @param x a matrix with rows corresponding to cells and columns corresponding to dimensions to calculate Euclidean distance
+#' @param span proportion of samples to include on either side, default is 13/(number of rows in `x`), corresponding roughly to points within a diamond shape distance away
 #'
 #' @importFrom stats dist
 #'
@@ -244,8 +244,9 @@ spatialWeightMatrix <- function(x, span = NULL) {
   n = nrow(x)
 
   if (is.null(span)) {
-    span = 0.5
-    message("span not specified, defaulting to 0.5")
+    span = 13/n
+    if (span > 1) span = 0.5
+    message(paste0("span not specified, defaulting to ", round(span, 2)))
   }
 
   # calculate euclidean distance of points on 2D
@@ -313,13 +314,11 @@ thin = function(W, n = 100) {
 #' @title scHOT_setWeightMatrix
 #'
 #' @param scHOT A scHOT object
-#' @param weightMatrix A matrix indicates the weight matrix for scHOT analysis
-#' @param positionType A string indicates the position type, either trajectory or spatial
-#' @param positionColData If positionType is "trajectory" then positionColData should be a sortable vector
-#' if positionType is "spatial" then positionColData should be a matrix type object.
-#' It should be stored in colData (SHILA to check).
-#' @param nrow.out SHILA to input
-#' @param averageAcrossTrajectoryTies SHILA to input
+#' @param weightMatrix A matrix indicating the weight matrix for scHOT analysis, such as the output from `trajectoryWeightMatrix` or `spatialWeightMatrix`. If this is not NULL then other parameters are ignored.
+#' @param positionType A string indicating the position type, either "trajectory" or "spatial"
+#' @param positionColData Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.
+#' @param nrow.out The number of weightings to include for testing, a smaller value is faster for computation
+#' @param averageAcrossTrajectoryTies Logical indicating whether ties in the trajectory should be given the same local weights
 #' @param ... parameters for function trajectoryWeightMatrix or spatialWeightMatrix
 #'
 #' @importFrom methods as
@@ -332,8 +331,6 @@ scHOT_setWeightMatrix <- function(scHOT,
                                   positionColData = NULL,
                                   nrow.out = NULL,
                                   averageAcrossTrajectoryTies = FALSE,
-                                  # type = NULL,
-                                  # span = NULL,
                                   ...) {
 
   # either set own weight matrix in object or generate a new one using parameters
@@ -462,7 +459,7 @@ weightedFunctionOverScaffold = function(testingScaffold,
 
   # weightedFunctionOverScaffold takes in a set of weights
   # and applies a weighted function to it
-  #  weightedFunction must have sample weighting as its first argument
+  #  weightedFunction must have sample weighting as its last argument
 
   sapply(1:nrow(weightMatrix), function(i) {
     apply(testingScaffold, 1, function(x) {
@@ -487,8 +484,8 @@ weightedFunctionOverScaffold = function(testingScaffold,
 #' if these aren't found in the params slot then they need to be specified here
 #'
 #' @param scHOT A scHOT object
-#' @param higherOrderFunction A function object indicates the higher order function
-#' @param higherOrderFunctionType is weighted or unweighted, determines if there
+#' @param higherOrderFunction A function object indicating the higher order function
+#' @param higherOrderFunctionType is "weighted" or "unweighted", determines if there
 #' is a weighting argument in the higher order function
 #'
 #' @importFrom SummarizedExperiment assay
@@ -607,10 +604,10 @@ stratifiedSample = function(stats, length = 100) {
 #' @title scHOT_setPermutationScaffold
 #'
 #' @param scHOT A scHOT object
-#' @param numberPermutations The number of permutatuion, set as 1000 by default
-#' @param numberScaffold The number of scaffold, set as 100 by default
+#' @param numberPermutations The number of permutations, set as 1000 by default
+#' @param numberScaffold The number of scaffold, set as 100 by default. if you want all combinations to do permutations then set, numberScaffold much higher than the testingScaffold
 #' @param storePermutations  a logical flag on whether
-#' Permutations should be stored, or discarded
+#' Permutations should be stored, or discarded once used
 #'
 #' @export
 
@@ -644,7 +641,7 @@ scHOT_setPermutationScaffold = function(scHOT,
 
   if (numberScaffold > nrow(scHOT@testingScaffold)) {
     message(paste0("numberScaffold set higher than the scaffold,",
-                   " performing permutations for all tests"))
+                   "setting permutation number for all tests"))
     scHOT@scHOT_output$numberPermutations = numberPermutations
   } else {
 
@@ -687,8 +684,19 @@ scHOT_stripOutput <- function(scHOT, force = TRUE, store = FALSE, file_name = NU
   scHOT_output <- scHOT@scHOT_output
 
   if (!is.null(scHOT_output)) {
-    current_testing <-  paste(scHOT@testingScaffold[, 1], scHOT@testingScaffold[, 2], sep = "_")
-    current_output_testing <- paste(scHOT_output$gene_1, scHOT_output$gene_2, sep = "_")
+    # current_testing <- paste(scHOT@testingScaffold[, 1], scHOT@testingScaffold[, 2], sep = "_")
+
+    if (nrow(scHOT@testingScaffold) == 1) {
+      current_testing <- apply(scHOT@testingScaffold, 1, paste, collapse = "_")
+      current_output_testing <- apply(scHOT_output[, grepl("gene_[0-9]", colnames(scHOT_output)), drop = FALSE], 1, paste, collapse = "_")
+    } else {
+      current_testing <- apply(scHOT@testingScaffold, 1, paste, sep = "_")
+      current_output_testing <- apply(scHOT_output[, grepl("gene_[0-9]", colnames(scHOT_output)), drop = FALSE], 1, paste, sep = "_")
+    }
+
+    # current_testing <- apply(scHOT@testingScaffold, 1, paste, sep = "_")
+    # current_output_testing <- paste(scHOT_output$gene_1, scHOT_output$gene_2, sep = "_")
+    # current_output_testing <- apply(scHOT_output[, grepl("gene_[0-9]", colnames(scHOT_output)), drop = FALSE], 1, paste, sep = "_")
 
     if (force | !all(current_testing %in% current_output_testing) | length(current_testing) != length(current_output_testing)) {
 
@@ -698,9 +706,9 @@ scHOT_stripOutput <- function(scHOT, force = TRUE, store = FALSE, file_name = NU
       if (store) {
 
         if (is.null(file_name)) {
-          file_name <- "scHOT.rds"
+          file_name <- "scHOT.Rds"
         } else {
-          file_name <- paste0(file_name, ".rds")
+          file_name <- paste0(file_name, ".Rds")
         }
 
         message(paste0("The current scHOT wil be stored as ", file_name))
