@@ -16,7 +16,7 @@ scHOT_buildFromMatrix(
 
 \item{cellData}{A dataframe or DataFrame object with rows for cells}
 
-\item{positionType}{A string indicates the position type, either trajectory or spatial}
+\item{positionType}{A string indicating the position type, either "trajectory" or "spatial"}
 
 \item{positionColData}{Strings indicate the position information stored in colData.
 If positionType is "trajectory" then positionColData should be a sortable vector
@@ -29,7 +29,7 @@ Create scHOT object from a matrix
 
 dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 colnames(dat) <- paste0("cell_", 1:ncol(dat))
-rownames(dat) <- c("T","Gata1", "Tal1")
+rownames(dat) <- c("gene_1","gene_2", "gene_2")
 
 scHOT <-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
 

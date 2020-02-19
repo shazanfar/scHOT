@@ -131,25 +131,23 @@
     </tr>
     <tr>
       <th>weightMatrix</th>
-      <td><p>A matrix indicates the weight matrix for scHOT analysis</p></td>
+      <td><p>A matrix indicating the weight matrix for scHOT analysis, such as the output from `trajectoryWeightMatrix` or `spatialWeightMatrix`. If this is not NULL then other parameters are ignored.</p></td>
     </tr>
     <tr>
       <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
+      <td><p>A string indicating the position type, either "trajectory" or "spatial"</p></td>
     </tr>
     <tr>
       <th>positionColData</th>
-      <td><p>If positionType is "trajectory" then positionColData should be a sortable vector
-if positionType is "spatial" then positionColData should be a matrix type object.
-It should be stored in colData (SHILA to check).</p></td>
+      <td><p>Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.</p></td>
     </tr>
     <tr>
       <th>nrow.out</th>
-      <td><p>SHILA to input</p></td>
+      <td><p>The number of weightings to include for testing, a smaller value is faster for computation</p></td>
     </tr>
     <tr>
       <th>averageAcrossTrajectoryTies</th>
-      <td><p>SHILA to input</p></td>
+      <td><p>Logical indicating whether ties in the trajectory should be given the same local weights</p></td>
     </tr>
     <tr>
       <th>...</th>

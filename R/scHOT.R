@@ -1,30 +1,28 @@
-#' A wrap up function to perform scHOT
+#' A wrapper function to perform scHOT
 #'
 #' @title scHOT
 #'
 #' @param scHOT A scHOT object
 #' @param testingScaffold A matrix with rows for each testing combination
 #' @param weightMatrix A matrix indicates the weight matrix for scHOT analysis
-#' @param positionType A string indicates the position type, either trajectory or spatial
-#' @param positionColData If positionType is "trajectory" then positionColData should be a sortable vector
-#' if positionType is "spatial" then positionColData should be a matrix type object.
-#' It should be stored in colData (SHILA to check).
-#' @param nrow.out SHILA to input
-#' @param averageAcrossTrajectoryTies SHILA to input
+#' @param positionType A string indicating the position type, either "trajectory" or "spatial"
+#' @param positionColData Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.
+#' @param nrow.out The number of weightings to include for testing, a smaller value is faster for computation
+#' @param averageAcrossTrajectoryTies Logical indicating whether ties in the trajectory should be given the same local weights
 #' @param higherOrderFunction A function object indicates the higher order function
-#' @param higherOrderFunctionType is weighted or unweighted, determines if there
+#' @param higherOrderFunctionType is "weighted" or "unweighted", determines if there
 #' is a weighting argument in the higher order function
-#' @param numberPermutations The number of permutatuion, set as 1000 by default
-#' @param numberScaffold The number of scaffold, set as 100 by default
-#' @param storePermutations  a logical flag on whether
-#' @param higherOrderSummaryFunction A functon indicates the higher order summary function (SHILA to check)
-#' @param parallel A logical input indicates whether run the permutation test using multiple cores in parallel.
+#' @param numberPermutations The number of permutations, set as 1000 by default
+#' @param numberScaffold The number of testing scaffolds to perform permutations, set as 100 by default
+#' @param storePermutations  a logical flag on whether permutation values should be saved
+#' @param higherOrderSummaryFunction A functon indicating the higher order summary function (default is standard deviation `sd`)
+#' @param parallel A logical input indicating whether to run the permutation test using multiple cores in parallel.
 #' @param BPPARAM  A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().
-#' @param usenperm SHILA to write
-#' @param nperm number of permutation
-#' @param maxDist SHILA to write
-#' @param plot A logical input indicates whether the results are plotted
-#' @param verbose A logical input indicates whether the intermediate steps will be printed
+#' @param usenperm Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
+#' @param nperm Number of neighbouring permutations to use for p-value estimation
+#' @param maxDist max difference of global higher order statistic to use for p-value estimation (default 0.1)
+#' @param plot A logical input indicating whether the results are plotted
+#' @param verbose A logical input indicating whether the intermediate steps will be printed
 #'
 #' @param ... parameters for function trajectoryWeightMatrix or spatialWeightMatrix
 #'
@@ -60,11 +58,16 @@ scHOT <- function(scHOT,
   # add testing scaffold
 
 
-  if (ncol(testingScaffold) != 2) {
-    stop("testingScaffold must be a matrix with two columns \n")
-  }
+  # if (ncol(testingScaffold) != 2) {
+  #   stop("testingScaffold must be a matrix with two columns \n")
+  # }
 
-  rownames(testingScaffold) <- paste(testingScaffold[, 1], testingScaffold[, 2])
+  # rownames(testingScaffold) <- paste(testingScaffold[, 1], testingScaffold[, 2])
+  if (nrow(testingScaffold) == 1) {
+    rownames(testingScaffold) <- apply(testingScaffold,1,paste0, collapse = "_")
+  } else {
+  rownames(testingScaffold) <- apply(testingScaffold, 1, paste, sep = "_")
+  }
 
   if (verbose) {
     cat("Adding testing scaffold \n")
@@ -72,7 +75,6 @@ scHOT <- function(scHOT,
 
   scHOT <- scHOT_addTestingScaffold(scHOT,
                                     testingScaffold = testingScaffold)
-
 
   # set weight matrix
 

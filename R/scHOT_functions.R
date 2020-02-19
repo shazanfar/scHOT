@@ -401,11 +401,11 @@ estimatePvalues <- function(stats,
 #' @title scHOT_estimatePvalues
 #'
 #' @param scHOT A scHOT object
-#' @param usenperm SHILA to write
-#' @param nperm number of permutation
-#' @param maxDist SHILA to write
-#' @param plot A logical input indicates whether the results are plotted
-#' @param verbose A logical input indicates whether the intermediate steps will be printed
+#' @param usenperm Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
+#' @param nperm Number of neighbouring permutations to use for p-value estimation
+#' @param maxDist max difference of global higher order statistic to use for p-value estimation (default 0.1)
+#' @param plot A logical input indicating whether the results are plotted
+#' @param verbose A logical input indicating whether the intermediate steps will be printed
 #'
 #' @return scHOT A scHOT object with results stored in scHOT_output slot
 #'

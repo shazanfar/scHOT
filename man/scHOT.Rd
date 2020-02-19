@@ -35,45 +35,43 @@ scHOT(
 
 \item{weightMatrix}{A matrix indicates the weight matrix for scHOT analysis}
 
-\item{positionType}{A string indicates the position type, either trajectory or spatial}
+\item{positionType}{A string indicating the position type, either "trajectory" or "spatial"}
 
-\item{positionColData}{If positionType is "trajectory" then positionColData should be a sortable vector
-if positionType is "spatial" then positionColData should be a matrix type object.
-It should be stored in colData (SHILA to check).}
+\item{positionColData}{Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.}
 
-\item{nrow.out}{SHILA to input}
+\item{nrow.out}{The number of weightings to include for testing, a smaller value is faster for computation}
 
-\item{averageAcrossTrajectoryTies}{SHILA to input}
+\item{averageAcrossTrajectoryTies}{Logical indicating whether ties in the trajectory should be given the same local weights}
 
 \item{higherOrderFunction}{A function object indicates the higher order function}
 
-\item{higherOrderFunctionType}{is weighted or unweighted, determines if there
+\item{higherOrderFunctionType}{is "weighted" or "unweighted", determines if there
 is a weighting argument in the higher order function}
 
-\item{numberPermutations}{The number of permutatuion, set as 1000 by default}
+\item{numberPermutations}{The number of permutations, set as 1000 by default}
 
-\item{numberScaffold}{The number of scaffold, set as 100 by default}
+\item{numberScaffold}{The number of testing scaffolds to perform permutations, set as 100 by default}
 
-\item{storePermutations}{a logical flag on whether}
+\item{storePermutations}{a logical flag on whether permutation values should be saved}
 
-\item{higherOrderSummaryFunction}{A functon indicates the higher order summary function (SHILA to check)}
+\item{higherOrderSummaryFunction}{A functon indicating the higher order summary function (default is standard deviation `sd`)}
 
-\item{parallel}{A logical input indicates whether run the permutation test using multiple cores in parallel.}
+\item{parallel}{A logical input indicating whether to run the permutation test using multiple cores in parallel.}
 
 \item{BPPARAM}{A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().}
 
-\item{usenperm}{SHILA to write}
+\item{usenperm}{Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used}
 
-\item{nperm}{number of permutation}
+\item{nperm}{Number of neighbouring permutations to use for p-value estimation}
 
-\item{maxDist}{SHILA to write}
+\item{maxDist}{max difference of global higher order statistic to use for p-value estimation (default 0.1)}
 
-\item{plot}{A logical input indicates whether the results are plotted}
+\item{plot}{A logical input indicating whether the results are plotted}
 
-\item{verbose}{A logical input indicates whether the intermediate steps will be printed}
+\item{verbose}{A logical input indicating whether the intermediate steps will be printed}
 
 \item{...}{parameters for function trajectoryWeightMatrix or spatialWeightMatrix}
 }
 \description{
-A wrap up function to perform scHOT
+A wrapper function to perform scHOT
 }

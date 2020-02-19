@@ -1,5 +1,5 @@
 ---
-title: "Getting start: scHOT"
+title: "Getting started: scHOT"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -27,6 +27,9 @@ library(scHOT)
 
 # Trajectory data: liver
 
+Investigate changes in variability along the first part of the trajectory,
+from hepatoblast to the decision point
+
 ```{r}
 data(liver)
 # load("../data/liver.RData", verbose = TRUE)
@@ -36,12 +39,11 @@ data(liver)
 ```{r}
 n_first = length(intersect(colnames(liver_branch_chol), colnames(liver_branch_hep)))
 
-gene_to_test <- cbind(c("Birc5", "H2afz", "Tacc3"),
-                      c("Birc5", "H2afz", "Tacc3"))
+gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
 
-weightedVar2 <- function(x, y, w) {
-  weightedVar2 <- weightedVar(x, w)
-}
+# weightedVar2 <- function(w, x) {
+#   weightedVar2 <- weightedVar(x, w)
+# }
 ```
 
 ## Hepatocytes branch
@@ -63,7 +65,7 @@ scHOT_trajectory_hepatocytes <- scHOT_setWeightMatrix(scHOT_trajectory_hepatocyt
 
 
 scHOT_trajectory_hepatocytes <- scHOT_calculateGlobalHigherOrderFunction(scHOT_trajectory_hepatocytes, 
-                                                                         higherOrderFunction = weightedVar2,
+                                                                         higherOrderFunction = weightedVar,
                                                                          higherOrderFunctionType = "weighted")
 
 
@@ -105,11 +107,9 @@ plotHigherOrderSequence(scHOT_trajectory_hepatocytes, "Tacc3")
 
 ## Branch: Cholangiocytes
 
-Perform similar analysis using `scHOT` wrap up function for the cholangiocytes branch
+Perform similar analysis using `scHOT` wrap up function for the cholangiocytes branch.
 
 ```{r}
-
-
 scHOT_trajectory_cholangiocytes <- scHOT_buildFromMatrix(mat = liver_branch_chol,
                                                          cellData = list(pseudotime = liver_pseudotime_chol),
                                                          positionType = "trajectory",
@@ -117,12 +117,11 @@ scHOT_trajectory_cholangiocytes <- scHOT_buildFromMatrix(mat = liver_branch_chol
 
 
 scHOT_trajectory_cholangiocytes <- scHOT(scHOT_trajectory_cholangiocytes,
-                       testingScaffold = matrix(c("Tacc3", "Tacc3"), 
-                                                ncol = 2, byrow = TRUE),
+                       testingScaffold = as.matrix(c("Tacc3", "Birc5")),
                        positionType = "trajectory",
                        positionColData = c("pseudotime"),
                        nrow.out = NULL,
-                       higherOrderFunction = weightedVar2,
+                       higherOrderFunction = weightedVar,
                        higherOrderFunctionType = 'weighted',
                        numberPermutations = 100,
                        higherOrderSummaryFunction = sd,
@@ -178,7 +177,7 @@ set.seed(2020)
 pairs <- pairs[sample(nrow(pairs), 10), ]
 
 cat("Pairs to be tested")
-pairs <- rbind(pairs, c("Arrb1", "Mtor"))
+pairs <- rbind(pairs, "Arrb1_Mtor" = c("Arrb1", "Mtor"))
 
 scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
 
@@ -251,7 +250,7 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        positionColData = c("x", "y"),
                        nrow.out = NULL,
                        higherOrderFunction = weightedSpearman,
-                       higherOrderFunctionType = 'weighted',
+                       higherOrderFunctionType = "weighted",
                        numberPermutations = 100,
                        higherOrderSummaryFunction = sd,
                        parallel = TRUE,

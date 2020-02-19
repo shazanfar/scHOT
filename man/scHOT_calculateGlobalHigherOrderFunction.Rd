@@ -13,9 +13,9 @@ scHOT_calculateGlobalHigherOrderFunction(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{higherOrderFunction}{A function object indicates the higher order function}
+\item{higherOrderFunction}{A function object indicating the higher order function}
 
-\item{higherOrderFunctionType}{is weighted or unweighted, determines if there
+\item{higherOrderFunctionType}{is "weighted" or "unweighted", determines if there
 is a weighting argument in the higher order function}
 }
 \description{

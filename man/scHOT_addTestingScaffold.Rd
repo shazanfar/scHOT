@@ -9,7 +9,7 @@ scHOT_addTestingScaffold(scHOT, testingScaffold)
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{testingScaffold}{A matrix with rows for each testing combination}
+\item{testingScaffold}{A matrix with rows for each testing combination, and columns for level of dimensionality (1 for single gene etc.)}
 }
 \description{
 Add a testing scaffold to a scHOT object

@@ -132,7 +132,7 @@
     </tr>
     <tr>
       <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
+      <td><p>A string indicating the position type, either "trajectory" or "spatial"</p></td>
     </tr>
     <tr>
       <th>positionColData</th>
@@ -147,7 +147,7 @@ if positionType is "spatial" then positionColData should be a matrix type object
     <pre class="examples"><div class='input'>
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>50</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>50</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>50</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"cell_"</span>, <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>dat</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"T"</span>,<span class='st'>"Gata1"</span>, <span class='st'>"Tal1"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gene_1"</span>,<span class='st'>"gene_2"</span>, <span class='st'>"gene_2"</span>)
 
 <span class='no'>scHOT</span> <span class='kw'>&lt;-</span><span class='fu'>scHOT_buildFromMatrix</span>(<span class='no'>dat</span>, <span class='kw'>cellData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>dat</span>)))</div></pre>
   </div>
