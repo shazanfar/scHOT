@@ -9,7 +9,7 @@ Install the following packages using `BiocManager`:
 
 ```r
 # install.packages("BiocManager")
-BiocManager::install(c("S4Vectors", "SummarizedExperiment", ""SingleCellExperiment", 
+BiocManager::install(c("S4Vectors", "SummarizedExperiment", "SingleCellExperiment", 
 "Matrix", "IRanges", "BiocParallel", "reshape", "ggplot2", "igraph", "grDevices", "ggforce"))
 ```
 
@@ -25,7 +25,7 @@ devtools::install_github("shazanfar/scHOT")
 
 ## Vignette
 
-You can find the vignette at this webiste: https://shazanfar.github.io/scHOT/index.html.
+You can find the vignette at this website: https://shazanfar.github.io/scHOT/.
 
 
 
