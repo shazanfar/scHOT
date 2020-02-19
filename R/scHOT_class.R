@@ -7,7 +7,7 @@
 
 setClassUnion("matrixORdgCMatrix", c("matrix", "dgCMatrix"))
 
-# @importClassesFrom S4Vectors DataFrame DFrame
+#' @importClassesFrom S4Vectors DataFrame DFrame
 #'
 
 setClassUnion("data.frameORDataFrame", c("data.frame", "DataFrame"))
