@@ -21,11 +21,12 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(SingleCellExperiment)
+library(ggplot2)
 library(scHOT)
 ```
 
 
-# Trajectory data: liver
+# Testing variability changes along liver trajectory
 
 Investigate changes in variability along the first part of the trajectory,
 from hepatoblast to the decision point. Using weighted variance as implemented
@@ -60,7 +61,7 @@ scHOT_traj <- scHOT_buildFromMatrix(mat = liver_branch_hep[,first_branch_cells],
                                                       positionColData = "pseudotime")
 scHOT_traj
 
-scater::plotExpression(scHOT_traj, c("Epcam"),
+scater::plotExpression(scHOT_traj, c("Sall4"),
                        exprs_values = "expression", x = "pseudotime")
 ```
 
@@ -88,46 +89,40 @@ scHOT_traj_wrap@scHOT_output$higherOrderSequence
 plotHigherOrderSequence(scHOT_traj_wrap, "Tacc3")
 ```
 
+Now, we can perform the same testing but step-by-step.
 
 ```{r}
 scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, gene_to_test)
 
 scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
-                                                      positionColData = c("pseudotime"),
-                                                      positionType = "trajectory",
-                                                      nrow.out = NULL,
-                                                      span = 0.25)
-
+                                    positionColData = c("pseudotime"),
+                                    positionType = "trajectory",
+                                    nrow.out = NULL,
+                                    span = 0.25)
 
 scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj, 
-                                                                         higherOrderFunction = matrixStats::weightedVar,
-                                                                         higherOrderFunctionType = "weighted")
+                                                       higherOrderFunction = matrixStats::weightedVar,
+                                                       higherOrderFunctionType = "weighted")
 
 
 scHOT_traj@scHOT_output
 
 scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj, 
-                                                             numberPermutations = 100)
+                                           numberPermutations = 100)
 
 
 scHOT_traj@scHOT_output
 
 
 scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
-                                                                         higherOrderSummaryFunction = sd)
+                                                       higherOrderSummaryFunction = sd)
 
 scHOT_traj@scHOT_output
 
-
-
-
 system.time(scHOT_traj <- scHOT_performPermutationTest(scHOT_traj, 
-                                                                         verbose = TRUE,
-                                                                         parallel = TRUE,
-                                                                         BPPARAM = MulticoreParam(workers = 4)))
-
-
-
+                                                       verbose = TRUE,
+                                                       parallel = TRUE,
+                                                       BPPARAM = MulticoreParam(workers = 4)))
 
 
 scHOT_traj <- scHOT_estimatePvalues(scHOT_traj)
@@ -138,65 +133,30 @@ scHOT_traj@scHOT_output$higherOrderSequence
 plotHigherOrderSequence(scHOT_traj, "Tacc3")
 ```
 
+# Spatial differential correlation in Mouse Olfactory Bulb
 
-
-## Branch: Cholangiocytes
-
-Perform similar analysis using `scHOT` wrap up function for the cholangiocytes branch.
-
-```{r}
-scHOT_trajectory_cholangiocytes <- scHOT_buildFromMatrix(mat = liver_branch_chol,
-                                                         cellData = list(pseudotime = liver_pseudotime_chol),
-                                                         positionType = "trajectory",
-                                                         positionColData = "pseudotime")
-
-
-scHOT_trajectory_cholangiocytes <- scHOT(scHOT_trajectory_cholangiocytes,
-                       testingScaffold = as.matrix(c("Tacc3", "Birc5")),
-                       positionType = "trajectory",
-                       positionColData = c("pseudotime"),
-                       nrow.out = NULL,
-                       higherOrderFunction = weightedVar,
-                       higherOrderFunctionType = 'weighted',
-                       numberPermutations = 100,
-                       higherOrderSummaryFunction = sd,
-                       parallel = TRUE,
-                       BPPARAM = MulticoreParam(workers = 4),
-                       verbose = TRUE,
-                       span = 0.5*n_first/ncol(liver_branch_chol))
-
-plotHigherOrderSequence(scHOT_trajectory_cholangiocytes, "Tacc3")
-```
-
-
-
-
-
-# Spatial data: MOB
-
-## Perform scHOT step by step
+We load up the Spatial Transcriptomics mouse olfactory bulb data, and build a 
+`scHOT` object from the `SingleCellExperiment` object.
 
 ```{r}
 data(MOB_subset)
 # load("../data/MOB_subset.RData", verbose = TRUE)
 sce_MOB_subset
 
-
 scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
-                                    assayName = "counts",
+                                    assayName = "logcounts",
                                     positionType = "spatial",
                                     positionColData = c("x", "y"))
+
+scHOT_spatial
 ```
 
-
-
+## Perform scHOT step by step - skip ahead for wrapper using `scHOT`
 
 ```{r}
-scHOT_spatial
-logcounts(scHOT_spatial) <- logcounts(sce_MOB_subset)
-
 pairs <- t(combn(intersect(HVG, nonDEgenes),2))
 rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+head(pairs)
 
 set.seed(2020)
 pairs <- pairs[sample(nrow(pairs), 10), ]
@@ -234,19 +194,23 @@ scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(scHOT_spatial,
 scHOT_spatial@scHOT_output
 
 
-
-
 system.time(scHOT_spatial <- scHOT_performPermutationTest(scHOT_spatial, 
                                                           verbose = TRUE,
                                                           parallel = TRUE,
                                                           BPPARAM = MulticoreParam(workers = 4)))
 
 
-
-
-
 scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial)
 scHOT_spatial@scHOT_output
+
+ggplot(as.data.frame(scHOT_spatial@scHOT_output),
+       aes(x = -log10(pvalPermutations), y = -log10(pvalEstimated))) + 
+  geom_point() + 
+  theme_classic() + 
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Permutation -log10(p-value)") +
+  ylab("Estimated -log10(p-value)") +
+  NULL
 
 colData(scHOT_spatial)[, "-x"] <- -colData(scHOT_spatial)[, "x"]
 plotHigherOrderSequence(scHOT_spatial, c("Dnm1l_Gucy1b3"),
@@ -254,9 +218,7 @@ plotHigherOrderSequence(scHOT_spatial, c("Dnm1l_Gucy1b3"),
 
 plotOrderedExpression(scHOT_spatial, "Dnm1l_Gucy1b3",
                       positionColData = c("-x", "y"),
-                      assayName = "logcounts")
-
-
+                      assayName = "expression")
 ```
 
 ## Perform scHOT using `scHOT` wrap-up function
@@ -264,13 +226,15 @@ plotOrderedExpression(scHOT_spatial, "Dnm1l_Gucy1b3",
 Please strip the scHOT output using `scHOT_stripOutput` before rerun scHOT. 
 ```{r}
 scHOT_spatial <- scHOT_stripOutput(scHOT_spatial, force = TRUE)
+
+scHOT_spatial
+scHOT_spatial@scHOT_output
 ```
 
 
 ```{r}
 scHOT_spatial <- scHOT(scHOT_spatial,
-                       testingScaffold = matrix(c("Arrb1", "Mtor"), 
-                                                ncol = 2, byrow = TRUE),
+                       testingScaffold = pairs,
                        positionType = "spatial",
                        positionColData = c("x", "y"),
                        nrow.out = NULL,
@@ -283,17 +247,15 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        verbose = TRUE,
                        span = 0.05)
 
-
+scHOT_spatial@scHOT_output
 
 plotOrderedExpression(scHOT_spatial, "Arrb1_Mtor",
                       positionColData = c("-x", "y"),
-                      assayName = "logcounts")
+                      assayName = "expression")
+
 plotHigherOrderSequence(scHOT_spatial, "Arrb1_Mtor",
                         positionColData = c("-x", "y"))
-
 ```
-
-
 
 
 ```{r}
