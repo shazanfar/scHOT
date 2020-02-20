@@ -63,11 +63,11 @@ scHOT <- function(scHOT,
   # }
 
   # rownames(testingScaffold) <- paste(testingScaffold[, 1], testingScaffold[, 2])
-  if (nrow(testingScaffold) == 1) {
-    rownames(testingScaffold) <- apply(testingScaffold,1,paste0, collapse = "_")
-  } else {
-  rownames(testingScaffold) <- apply(testingScaffold, 1, paste, sep = "_")
-  }
+  # if (nrow(testingScaffold) == 1) {
+    # rownames(testingScaffold) <- apply(testingScaffold,1,paste0, collapse = "_")
+  # } else {
+  rownames(testingScaffold) <- apply(testingScaffold, 1, paste, collapse = "_")
+  # }
 
   if (verbose) {
     cat("Adding testing scaffold \n")

@@ -708,7 +708,7 @@ scHOT_plotPermutationDistributions = function(scHOT) {
 
   gBase = ggplot(permstatsDF, aes(x = globalHigherOrderFunction, y = stat))
 
-  if (require(scattermore)) {
+  if (require(scattermore) & require(scales)) {
     gBase = gBase + geom_scattermore()
   }
 
