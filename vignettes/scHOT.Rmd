@@ -4,7 +4,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{Getting start: scHOT}
+  %\VignetteIndexEntry{Getting started: scHOT}
   %\usepackage[UTF-8]{inputenc}
 ---
 
@@ -28,7 +28,8 @@ library(scHOT)
 # Trajectory data: liver
 
 Investigate changes in variability along the first part of the trajectory,
-from hepatoblast to the decision point
+from hepatoblast to the decision point. Using weighted variance as implemented
+in the `matrixStats` package.
 
 ```{r}
 data(liver)
@@ -65,7 +66,7 @@ scHOT_trajectory_hepatocytes <- scHOT_setWeightMatrix(scHOT_trajectory_hepatocyt
 
 
 scHOT_trajectory_hepatocytes <- scHOT_calculateGlobalHigherOrderFunction(scHOT_trajectory_hepatocytes, 
-                                                                         higherOrderFunction = weightedVar,
+                                                                         higherOrderFunction = matrixStats::weightedVar,
                                                                          higherOrderFunctionType = "weighted")
 
 

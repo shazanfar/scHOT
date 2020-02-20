@@ -303,16 +303,16 @@ estimatePvalues <- function(stats,
                             usenperm = FALSE,
                             nperm = 10000,
                             maxDist = 0.1,
-                            plot = FALSE,
+                            # plot = FALSE,
                             verbose = FALSE) {
 
-  if (plot) {
-    graphics::plot(globalCors[names(permstats)],
-                   unlist(lapply(permstats,
-                                 function(x) mean(unlist(x)))),
-                   xlab = "Global Spearman correlation",
-                   ylab = "Mean of permuted statistics")
-  }
+  # if (plot) {
+  #   graphics::plot(globalCors[names(permstats)],
+  #                  unlist(lapply(permstats,
+  #                                function(x) mean(unlist(x)))),
+  #                  xlab = "Global Spearman correlation",
+  #                  ylab = "Mean of permuted statistics")
+  # }
 
 
   # melt permstats list
@@ -422,9 +422,15 @@ scHOT_estimatePvalues <- function(scHOT,
                                   plot = FALSE,
                                   verbose = FALSE) {
 
-  stats = scHOT@scHOT_output$higherOrderStatistic
-  globalCors = scHOT@scHOT_output$globalHigherOrderFunction
-  permstats = as.list(scHOT@scHOT_output$permutations)
+  if (plot) {
+    scHOT_plotPermutationDistributions(scHOT)
+  }
+
+  scHOT_output = scHOT@scHOT_output
+
+  stats = scHOT_output$higherOrderStatistic
+  globalCors = scHOT_output$globalHigherOrderFunction
+  permstats = as.list(scHOT_output$permutations)
 
 
   # check the input
@@ -460,7 +466,7 @@ scHOT_estimatePvalues <- function(scHOT,
                         usenperm,
                         nperm,
                         maxDist,
-                        plot,
+                        # plot,
                         verbose)
 
 
