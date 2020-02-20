@@ -38,7 +38,7 @@ data(liver)
 
 
 ```{r}
-n_first = length(intersect(colnames(liver_branch_chol), colnames(liver_branch_hep)))
+first_branch_cells = intersect(colnames(liver_branch_chol), colnames(liver_branch_hep))
 
 gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
 
@@ -47,47 +47,81 @@ gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
 # }
 ```
 
-## Hepatocytes branch
+## First branch
+
+First we build the `scHOT` object, which is based on the `SingleCellExperiment` 
+object. `scHOT` objects can be built either from a matrix format or from an 
+existing `SingleCellExperiment` object. 
 
 ```{r}
-scHOT_trajectory_hepatocytes <- scHOT_buildFromMatrix(mat = liver_branch_hep,
-                                                      cellData = list(pseudotime = liver_pseudotime_hep),
+scHOT_traj <- scHOT_buildFromMatrix(mat = liver_branch_hep[,first_branch_cells],
+                                                      cellData = list(pseudotime = liver_pseudotime_hep[first_branch_cells]),
                                                       positionType = "trajectory",
                                                       positionColData = "pseudotime")
+scHOT_traj
+
+scater::plotExpression(scHOT_traj, c("Epcam"),
+                       exprs_values = "expression", x = "pseudotime")
+```
+
+Now using the `scHOT` wrapper function, we can perform higher order testing on 
+the selected genes.
+
+```{r}
+scHOT_traj_wrap = scHOT(scHOT_traj,
+                       testingScaffold = gene_to_test,
+                       higherOrderFunction = matrixStats::weightedVar,
+                       higherOrderFunctionType = "weighted",
+                       numberScaffold = 100,
+                       numberPermutations = 100,
+                       higherOrderSummaryFunction = sd,
+                       parallel = TRUE,
+                       plot = FALSE,
+                       BPPARAM = MulticoreParam(workers = 4),
+                       verbose = TRUE,
+                       span = 0.25)
+
+scHOT_traj_wrap@scHOT_output
+
+scHOT_traj_wrap@scHOT_output$higherOrderSequence
+
+plotHigherOrderSequence(scHOT_traj_wrap, "Tacc3")
+```
 
 
-scHOT_trajectory_hepatocytes <- scHOT_addTestingScaffold(scHOT_trajectory_hepatocytes, gene_to_test)
+```{r}
+scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, gene_to_test)
 
-scHOT_trajectory_hepatocytes <- scHOT_setWeightMatrix(scHOT_trajectory_hepatocytes,
+scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
                                                       positionColData = c("pseudotime"),
                                                       positionType = "trajectory",
                                                       nrow.out = NULL,
-                                                      span = 0.5*n_first/ncol(liver_branch_hep))
+                                                      span = 0.25)
 
 
-scHOT_trajectory_hepatocytes <- scHOT_calculateGlobalHigherOrderFunction(scHOT_trajectory_hepatocytes, 
+scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj, 
                                                                          higherOrderFunction = matrixStats::weightedVar,
                                                                          higherOrderFunctionType = "weighted")
 
 
-scHOT_trajectory_hepatocytes@scHOT_output
+scHOT_traj@scHOT_output
 
-scHOT_trajectory_hepatocytes <- scHOT_setPermutationScaffold(scHOT_trajectory_hepatocytes, 
+scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj, 
                                                              numberPermutations = 100)
 
 
-scHOT_trajectory_hepatocytes@scHOT_output
+scHOT_traj@scHOT_output
 
 
-scHOT_trajectory_hepatocytes <- scHOT_calculateHigherOrderTestStatistics(scHOT_trajectory_hepatocytes,
+scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
                                                                          higherOrderSummaryFunction = sd)
 
-scHOT_trajectory_hepatocytes@scHOT_output
+scHOT_traj@scHOT_output
 
 
 
 
-system.time(scHOT_trajectory_hepatocytes <- scHOT_performPermutationTest(scHOT_trajectory_hepatocytes, 
+system.time(scHOT_traj <- scHOT_performPermutationTest(scHOT_traj, 
                                                                          verbose = TRUE,
                                                                          parallel = TRUE,
                                                                          BPPARAM = MulticoreParam(workers = 4)))
@@ -96,12 +130,12 @@ system.time(scHOT_trajectory_hepatocytes <- scHOT_performPermutationTest(scHOT_t
 
 
 
-scHOT_trajectory_hepatocytes <- scHOT_estimatePvalues(scHOT_trajectory_hepatocytes)
-scHOT_trajectory_hepatocytes@scHOT_output
+scHOT_traj <- scHOT_estimatePvalues(scHOT_traj)
+scHOT_traj@scHOT_output
 
-scHOT_trajectory_hepatocytes@scHOT_output$higherOrderSequence
+scHOT_traj@scHOT_output$higherOrderSequence
 
-plotHigherOrderSequence(scHOT_trajectory_hepatocytes, "Tacc3")
+plotHigherOrderSequence(scHOT_traj, "Tacc3")
 ```
 
 
@@ -132,8 +166,6 @@ scHOT_trajectory_cholangiocytes <- scHOT(scHOT_trajectory_cholangiocytes,
                        span = 0.5*n_first/ncol(liver_branch_chol))
 
 plotHigherOrderSequence(scHOT_trajectory_cholangiocytes, "Tacc3")
-
-
 ```
 
 

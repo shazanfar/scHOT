@@ -377,7 +377,15 @@ scHOT_setWeightMatrix <- function(scHOT,
 
     positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
 
+    if (is.null(positionColData)) {
 
+      if (is.null(scHOT@positionColData)) {
+        stop("Both positionColData and scHOT@positionColData are NULL.")
+      } else {
+        positionColData <- scHOT@positionColData
+      }
+
+    }
 
     if (!all(positionColData %in% colnames(colData(scHOT)))) {
       stop("at least one positionColData column names not found in colData(scHOT)")
