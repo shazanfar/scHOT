@@ -199,10 +199,10 @@ scHOT_performPermutationTest <- function(scHOT,
     if (verbose) {
       if (nrow(DF) > 100) {
         if (i == 1 | i %% 10 == 0 | i == nrow(DF)) {
-          message(paste0("Permutation testing combination ", i, "...\n"))
+          message(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
         }
       } else {
-        message(paste0("Permutation testing combination ", i, "...\n"))
+        message(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
       }
     }
 

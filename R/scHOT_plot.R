@@ -699,7 +699,7 @@ scHOT_plotPermutationDistributions = function(scHOT) {
   quantileDF = data.frame(
     test = rep(seq_len(nrow(scHOT_output)),
                times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0)),
-    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) quantile(x, 0.9))),
+    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) quantile(x, 0.9,na.rm = TRUE))),
     globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
                                     times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0))
   )
