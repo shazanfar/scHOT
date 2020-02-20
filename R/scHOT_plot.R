@@ -715,7 +715,7 @@ scHOT_plotPermutationDistributions = function(scHOT) {
 
   g = gBase +
     geom_line(aes(y = quantile_0.9_fitted),
-              data = reshape::sort_df(quantileDF, "globalHigherOrderFunction")) +
+              data = reshape::sort_df(subset(quantileDF, !is.na(quantile_0.9_fitted)), "globalHigherOrderFunction")) +
     theme_classic() +
     ylab("Permuted scHOT test statistics") +
     NULL
