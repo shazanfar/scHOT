@@ -160,19 +160,11 @@ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
 
 
 ```{r}
-
-scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
-                                    assayName = "counts",
-                                    positionType = "spatial",
-                                    positionColData = c("x", "y"))
+scHOT_spatial
 logcounts(scHOT_spatial) <- logcounts(sce_MOB_subset)
-
-
 
 pairs <- t(combn(intersect(HVG, nonDEgenes),2))
 rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
-
-
 
 set.seed(2020)
 pairs <- pairs[sample(nrow(pairs), 10), ]
