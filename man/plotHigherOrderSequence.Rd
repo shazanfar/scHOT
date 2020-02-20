@@ -27,5 +27,5 @@ plotHigherOrderSequence(
 \code{ggplot} object with line plots
 }
 \description{
-the plotHigherOrderSequence function plots weighted correlation vectors (stored in higherOrderSequence) as line plots
+the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
 }

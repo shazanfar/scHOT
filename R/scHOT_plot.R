@@ -449,7 +449,7 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 ##############################################
 
 
-#' the plotHigherOrderSequence function plots weighted correlation vectors (stored in higherOrderSequence) as line plots
+#' the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
 #'
 #' @title plotHigherOrderSequence
 #' @param scHOT A scHOT object with higherOrderSequence in scHOT_output slot
@@ -474,7 +474,7 @@ plotHigherOrderSequence <- function(scHOT,
                                     branches = NULL,
                                     positionColData = NULL) {
 
-  # wcorsList is a list of matrices, with each matrix gene pair x samples weighted correlation vectors,
+  # wcorsList is a list of matrices, with each matrix gene pair x samples weighted higher order statistics vectors,
   # assumed that they have same number of rows
   # gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
   # matchExact matches gene names by splitting instead of using grep, but is slower
@@ -531,7 +531,7 @@ plotHigherOrderSequence <- function(scHOT,
     if (is.logical(gene[1])) {
 
       if (length(unique(unlist(lapply(wcorsList,nrow)))) > 1) {
-        stop("cannot use logical subset when weighted correlation matrices have differing rows")
+        stop("cannot use logical subset when weighted higher order statistic matrices have differing rows")
       }
 
       if (length(gene) != nrow(wcorsList[[1]])) {
@@ -557,7 +557,6 @@ plotHigherOrderSequence <- function(scHOT,
     branch_long = cbind(
       rep(names(wcors_longList), unlist(lapply(wcors_longList, nrow))),
       branch_long)
-    # colnames(branch_long) = c("branch","SampleOrder", "GenePair","WeightedCorrelation")
     colnames(branch_long) = c("branch","SampleOrder", "GenePair", "WeightedCorrelation")
 
 
@@ -580,8 +579,8 @@ plotHigherOrderSequence <- function(scHOT,
       geom_hline(yintercept = 0, size = 1, colour = "grey") +
       ggtitle(gene) +
       xlab("Sample Order") +
-      ylab("Weighted Correlation") +
-      labs(col = "Gene Pair") +
+      ylab("Weighted Higher Order Statistic") +
+      labs(col = "Test") +
       NULL
 
 
@@ -594,7 +593,7 @@ plotHigherOrderSequence <- function(scHOT,
     if (is.logical(gene[1])) {
 
       if (length(unique(unlist(lapply(wcorsList, nrow)))) > 1) {
-        stop("cannot use logical subset when weighted correlation matrices have differing rows")
+        stop("cannot use logical subset when weighted higher order statistic matrices have differing rows")
       }
 
       if (length(gene) != nrow(wcor)) {
@@ -656,7 +655,7 @@ plotHigherOrderSequence <- function(scHOT,
       theme(axis.text = element_blank()) +
       xlab("") + ylab("") +
       coord_fixed() +
-      labs(fill = "Weighted Correlation") +
+      labs(fill = "Weighted Higher Order Statistic") +
       NULL
   }
 

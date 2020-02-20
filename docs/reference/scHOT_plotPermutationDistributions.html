@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>plotHigherOrderSequence — plotHigherOrderSequence • scHOT</title>
+<title>scHOT_plotPermutationDistributions — scHOT_plotPermutationDistributions • scHOT</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,9 @@
 
 
 
-<meta property="og:title" content="plotHigherOrderSequence — plotHigherOrderSequence" />
-<meta property="og:description" content="the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots" />
+<meta property="og:title" content="scHOT_plotPermutationDistributions — scHOT_plotPermutationDistributions" />
+<meta property="og:description" content="the scHOT_plotPermutationDistributions function plots the permutation test statistics
+as a diagnostic plot for estimating p-values" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -103,51 +104,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>plotHigherOrderSequence</h1>
+    <h1>scHOT_plotPermutationDistributions</h1>
     
-    <div class="hidden name"><code>plotHigherOrderSequence.Rd</code></div>
+    <div class="hidden name"><code>scHOT_plotPermutationDistributions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots</p>
+    <p>the scHOT_plotPermutationDistributions function plots the permutation test statistics
+as a diagnostic plot for estimating p-values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotHigherOrderSequence</span>(
-  <span class='no'>scHOT</span>,
-  <span class='no'>gene</span>,
-  <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>branches</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>scHOT_plotPermutationDistributions</span>(<span class='no'>scHOT</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>scHOT</th>
-      <td><p>A scHOT object with higherOrderSequence in scHOT_output slot</p></td>
-    </tr>
-    <tr>
-      <th>gene</th>
-      <td><p>is either a logical vector matching rows of entries in wcorsList, or a character of a gene</p></td>
-    </tr>
-    <tr>
-      <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
-    </tr>
-    <tr>
-      <th>branches</th>
-      <td><p>A character indicates that the colnames stored the branch information in colData (for trajectory type of data)</p></td>
-    </tr>
-    <tr>
-      <th>positionColData</th>
-      <td><p>A vector indicates column names of colData that stored the postion informaton (for spatial type of data)</p></td>
+      <td><p>a scHOT object</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>ggplot</code> object with line plots</p>
+    <p><code>ggplot</code> graph of global higher order function and the
+permutation scHOT test statistics. This should have a continuous pattern
+to be reliably used for p-value estimation</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
