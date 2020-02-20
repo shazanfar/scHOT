@@ -664,3 +664,60 @@ plotHigherOrderSequence <- function(scHOT,
 }
 
 
+
+##############################################
+
+#' the scHOT_plotPermutationDistributions function plots the permutation test statistics
+#' as a diagnostic plot for estimating p-values
+#'
+#' @title scHOT_plotPermutationDistributions
+#' @param scHOT a scHOT object
+#' @return \code{ggplot} graph of global higher order function and the
+#' permutation scHOT test statistics. This should have a continuous pattern
+#' to be reliably used for p-value estimation
+#'
+#'
+#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#'
+#' @export
+
+scHOT_plotPermutationDistributions = function(scHOT) {
+
+  scHOT_output = scHOT@scHOT_output
+
+  permstatsDF = data.frame(
+    test = rep(seq_len(nrow(scHOT_output)),
+               times = unlist(
+                 lapply(scHOT_output$permutations, function(x) length(unlist(x))))),
+    stat = unlist(scHOT_output$permutations),
+    globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
+                                    times = unlist(
+                                      lapply(scHOT_output$permutations, function(x) length(unlist(x)))))
+  )
+
+  quantileDF = data.frame(
+    test = rep(seq_len(nrow(scHOT_output)),
+               times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0)),
+    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) quantile(x, 0.9))),
+    globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
+                                    times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0))
+  )
+
+  quantileDF$quantile_0.9_fitted = loess(quantile_0.9 ~ globalHigherOrderFunction, data = quantileDF)$fitted
+
+  gBase = ggplot(permstatsDF, aes(x = globalHigherOrderFunction, y = stat))
+
+  if (require(scattermore)) {
+    gBase = gBase + geom_scattermore()
+  }
+
+  g = gBase +
+    geom_line(aes(y = quantile_0.9_fitted),
+              data = reshape::sort_df(quantileDF, "globalHigherOrderFunction")) +
+    theme_classic() +
+    ylab("Permuted scHOT test statistics") +
+    NULL
+
+  return(g)
+}
