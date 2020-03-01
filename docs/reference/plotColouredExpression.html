@@ -114,7 +114,8 @@
 
     <pre class="usage"><span class='fu'>plotColouredExpression</span>(
   <span class='no'>scHOT</span>,
-  <span class='no'>genepair</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>genes_delimeter</span> <span class='kw'>=</span> <span class='st'>"_"</span>,
   <span class='kw'>branches</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ranked_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>subsetBranch</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -131,8 +132,12 @@
       <td><p>A scHOT object.</p></td>
     </tr>
     <tr>
-      <th>genepair</th>
-      <td><p>is either a single character string with an underscore, or a two length character vector</p></td>
+      <th>genes</th>
+      <td><p>is either a single character string with a delimeter, or a length two character vector</p></td>
+    </tr>
+    <tr>
+      <th>genes_delimeter</th>
+      <td><p>is the delimeter to split into two gene names if genes is provided as a single character</p></td>
     </tr>
     <tr>
       <th>branches</th>
@@ -140,8 +145,7 @@
     </tr>
     <tr>
       <th>ranked_by</th>
-      <td><p>A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time,
-If it is NULL, it will be ranked based on the branch information.</p></td>
+      <td><p>A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.</p></td>
     </tr>
     <tr>
       <th>subsetBranch</th>

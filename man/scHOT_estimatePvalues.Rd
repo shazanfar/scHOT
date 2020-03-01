@@ -6,8 +6,8 @@
 \usage{
 scHOT_estimatePvalues(
   scHOT,
-  usenperm = FALSE,
-  nperm = 10000,
+  usenperm_estimate = FALSE,
+  nperm_estimate = 10000,
   maxDist = 0.1,
   plot = FALSE,
   verbose = FALSE
@@ -16,9 +16,9 @@ scHOT_estimatePvalues(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{usenperm}{Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used}
+\item{usenperm_estimate}{Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used}
 
-\item{nperm}{Number of neighbouring permutations to use for p-value estimation}
+\item{nperm_estimate}{Number of neighbouring permutations to use for p-value estimation}
 
 \item{maxDist}{max difference of global higher order statistic to use for p-value estimation (default 0.1)}
 

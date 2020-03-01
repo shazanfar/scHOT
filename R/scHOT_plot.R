@@ -7,10 +7,10 @@
 #' @title plotColouredExpression
 #'
 #' @param scHOT A scHOT object.
-#' @param genepair is either a single character string with an underscore, or a two length character vector
+#' @param genes is either a single character string with a delimeter, or a length two character vector
+#' @param genes_delimeter is the delimeter to split into two gene names if genes is provided as a single character
 #' @param branches A character indicates that the colnames stored the branch information in colData
-#' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time,
-#' If it is NULL, it will be ranked based on the branch information.
+#' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.
 #' @param subsetBranch subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
 #' @param n number of panels to split ranked samples into, default 3.
 #' @param fittedline logical default TRUE, add a lm straight line to the plot
@@ -27,7 +27,8 @@
 #'
 
 plotColouredExpression = function(scHOT,
-                                  genepair,
+                                  genes,
+                                  genes_delimeter = "_",
                                   branches = NULL,
                                   ranked_by = NULL,
                                   subsetBranch = NULL,
@@ -35,27 +36,28 @@ plotColouredExpression = function(scHOT,
                                   fittedline = TRUE,
                                   assayName = NULL) {
 
+  if (length(genes) == 0) stop("please provide genes to plot")
 
-  if (length(genepair) == 1) {
-    genepair = unlist(strsplit(genepair, "_"))
-  }
-  else {
-    genepair = genepair[1:2]
+  if (length(genes) == 1) {
+    message("genes given as single character, splitting using delimiter")
+    genepair = unlist(strsplit(genes, genes_delimeter))[1:2]
   }
 
-  if (length(genepair) != 2) {
-    stop("genepair is either a single character string with an underscore, or a two length character vector")
+  if (length(genes) == 2) {
+    genepair = genes
   }
+
+  if (length(genes) > 2) {
+    message("only first two entries of genes will be used")
+    genepair = genes[1:2]
+  }
+
 
   if (is.null(assayName)) {
     assayName <- "expression"
   }
 
-
   branchData <- SummarizedExperiment::assay(scHOT, assayName)
-
-
-
 
   if (is.null(ranked_by)) {
     message("ranked_by information is not provided, the expression data is ranked by the branches")
@@ -96,9 +98,6 @@ plotColouredExpression = function(scHOT,
     gdf_list_1 = data.frame(Sample = colnames(branch), order = 1:ncol(branch),
                             ExpressionGene1 = branch[genepair[1], ], ExpressionGene2 = branch[genepair[2], ])
     if (n > 1) {
-      # gdf_list_1$ordercut = cut(gdf_list_1$order, n, labels = unlist(ifelse(n == 3,
-      #                                                                       list(c("Early", "Middle", "Late")),
-      #                                                                       list(paste0("Group ", 1:n)))))
 
 
       gdf_list_1$ordercut = cut(gdf_list_1$order, n, labels = unlist(ifelse(n == 3,
@@ -145,7 +144,7 @@ plotColouredExpression = function(scHOT,
 #'
 #' @title plotOrderedExpression
 #' @param scHOT A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".
-#' @param genepair is either a single character string with an underscore, or a two length character vector
+#' @param genes is a character vector for gene names
 #' @param positionType A string indicates the position type, either trajectory or spatial
 #' @param branches A character indicates that the colnames stored the branch information in colData
 #' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time
@@ -165,7 +164,7 @@ plotColouredExpression = function(scHOT,
 #' @export
 #'
 plotOrderedExpression = function(scHOT,
-                                 genepair,
+                                 genes,
                                  positionType = NULL,
                                  branches = NULL,
                                  ranked_by = NULL,
@@ -175,10 +174,8 @@ plotOrderedExpression = function(scHOT,
                                  positionColData = NULL,
                                  assayName = NULL) {
 
-  # branchData is a list containing matrices of the cell expression per branch
-  # assumed that the columns of each matrix in branchData is ordered by pseudotime
-  # if branchData is not given as a list, it will be converted into a list containing branchData
-  # gene is either a single character string with an underscore, or a two length character vector
+
+  # genes is character vector
   # xvals is a list containing the x-values associated with the samples in branchData (if NULL, samples will just be plotted against their rank)
   # subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
   # facet can either be FALSE, "branch", "gene", or "both"
@@ -194,22 +191,24 @@ plotOrderedExpression = function(scHOT,
 
   }
 
-  if (length(genepair) == 1) {
-    genepair = unlist(strsplit(genepair, "_"))
-  }
-  else {
-    genepair = genepair[1:2]
-  }
-
-  if (length(genepair) != 2) {
-    stop("genepair is either a single character string with an underscore, or a two length character vector")
-  }
+  # if (length(genepair) == 1) {
+  #   genepair = unlist(strsplit(genepair, "_"))
+  # }
+  # else {
+  #   genepair = genepair[1:2]
+  # }
 
   if (is.null(assayName)) {
     assayName <- "expression"
   }
 
   branchData <- SummarizedExperiment::assay(scHOT, assayName)
+
+  genes = genes[genes %in% rownames(branchData)]
+
+  if (length(genes) == 0) {
+    stop("No genes found in rownames of dataset!")
+  }
 
   if (scHOT@positionType == "trajectory") {
 
@@ -244,7 +243,7 @@ plotOrderedExpression = function(scHOT,
 
 
 
-    gdf_list = sapply(genepair, function(g) {
+    gdf_list = sapply(genes, function(g) {
 
       gdf = do.call(rbind,lapply(branchData, function(branch){
         gdf_list_1 = data.frame(
@@ -288,7 +287,7 @@ plotOrderedExpression = function(scHOT,
       labs(fill = "Gene", col = "Gene", linetype = "Branch", shape = "Branch") +
       theme_minimal() + geom_smooth() +
       ylab("Expression") +
-      ggtitle(paste0(genepair, collapse = ", ")) +
+      ggtitle(paste0(genes, collapse = ", ")) +
       NULL
 
     if (facet == "branch") {
@@ -319,17 +318,17 @@ plotOrderedExpression = function(scHOT,
     coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, positionColData])
     colnames(coords_info) <- positionColData
 
-    branch_long <- reshape::melt(cbind(coords_info, t(branchData[genepair, , drop = FALSE])),
+    branch_long <- reshape::melt(cbind(coords_info, t(branchData[genes, , drop = FALSE])),
                                  id.vars = positionColData)
 
 
-    colnames(branch_long) <- c("x", "y", "genepair", "value")
+    colnames(branch_long) <- c("x", "y", "genes", "value")
 
     g <- ggplot(branch_long,  aes(x = branch_long$x, y = branch_long$y, color = branch_long$value)) +
       geom_point(size = 3) +
       # geom_point(size = 0.5, colour = "black") +
       theme_minimal() +
-      facet_wrap(~genepair) +
+      facet_wrap(~genes) +
       scale_alpha_continuous(range = c(0,0.5)) +
       scale_color_viridis_c(breaks = c(0,max(branch_long$value)),
                             limits = c(0,max(branch_long$value)),
@@ -474,17 +473,17 @@ plotHigherOrderSequence <- function(scHOT,
                                     branches = NULL,
                                     positionColData = NULL) {
 
-  # wcorsList is a list of matrices, with each matrix gene pair x samples weighted higher order statistics vectors,
-  # assumed that they have same number of rows
-  # gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
   # matchExact matches gene names by splitting instead of using grep, but is slower
 
   if (!("higherOrderSequence" %in% colnames(scHOT@scHOT_output))) {
     stop("higherOrderSequence is not found in scHOT_output")
   }
 
+  namescols = grep("gene_", colnames(scHOT@scHOT_output), value = TRUE)
+
   wcor <- as.matrix(scHOT@scHOT_output$higherOrderSequence)
-  rownames(wcor) <- paste(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
+  # rownames(wcor) <- paste0(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
+  rownames(wcor) <- apply(scHOT@scHOT_output[,namescols, drop = FALSE], 1, paste0, collapse = "_")
   colnames(wcor) <- NULL
 
   if (ncol(wcor) != ncol(scHOT)) {
@@ -684,6 +683,16 @@ plotHigherOrderSequence <- function(scHOT,
 scHOT_plotPermutationDistributions = function(scHOT) {
 
   scHOT_output = scHOT@scHOT_output
+
+  if (length(scHOT_output$globalHigherOrderFunction) == 0) {
+    stop("No globalHigherOrderFunction found in scHOT object's scHOT_output slot,
+         please run function scHOT_calculateGlobalHigherOrderFunction!")
+  }
+
+  if (length(as.list(scHOT_output$permutations)) == 0) {
+    stop("No permutations found in scHOT object's scHOT_output slot,
+         please run function scHOT_performPermutationTest!")
+  }
 
   permstatsDF = data.frame(
     test = rep(seq_len(nrow(scHOT_output)),

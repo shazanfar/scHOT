@@ -6,7 +6,7 @@
 \usage{
 plotOrderedExpression(
   scHOT,
-  genepair,
+  genes,
   positionType = NULL,
   branches = NULL,
   ranked_by = NULL,
@@ -20,7 +20,7 @@ plotOrderedExpression(
 \arguments{
 \item{scHOT}{A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".}
 
-\item{genepair}{is either a single character string with an underscore, or a two length character vector}
+\item{genes}{is a character vector for gene names}
 
 \item{positionType}{A string indicates the position type, either trajectory or spatial}
 

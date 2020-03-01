@@ -7,7 +7,8 @@
 #' @title scHOT_calculateHigherOrderTestStatistics
 #'
 #' @param scHOT A scHOT object
-#' @param higherOrderSummaryFunction A functon indicates the higher order summary function (SHILA to check)
+#' @param higherOrderSummaryFunction A function which indicates how the higher
+#' order sequence is summarised, default is sd
 #' @param ... parameters for higherOrderSummaryFunction
 #'
 #'
@@ -199,10 +200,10 @@ scHOT_performPermutationTest <- function(scHOT,
     if (verbose) {
       if (nrow(DF) > 100) {
         if (i == 1 | i %% 10 == 0 | i == nrow(DF)) {
-          message(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
+          cat(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
         }
       } else {
-        message(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
+        cat(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
       }
     }
 
@@ -300,8 +301,8 @@ scHOT_performPermutationTest <- function(scHOT,
 estimatePvalues <- function(stats,
                             globalCors,
                             permstats,
-                            usenperm = FALSE,
-                            nperm = 10000,
+                            usenperm_estimate = FALSE,
+                            nperm_estimate = 10000,
                             maxDist = 0.1,
                             # plot = FALSE,
                             verbose = FALSE) {
@@ -330,7 +331,7 @@ estimatePvalues <- function(stats,
   results = sapply(names(stats), function(genepair) {
 
     if (verbose) {
-      print(genepair)
+      cat(paste0(genepair," \n"))
     }
 
     stat = stats[genepair]
@@ -338,21 +339,20 @@ estimatePvalues <- function(stats,
 
     permstatsDF$dist = abs(permstatsDF$globalCor - globalCor)
 
-    if (usenperm) {
-      if (nperm >= nrow(permstatsDF)) {
-        message(paste0("nperm given is larger than or equal to total",
+    if (usenperm_estimate) {
+      if (nperm_estimate >= nrow(permstatsDF)) {
+        message(paste0("nperm_estimate given is larger than or equal to total",
                        " number of permutations... using all",
                        " permutations"))
-        # permstatsDF_sorted_sub = permstatsDF
         permstatsDF_sorted_sub = na.omit(permstatsDF)
       }
       else {
         permstatsDF_sorted = reshape::sort_df(na.omit(permstatsDF), "dist")
-        permstatsDF_sorted_sub = permstatsDF_sorted[1:nperm, ]
+        permstatsDF_sorted_sub = permstatsDF_sorted[1:nperm_estimate, ]
       }
     } else {
       if (is.null(maxDist)) {
-        message(paste0("usenperm set as FALSE, but maxDist not",
+        message(paste0("usenperm_estimate set as FALSE, but maxDist not",
                        " given... defaulting to maxDist = 0.1"))
         maxDist = 0.1
       }
@@ -370,20 +370,20 @@ estimatePvalues <- function(stats,
 
 
     if (length(permstats_sub) == 0)
-      stop("please set a larger maxDist, or set a larger usenperm")
+      stop("please set a larger maxDist, or set a larger usenperm_estimate")
 
     pval = mean(permstats_sub >= stat)
     if (pval == 0) {
       pval = 1/(1 + length(permstats_sub))
     }
-    nperm = nrow(permstatsDF_sorted_sub)
+    nperm_estimate = nrow(permstatsDF_sorted_sub)
     globalCorMin = min(permstatsDF_sorted_sub$globalCor)
     globalCorMax = max(permstatsDF_sorted_sub$globalCor)
     return(data.frame(genepair = genepair,
                       stat = stat,
                       globalCor = globalCor,
                       pval = pval,
-                      nperm = nperm,
+                      nperm_estimate = nperm_estimate,
                       globalCorMin = globalCorMin,
                       globalCorMax = globalCorMax))
   }, simplify = FALSE)
@@ -401,8 +401,8 @@ estimatePvalues <- function(stats,
 #' @title scHOT_estimatePvalues
 #'
 #' @param scHOT A scHOT object
-#' @param usenperm Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
-#' @param nperm Number of neighbouring permutations to use for p-value estimation
+#' @param usenperm_estimate Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
+#' @param nperm_estimate Number of neighbouring permutations to use for p-value estimation
 #' @param maxDist max difference of global higher order statistic to use for p-value estimation (default 0.1)
 #' @param plot A logical input indicating whether the results are plotted
 #' @param verbose A logical input indicating whether the intermediate steps will be printed
@@ -416,15 +416,11 @@ estimatePvalues <- function(stats,
 #'
 
 scHOT_estimatePvalues <- function(scHOT,
-                                  usenperm = FALSE,
-                                  nperm = 10000,
+                                  usenperm_estimate = FALSE,
+                                  nperm_estimate = 10000,
                                   maxDist = 0.1,
                                   plot = FALSE,
                                   verbose = FALSE) {
-
-  if (plot) {
-    scHOT_plotPermutationDistributions(scHOT)
-  }
 
   scHOT_output = scHOT@scHOT_output
 
@@ -432,26 +428,26 @@ scHOT_estimatePvalues <- function(scHOT,
   globalCors = scHOT_output$globalHigherOrderFunction
   permstats = as.list(scHOT_output$permutations)
 
-
   # check the input
 
-  if (is.null(stats)) {
+  if (length(stats) == 0) {
     stop("No higherOrderStatistic found in scHOT object's scHOT_output slot,
          please run function scHOT_calculateHigherOrderTestStatistics!")
   }
 
-  if (is.null(globalCors)) {
+  if (length(globalCors) == 0) {
     stop("No globalHigherOrderFunction found in scHOT object's scHOT_output slot,
          please run function scHOT_calculateGlobalHigherOrderFunction!")
   }
 
-  if (is.null(permstats)) {
+  if (length(permstats) == 0) {
     stop("No permutations found in scHOT object's scHOT_output slot,
          please run function scHOT_performPermutationTest!")
   }
 
-
-
+  if (plot) {
+    scHOT_plotPermutationDistributions(scHOT)
+  }
 
   if (is.null(names(stats))) {
     names(stats) <- paste0("stat_", 1:length(stats))
@@ -463,10 +459,9 @@ scHOT_estimatePvalues <- function(scHOT,
   out = estimatePvalues(stats,
                         globalCors,
                         permstats,
-                        usenperm,
-                        nperm,
+                        usenperm_estimate,
+                        nperm_estimate,
                         maxDist,
-                        # plot,
                         verbose)
 
 

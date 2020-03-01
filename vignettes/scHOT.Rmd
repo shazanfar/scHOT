@@ -151,7 +151,7 @@ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
 scHOT_spatial
 ```
 
-## Perform scHOT step by step - skip ahead for wrapper using `scHOT`
+## Perform scHOT step by step - skip [ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
 
 ```{r}
 pairs <- t(combn(intersect(HVG, nonDEgenes),2))
@@ -216,12 +216,12 @@ colData(scHOT_spatial)[, "-x"] <- -colData(scHOT_spatial)[, "x"]
 plotHigherOrderSequence(scHOT_spatial, c("Dnm1l_Gucy1b3"),
                         positionColData = c("-x", "y"))
 
-plotOrderedExpression(scHOT_spatial, "Dnm1l_Gucy1b3",
+plotOrderedExpression(scHOT_spatial, c("Dnm1l", "Gucy1b3"),
                       positionColData = c("-x", "y"),
                       assayName = "expression")
 ```
 
-## Perform scHOT using `scHOT` wrap-up function
+## Perform scHOT using `scHOT` wrapper function
 
 Please strip the scHOT output using `scHOT_stripOutput` before rerun scHOT. 
 ```{r}
@@ -249,7 +249,7 @@ scHOT_spatial <- scHOT(scHOT_spatial,
 
 scHOT_spatial@scHOT_output
 
-plotOrderedExpression(scHOT_spatial, "Arrb1_Mtor",
+plotOrderedExpression(scHOT_spatial, c("Arrb1", "Mtor"),
                       positionColData = c("-x", "y"),
                       assayName = "expression")
 
