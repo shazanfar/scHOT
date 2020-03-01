@@ -20,8 +20,8 @@ scHOT(
   higherOrderSummaryFunction = sd,
   parallel = FALSE,
   BPPARAM = BiocParallel::SerialParam(),
-  usenperm = FALSE,
-  nperm = 10000,
+  usenperm_estimate = FALSE,
+  nperm_estimate = 10000,
   maxDist = 0.1,
   plot = FALSE,
   verbose = TRUE,
@@ -60,9 +60,9 @@ is a weighting argument in the higher order function}
 
 \item{BPPARAM}{A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().}
 
-\item{usenperm}{Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used}
+\item{usenperm_estimate}{Logical (default FALSE) if number of neighbouring permutations should be used to estimate P-values, or if difference of global higher order statistic should be used}
 
-\item{nperm}{Number of neighbouring permutations to use for p-value estimation}
+\item{nperm_estimate}{Number of neighbouring permutations to use for p-value estimation}
 
 \item{maxDist}{max difference of global higher order statistic to use for p-value estimation (default 0.1)}
 

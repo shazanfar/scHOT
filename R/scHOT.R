@@ -18,8 +18,8 @@
 #' @param higherOrderSummaryFunction A functon indicating the higher order summary function (default is standard deviation `sd`)
 #' @param parallel A logical input indicating whether to run the permutation test using multiple cores in parallel.
 #' @param BPPARAM  A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().
-#' @param usenperm Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
-#' @param nperm Number of neighbouring permutations to use for p-value estimation
+#' @param usenperm_estimate Logical (default FALSE) if number of neighbouring permutations should be used to estimate P-values, or if difference of global higher order statistic should be used
+#' @param nperm_estimate Number of neighbouring permutations to use for p-value estimation
 #' @param maxDist max difference of global higher order statistic to use for p-value estimation (default 0.1)
 #' @param plot A logical input indicating whether the results are plotted
 #' @param verbose A logical input indicating whether the intermediate steps will be printed
@@ -46,8 +46,8 @@ scHOT <- function(scHOT,
                   higherOrderSummaryFunction = sd,
                   parallel = FALSE,
                   BPPARAM = BiocParallel::SerialParam(),
-                  usenperm = FALSE,
-                  nperm = 10000,
+                  usenperm_estimate = FALSE,
+                  nperm_estimate = 10000,
                   maxDist = 0.1,
                   plot = FALSE,
                   verbose = TRUE,
@@ -126,19 +126,23 @@ scHOT <- function(scHOT,
                                         parallel = parallel,
                                         BPPARAM = BPPARAM)
 
-
+  if (storePermutations) {
 
   if (verbose) {
     cat("Estimating p-values \n")
   }
 
-
   scHOT <- scHOT_estimatePvalues(scHOT,
-                                 usenperm = usenperm,
-                                 nperm = nperm,
+                                 usenperm_estimate = usenperm_estimate,
+                                 nperm_estimate = nperm_estimate,
                                  maxDist = maxDist,
                                  plot = plot,
                                  verbose = verbose)
+  } else {
+    if (verbose) {
+      cat("No permutations stored, not estimating p-values \n")
+    }
+  }
 
   return(scHOT)
 }

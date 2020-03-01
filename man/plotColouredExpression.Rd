@@ -6,7 +6,8 @@
 \usage{
 plotColouredExpression(
   scHOT,
-  genepair,
+  genes,
+  genes_delimeter = "_",
   branches = NULL,
   ranked_by = NULL,
   subsetBranch = NULL,
@@ -18,12 +19,13 @@ plotColouredExpression(
 \arguments{
 \item{scHOT}{A scHOT object.}
 
-\item{genepair}{is either a single character string with an underscore, or a two length character vector}
+\item{genes}{is either a single character string with a delimeter, or a length two character vector}
+
+\item{genes_delimeter}{is the delimeter to split into two gene names if genes is provided as a single character}
 
 \item{branches}{A character indicates that the colnames stored the branch information in colData}
 
-\item{ranked_by}{A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time,
-If it is NULL, it will be ranked based on the branch information.}
+\item{ranked_by}{A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.}
 
 \item{subsetBranch}{subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches}
 

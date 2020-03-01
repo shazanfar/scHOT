@@ -13,7 +13,8 @@ scHOT_calculateHigherOrderTestStatistics(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{higherOrderSummaryFunction}{A functon indicates the higher order summary function (SHILA to check)}
+\item{higherOrderSummaryFunction}{A function which indicates how the higher
+order sequence is summarised, default is sd}
 
 \item{...}{parameters for higherOrderSummaryFunction}
 }
