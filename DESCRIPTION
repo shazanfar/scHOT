@@ -8,7 +8,7 @@ Description: A package to perform single-cell higher order testing
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.6.0)
 Imports:
     S4Vectors (>= 0.24.3),
     SingleCellExperiment,

@@ -23,28 +23,29 @@
 
 
 
-scHOT_calculateHigherOrderTestStatistics <- function(scHOT,
-                                                     higherOrderSummaryFunction = NULL,
-                                                     ...) {
+scHOT_calculateHigherOrderTestStatistics <- function(
+  scHOT,
+  higherOrderSummaryFunction = NULL,
+  ...) {
   # calculate and store the higherOrderSequence and higherOrderTestStatistic
 
   higherOrderFunctionType <- scHOT@params$higherOrderFunctionType
   if (is.null(higherOrderFunctionType)) {
-    stop("No higherOrderFunctionType found in scHOT object's params slot, please provide one
-         or run scHOT_calculateGlobalHigherOrderFunction!")
+    stop("No higherOrderFunctionType found in scHOT object's params slot,
+    please provide one or run scHOT_calculateGlobalHigherOrderFunction!")
   }
 
   higherOrderFunction <- scHOT@params$higherOrderFunction
   if (is.null(higherOrderFunction)) {
-    stop("No higherOrderFunction found in scHOT object's params slot, please provide one
-         or run scHOT_calculateGlobalHigherOrderFunction!")
+    stop("No higherOrderFunction found in scHOT object's params slot,
+    please provide one or run scHOT_calculateGlobalHigherOrderFunction!")
   }
 
   if (is.null(higherOrderSummaryFunction)) {
     higherOrderSummaryFunction = scHOT@params$higherOrderSummaryFunction
     if (is.null(higherOrderSummaryFunction)) {
-      stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT object's params slot,
-                  please provide one!"))
+      stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT
+      object's params slot, please provide one!"))
     }
   } else {
     message("higherOrderSummaryFunction will replace any stored param")
@@ -139,30 +140,31 @@ scHOT_calculateHigherOrderTestStatistics <- function(scHOT,
 
 
 
-scHOT_performPermutationTest <- function(scHOT,
-                                         verbose = FALSE,
-                                         parallel = FALSE,
-                                         BPPARAM = BiocParallel::SerialParam()) {
+scHOT_performPermutationTest <- function(
+  scHOT,
+  verbose = FALSE,
+  parallel = FALSE,
+  BPPARAM = BiocParallel::SerialParam()) {
 
   # do this in a for loop
 
   higherOrderFunctionType <- scHOT@params$higherOrderFunctionType
   if (is.null(higherOrderFunctionType)) {
-    stop("No higherOrderFunctionType found in scHOT object's params slot, please provide one
-         or run scHOT_calculateGlobalHigherOrderFunction!")
+    stop("No higherOrderFunctionType found in scHOT object's params slot,
+    please provide one or run scHOT_calculateGlobalHigherOrderFunction!")
   }
 
 
   higherOrderFunction <- scHOT@params$higherOrderFunction
   if (is.null(higherOrderFunction)) {
-    stop("No higherOrderFunction found in scHOT object's params slot, please provide one
-         or run scHOT_calculateGlobalHigherOrderFunction!")  }
+    stop("No higherOrderFunction found in scHOT object's params slot,
+    please provide one or run scHOT_calculateGlobalHigherOrderFunction!")  }
 
 
   higherOrderSummaryFunction <- scHOT@params$higherOrderSummaryFunction
   if (is.null(higherOrderSummaryFunction)) {
-    stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT object's params slot,
-                  please provide one!"))
+    stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT
+    object's params slot, please provide one!"))
   }
 
   expressionData <- SummarizedExperiment::assay(scHOT, "expression")
@@ -200,10 +202,12 @@ scHOT_performPermutationTest <- function(scHOT,
     if (verbose) {
       if (nrow(DF) > 100) {
         if (i == 1 | i %% 10 == 0 | i == nrow(DF)) {
-          cat(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
+          cat(paste0("Permutation testing combination ", i,
+                     " of ", nrow(DF), "...\n"))
         }
       } else {
-        cat(paste0("Permutation testing combination ", i, " of ", nrow(DF), "...\n"))
+        cat(paste0("Permutation testing combination ", i,
+                   " of ", nrow(DF), "...\n"))
       }
     }
 

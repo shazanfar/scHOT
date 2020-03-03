@@ -41,3 +41,18 @@ plotColouredExpression(
 \description{
 the plotColouredExpression function plots an n-panel scatterplot of the gene pairs split by early, mid, and late in the sample ordering.
 }
+\examples{
+
+data(liver)
+
+scHOT_traj <- scHOT_buildFromMatrix(
+mat = liver_branch_hep,
+cellData = list(pseudotime = liver_pseudotime_hep),
+positionType = "trajectory",
+positionColData = "pseudotime")
+
+scHOT_traj
+
+plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
+
+}

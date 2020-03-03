@@ -17,14 +17,25 @@
 #' @param assayName the name of the assay that are used to plot.
 #' @return \code{ggplot} a ggplot object of scatterplots of expression split by sample ordering
 #'
+#' @examples
 #'
+#' data(liver)
+#'
+#' scHOT_traj <- scHOT_buildFromMatrix(
+#' mat = liver_branch_hep,
+#' cellData = list(pseudotime = liver_pseudotime_hep),
+#' positionType = "trajectory",
+#' positionColData = "pseudotime")
+#'
+#' scHOT_traj
+#'
+#' plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
 #'
 #' @importFrom SummarizedExperiment assay colData
 #' @import ggplot2
 #'
 #'
 #' @export
-#'
 
 plotColouredExpression = function(scHOT,
                                   genes,
@@ -458,12 +469,34 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 #' @param positionColData A vector indicates column names of colData that stored the postion informaton (for spatial type of data)
 #' @return \code{ggplot} object with line plots
 #'
-#'
-#'
-#'
 #' @importFrom reshape melt
 #' @import ggplot2
 #' @importFrom ggforce geom_voronoi_tile
+#'
+#' @examples
+#' data(liver)scHOT_traj <- scHOT_buildFromMatrix(
+#' mat = liver_branch_hep,
+#' cellData = list(pseudotime = liver_pseudotime_hep),
+#' positionType = "trajectory",
+#' positionColData = "pseudotime")
+#' scHOT_traj
+#' plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
+#'
+#' scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, t(as.matrix(c("Cdt1", "Top2a"))))
+#' scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
+#' positionColData = c("pseudotime"),
+#' positionType = "trajectory",
+#' nrow.out = NULL,
+#' span = 0.25)
+#' scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj,
+#'                                                       higherOrderFunction = weightedSpearman,
+#'                                                      higherOrderFunctionType = "weighted")
+#'
+#' scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
+#'                                                       higherOrderSummaryFunction = sd)
+#'
+#' scHOT_traj@scHOT_output
+#' plotHigherOrderSequence(scHOT_traj, c("Cdt1_Top2a"))
 #'
 #' @export
 #'

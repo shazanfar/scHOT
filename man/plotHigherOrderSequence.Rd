@@ -29,3 +29,29 @@ plotHigherOrderSequence(
 \description{
 the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
 }
+\examples{
+data(liver)scHOT_traj <- scHOT_buildFromMatrix(
+mat = liver_branch_hep,
+cellData = list(pseudotime = liver_pseudotime_hep),
+positionType = "trajectory",
+positionColData = "pseudotime")
+scHOT_traj
+plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
+
+scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, t(as.matrix(c("Cdt1", "Top2a"))))
+scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
+positionColData = c("pseudotime"),
+positionType = "trajectory",
+nrow.out = NULL,
+span = 0.25)
+scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj,
+                                                      higherOrderFunction = weightedSpearman,
+                                                     higherOrderFunctionType = "weighted")
+
+scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
+                                                      higherOrderSummaryFunction = sd)
+
+scHOT_traj@scHOT_output
+plotHigherOrderSequence(scHOT_traj, c("Cdt1_Top2a"))
+
+}
