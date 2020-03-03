@@ -39,7 +39,8 @@ data(liver)
 
 
 ```{r}
-first_branch_cells = intersect(colnames(liver_branch_chol), colnames(liver_branch_hep))
+first_branch_cells = intersect(colnames(liver_branch_chol),
+                               colnames(liver_branch_hep))
 
 gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
 
@@ -55,10 +56,11 @@ object. `scHOT` objects can be built either from a matrix format or from an
 existing `SingleCellExperiment` object. 
 
 ```{r}
-scHOT_traj <- scHOT_buildFromMatrix(mat = liver_branch_hep[,first_branch_cells],
-                                                      cellData = list(pseudotime = liver_pseudotime_hep[first_branch_cells]),
-                                                      positionType = "trajectory",
-                                                      positionColData = "pseudotime")
+scHOT_traj <- scHOT_buildFromMatrix(
+  mat = liver_branch_hep[,first_branch_cells],
+  cellData = list(pseudotime = liver_pseudotime_hep[first_branch_cells]),
+  positionType = "trajectory",
+  positionColData = "pseudotime")
 scHOT_traj
 
 scater::plotExpression(scHOT_traj, c("Sall4"),
@@ -70,17 +72,17 @@ the selected genes.
 
 ```{r}
 scHOT_traj_wrap = scHOT(scHOT_traj,
-                       testingScaffold = gene_to_test,
-                       higherOrderFunction = matrixStats::weightedVar,
-                       higherOrderFunctionType = "weighted",
-                       numberScaffold = 100,
-                       numberPermutations = 100,
-                       higherOrderSummaryFunction = sd,
-                       parallel = TRUE,
-                       plot = FALSE,
-                       BPPARAM = MulticoreParam(workers = 4),
-                       verbose = TRUE,
-                       span = 0.25)
+                        testingScaffold = gene_to_test,
+                        higherOrderFunction = matrixStats::weightedVar,
+                        higherOrderFunctionType = "weighted",
+                        numberScaffold = 100,
+                        numberPermutations = 100,
+                        higherOrderSummaryFunction = sd,
+                        parallel = TRUE,
+                        plot = FALSE,
+                        BPPARAM = MulticoreParam(workers = 4),
+                        verbose = TRUE,
+                        span = 0.25)
 
 scHOT_traj_wrap@scHOT_output
 
@@ -100,9 +102,10 @@ scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
                                     nrow.out = NULL,
                                     span = 0.25)
 
-scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj, 
-                                                       higherOrderFunction = matrixStats::weightedVar,
-                                                       higherOrderFunctionType = "weighted")
+scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(
+  scHOT_traj, 
+  higherOrderFunction = matrixStats::weightedVar,
+  higherOrderFunctionType = "weighted")
 
 
 scHOT_traj@scHOT_output
@@ -114,15 +117,17 @@ scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj,
 scHOT_traj@scHOT_output
 
 
-scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
-                                                       higherOrderSummaryFunction = sd)
+scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(
+  scHOT_traj,
+  higherOrderSummaryFunction = sd)
 
 scHOT_traj@scHOT_output
 
-system.time(scHOT_traj <- scHOT_performPermutationTest(scHOT_traj, 
-                                                       verbose = TRUE,
-                                                       parallel = TRUE,
-                                                       BPPARAM = MulticoreParam(workers = 4)))
+system.time(scHOT_traj <- scHOT_performPermutationTest(
+  scHOT_traj, 
+  verbose = TRUE,
+  parallel = TRUE,
+  BPPARAM = MulticoreParam(workers = 4)))
 
 
 scHOT_traj <- scHOT_estimatePvalues(scHOT_traj)
@@ -151,7 +156,8 @@ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
 scHOT_spatial
 ```
 
-## Perform scHOT step by step - skip [ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
+## Perform scHOT step by step - skip 
+[ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
 
 ```{r}
 pairs <- t(combn(intersect(HVG, nonDEgenes),2))
@@ -174,9 +180,10 @@ scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
 
 dim(scHOT_spatial@weightMatrix)
 
-scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(scHOT_spatial, 
-                                                          higherOrderFunction = weightedSpearman,
-                                                          higherOrderFunctionType = "weighted")
+scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+  scHOT_spatial, 
+  higherOrderFunction = weightedSpearman,
+  higherOrderFunctionType = "weighted")
 
 
 scHOT_spatial@scHOT_output
@@ -188,16 +195,18 @@ scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
 scHOT_spatial@scHOT_output
 
 
-scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(scHOT_spatial,
-                                                          higherOrderSummaryFunction = sd)
+scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+  scHOT_spatial,
+  higherOrderSummaryFunction = sd)
 
 scHOT_spatial@scHOT_output
 
 
-system.time(scHOT_spatial <- scHOT_performPermutationTest(scHOT_spatial, 
-                                                          verbose = TRUE,
-                                                          parallel = TRUE,
-                                                          BPPARAM = MulticoreParam(workers = 4)))
+system.time(scHOT_spatial <- scHOT_performPermutationTest(
+  scHOT_spatial, 
+  verbose = TRUE,
+  parallel = TRUE,
+  BPPARAM = MulticoreParam(workers = 4)))
 
 
 scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial)

@@ -648,7 +648,7 @@ scHOT_setPermutationScaffold = function(scHOT,
   scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
 
   if (numberScaffold > nrow(scHOT@testingScaffold)) {
-    message(paste0("numberScaffold set higher than the scaffold,",
+    message(paste0("numberScaffold set higher than the scaffold, ",
                    "setting permutation number for all tests"))
     scHOT@scHOT_output$numberPermutations = numberPermutations
   } else {
