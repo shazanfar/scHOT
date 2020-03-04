@@ -46,8 +46,8 @@ the plotColouredExpression function plots an n-panel scatterplot of the gene pai
 data(liver)
 
 scHOT_traj <- scHOT_buildFromMatrix(
-mat = liver_branch_hep,
-cellData = list(pseudotime = liver_pseudotime_hep),
+mat = liver$liver_branch_hep,
+cellData = list(pseudotime = liver$liver_pseudotime_hep),
 positionType = "trajectory",
 positionColData = "pseudotime")
 

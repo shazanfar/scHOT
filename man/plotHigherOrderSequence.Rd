@@ -30,9 +30,11 @@ plotHigherOrderSequence(
 the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
 }
 \examples{
-data(liver)scHOT_traj <- scHOT_buildFromMatrix(
-mat = liver_branch_hep,
-cellData = list(pseudotime = liver_pseudotime_hep),
+data(liver)
+
+scHOT_traj <- scHOT_buildFromMatrix(
+mat = liver$liver_branch_hep,
+cellData = list(pseudotime = liver$liver_pseudotime_hep),
 positionType = "trajectory",
 positionColData = "pseudotime")
 scHOT_traj
