@@ -132,7 +132,9 @@
     </tr>
     <tr>
       <th>numberScaffold</th>
-      <td><p>The number of scaffold, set as 100 by default. if you want all combinations to do permutations then set, numberScaffold much higher than the testingScaffold</p></td>
+      <td><p>The number of scaffold, set as 100 by default.
+if you want all combinations to do permutations then set,
+numberScaffold much higher than the testingScaffold</p></td>
     </tr>
     <tr>
       <th>storePermutations</th>
@@ -141,12 +143,37 @@ Permutations should be stored, or discarded once used</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A scHOT object with storePermutations in slot scHOT_output saved</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>MOB_subset</span>)
+ <span class='no'>sce_MOB_subset</span> <span class='kw'>&lt;-</span> <span class='no'>MOB_subset</span>$<span class='no'>sce_MOB_subset</span>
+ <span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_buildFromSCE.html'>scHOT_buildFromSCE</a></span>(<span class='no'>sce_MOB_subset</span>,
+                                     <span class='kw'>assayName</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+                                    <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"spatial"</span>,
+                                     <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>))
+<span class='no'>pairs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Arrb1"</span>, <span class='st'>"Mtor"</span>, <span class='st'>"Dnm1l"</span>, <span class='st'>"Gucy1b3"</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>pairs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>pairs</span>,<span class='fl'>1</span>,<span class='no'>paste0</span>,<span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"_"</span>)
+<span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_spatial</span>, <span class='no'>pairs</span>)
+ <span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_spatial</span>,
+                                       <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>,<span class='st'>"y"</span>),
+                                        <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"spatial"</span>,
+                                        <span class='kw'>nrow.out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+                                        <span class='kw'>span</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</div><div class='output co'>#&gt; <span class='message'>weightMatrix not provided, generating one using parameter settings...</span></div><div class='input'><span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_calculateGlobalHigherOrderFunction.html'>scHOT_calculateGlobalHigherOrderFunction</a></span>(
+  <span class='no'>scHOT_spatial</span>,
+  <span class='kw'>higherOrderFunction</span> <span class='kw'>=</span> <span class='no'>weightedSpearman</span>,
+  <span class='kw'>higherOrderFunctionType</span> <span class='kw'>=</span> <span class='st'>"weighted"</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderFunctionType given will replace any stored param</span></div><div class='output co'>#&gt; <span class='message'>higherOrderFunction given will replace any stored param</span></div><div class='input'><span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'>scHOT_setPermutationScaffold</span>(<span class='no'>scHOT_spatial</span>,
+                                              <span class='kw'>numberPermutations</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='output co'>#&gt; <span class='message'>numberScaffold set higher than the scaffold, setting permutation number for all tests</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

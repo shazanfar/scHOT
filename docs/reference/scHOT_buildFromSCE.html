@@ -128,20 +128,28 @@
     </tr>
     <tr>
       <th>assayName</th>
-      <td><p>is a single assay to pull out from sce as the expression matrix input of scHOT</p></td>
+      <td><p>is a single assay to pull out from sce as
+the expression matrix input of scHOT</p></td>
     </tr>
     <tr>
       <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
+      <td><p>A string indicates the position type,
+either trajectory or spatial</p></td>
     </tr>
     <tr>
       <th>positionColData</th>
-      <td><p>Strings indicate the position information stored in colData.
-If positionType is "trajectory" then positionColData should be a sortable vector
-if positionType is "spatial" then positionColData should be a matrix type object.</p></td>
+      <td><p>Strings indicate the position information
+stored in colData.
+If positionType is "trajectory" then positionColData
+should be a sortable vector
+if positionType is "spatial" then positionColData
+should be a matrix type object.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A scHOT object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -159,7 +167,7 @@ if positionType is "spatial" then positionColData should be a matrix type object
 #&gt; <span class='message'>    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,</span>
 #&gt; <span class='message'>    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
 #&gt; <span class='message'>    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,</span>
-#&gt; <span class='message'>    union, unique, unsplit, which, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘S4Vectors’ was built under R version 3.6.2</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    union, unique, unsplit, which, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    expand.grid</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biobase</span></div><div class='output co'>#&gt; <span class='message'>Welcome to Bioconductor</span>
@@ -178,13 +186,15 @@ if positionType is "spatial" then positionColData should be a matrix type object
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"cell_"</span>, <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>dat</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gene_1"</span>,<span class='st'>"gene_2"</span>, <span class='st'>"gene_2"</span>)
 
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>SingleCellExperiment</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></span>(<span class='kw'>assays</span> <span class='kw'>=</span> <span class='kw pkg'>S4Vectors</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/SimpleList-class.html'>SimpleList</a></span>(<span class='kw'>counts</span> <span class='kw'>=</span> <span class='no'>dat</span>))
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>SingleCellExperiment</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></span>(<span class='kw'>assays</span> <span class='kw'>=</span>
+<span class='kw pkg'>S4Vectors</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/SimpleList-class.html'>SimpleList</a></span>(<span class='kw'>counts</span> <span class='kw'>=</span> <span class='no'>dat</span>))
 <span class='no'>scHOT</span> <span class='kw'>&lt;-</span> <span class='fu'>scHOT_buildFromSCE</span>(<span class='no'>sce</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
