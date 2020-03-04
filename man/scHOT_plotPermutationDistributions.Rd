@@ -15,6 +15,7 @@ permutation scHOT test statistics. This should have a continuous pattern
 to be reliably used for p-value estimation
 }
 \description{
-the scHOT_plotPermutationDistributions function plots the permutation test statistics
-as a diagnostic plot for estimating p-values
+the scHOT_plotPermutationDistributions function plots
+the permutation test statistics as a diagnostic plot
+for estimating p-values
 }

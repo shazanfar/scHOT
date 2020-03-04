@@ -17,7 +17,10 @@ weightedZIKendall(x, y, w = 1)
 \code{numeric} weighted Tau* association value between x and y
 }
 \description{
-the weightedZIKendall function calculates weighted Tau*, where Tau* is described in Pimentel et al (2015) doi:10.1016/j.spl.2014.09.002. This association measure is defined for zero-inflated, non-negative random variables.
+the weightedZIKendall function calculates weighted Tau*,
+where Tau* is described in Pimentel et al (2015)
+doi:10.1016/j.spl.2014.09.002. This association measure
+is defined for zero-inflated, non-negative random variables.
 }
 \examples{
 

@@ -15,6 +15,22 @@ scHOT_stripOutput(scHOT, force = TRUE, store = FALSE, file_name = NULL)
 
 \item{file_name}{A string indicates the file name of the scHOT will be stored}
 }
+\value{
+A scHOT object with scHOT_output striped
+}
 \description{
 Strip the scHOT output
+}
+\examples{
+data(MOB_subset)
+sce_MOB_subset <- MOB_subset$sce_MOB_subset
+scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+                                     assayName = "logcounts",
+                                    positionType = "spatial",
+                                     positionColData = c("x", "y"))
+
+scHOT_spatial <- scHOT_stripOutput(scHOT_spatial)
+
+
+
 }

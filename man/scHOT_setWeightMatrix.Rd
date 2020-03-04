@@ -17,18 +17,52 @@ scHOT_setWeightMatrix(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{weightMatrix}{A matrix indicating the weight matrix for scHOT analysis, such as the output from `trajectoryWeightMatrix` or `spatialWeightMatrix`. If this is not NULL then other parameters are ignored.}
+\item{weightMatrix}{A matrix indicating the weight matrix for
+scHOT analysis, such as the output from `trajectoryWeightMatrix`
+or `spatialWeightMatrix`. If this is not NULL then other parameters
+are ignored.}
 
-\item{positionType}{A string indicating the position type, either "trajectory" or "spatial"}
+\item{positionType}{A string indicating the position type,
+either "trajectory" or "spatial"}
 
-\item{positionColData}{Either trajectory or spatial information for each sample. If positionType is "trajectory" then positionColData should be a character or numeric indicating the subset of colData of the scHOT object. If positionType is "spatial" then positionColData should be a character or numeric vector indicating the subset of colData that give the full spatial coordinates.}
+\item{positionColData}{Either trajectory or spatial information
+for each sample. If positionType is "trajectory"
+then positionColData should be a character or
+numeric indicating the subset of colData of the scHOT object.
+If positionType is "spatial" then positionColData
+should be a character or numeric vector indicating
+the subset of colData that give the full spatial coordinates.}
 
-\item{nrow.out}{The number of weightings to include for testing, a smaller value is faster for computation}
+\item{nrow.out}{The number of weightings to include for testing,
+a smaller value is faster for computation}
 
-\item{averageAcrossTrajectoryTies}{Logical indicating whether ties in the trajectory should be given the same local weights}
+\item{averageAcrossTrajectoryTies}{Logical indicating whether ties
+in the trajectory should be given the same local weights}
 
-\item{...}{parameters for function trajectoryWeightMatrix or spatialWeightMatrix}
+\item{...}{parameters for function trajectoryWeightMatrix
+or spatialWeightMatrix}
+}
+\value{
+A scHOT object with slot weightMatrix saved
 }
 \description{
 Create scHOT object from a SingleCellExperiment object
+}
+\examples{
+
+ data(MOB_subset)
+ sce_MOB_subset <- MOB_subset$sce_MOB_subset
+ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+                                     assayName = "logcounts",
+                                    positionType = "spatial",
+                                     positionColData = c("x", "y"))
+ pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+ rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+ scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+ scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+                                       positionColData = c("x","y"),
+                                        positionType = "spatial",
+                                        nrow.out = NULL,
+                                        span = 0.05)
+
 }

@@ -20,15 +20,19 @@ plotEgoNetwork(
 
 \item{network}{is an igraph network}
 
-\item{weight}{A string indicates the column name stored in scHOT_output slot that are used as the weights of the network}
+\item{weight}{A string indicates the column name stored in scHOT_output slot
+that are used as the weights of the network}
 
-\item{subset}{is a logical asking if you should subset based on the weight (default FALSE)}
+\item{subset}{is a logical asking if you should subset
+based on the weight (default FALSE)}
 
 \item{thresh}{is the subset weight threshold}
 }
 \value{
-\code{igraph} object containing the network graphed. Produces an igraph plot
+\code{igraph} object containing the network graphed.
+Produces an igraph plot
 }
 \description{
-the plotEgoNetwork function plots network graphs with edges coloured by weights in the network
+the plotEgoNetwork function plots network graphs with edges coloured by
+weights in the network
 }

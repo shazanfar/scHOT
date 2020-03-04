@@ -1,5 +1,6 @@
 #' @title Liver trajectory example data
-#' @description A liver data set contains two branches (hepatocyte and cholangiocyte).
+#' @description A liver data set contains two branches
+#' (hepatocyte and cholangiocyte).
 #' @usage data(liver, package = 'scHOT')
 #'
 #' @format A `list` object.

@@ -15,7 +15,9 @@ thin(W, n = 100)
 \code{matrix} of thinned matrix keeping only roughly n rows.
 }
 \description{
-The thin function extracts the rows of a matrix evenly so that roughly n number of rows remain. Used for thinning down the weight matrix to speed up overall computation.
+The thin function extracts the rows of a matrix evenly so that
+roughly n number of rows remain. Used for thinning down
+the weight matrix to speed up overall computation.
 }
 \examples{
 

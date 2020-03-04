@@ -9,6 +9,7 @@
 data(liver, package = 'scHOT')
 }
 \description{
-A liver data set contains two branches (hepatocyte and cholangiocyte).
+A liver data set contains two branches
+(hepatocyte and cholangiocyte).
 }
 \keyword{datasets}

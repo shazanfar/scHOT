@@ -24,3 +24,30 @@ scHOT A scHOT object with results stored in scHOT_output slot
 \description{
 Calculate and store the higherOrderSequence and higherOrderTestStatistic
 }
+\examples{
+data(MOB_subset)
+sce_MOB_subset <- MOB_subset$sce_MOB_subset
+scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+                                     assayName = "logcounts",
+                                    positionType = "spatial",
+                                     positionColData = c("x", "y"))
+pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+
+rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+
+scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+                                       positionColData = c("x","y"),
+                                        positionType = "spatial",
+                                        nrow.out = NULL,
+                                        span = 0.05)
+scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+  scHOT_spatial,
+  higherOrderFunction = weightedSpearman,
+  higherOrderFunctionType = "weighted")
+scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
+                                              numberPermutations = 100)
+scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+  scHOT_spatial,
+  higherOrderSummaryFunction = sd)
+}

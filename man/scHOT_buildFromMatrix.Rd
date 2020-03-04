@@ -16,11 +16,17 @@ scHOT_buildFromMatrix(
 
 \item{cellData}{A dataframe or DataFrame object with rows for cells}
 
-\item{positionType}{A string indicating the position type, either "trajectory" or "spatial"}
+\item{positionType}{A string indicating the position type,
+either "trajectory" or "spatial"}
 
-\item{positionColData}{Strings indicate the position information stored in colData.
-If positionType is "trajectory" then positionColData should be a sortable vector
-if positionType is "spatial" then positionColData should be a matrix type object.}
+\item{positionColData}{Strings indicate the position information
+stored in colData. If positionType is "trajectory" then
+positionColData should be a sortable vector
+if positionType is "spatial" then positionColData should
+be a matrix type object.}
+}
+\value{
+A scHOT object
 }
 \description{
 Create scHOT object from a matrix

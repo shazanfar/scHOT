@@ -90,9 +90,9 @@ scHOT_traj_wrap = scHOT(scHOT_traj,
                         verbose = TRUE,
                         span = 0.25)
 
-scHOT_traj_wrap@scHOT_output
+slot(scHOT_traj_wrap, "scHOT_output")
 
-scHOT_traj_wrap@scHOT_output$higherOrderSequence
+slot(scHOT_traj_wrap, "scHOT_output")$higherOrderSequence
 
 plotHigherOrderSequence(scHOT_traj_wrap, "Tacc3")
 ```
@@ -114,20 +114,20 @@ scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(
   higherOrderFunctionType = "weighted")
 
 
-scHOT_traj@scHOT_output
+slot(scHOT_traj, "scHOT_output")
 
 scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj, 
                                            numberPermutations = 100)
 
 
-scHOT_traj@scHOT_output
+slot(scHOT_traj, "scHOT_output")
 
 
 scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(
   scHOT_traj,
   higherOrderSummaryFunction = sd)
 
-scHOT_traj@scHOT_output
+slot(scHOT_traj, "scHOT_output")
 
 system.time(scHOT_traj <- scHOT_performPermutationTest(
   scHOT_traj, 
@@ -137,9 +137,9 @@ system.time(scHOT_traj <- scHOT_performPermutationTest(
 
 
 scHOT_traj <- scHOT_estimatePvalues(scHOT_traj)
-scHOT_traj@scHOT_output
+slot(scHOT_traj, "scHOT_output")
 
-scHOT_traj@scHOT_output$higherOrderSequence
+slot(scHOT_traj, "scHOT_output")$higherOrderSequence
 
 plotHigherOrderSequence(scHOT_traj, "Tacc3")
 ```
@@ -186,7 +186,8 @@ scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
                                        nrow.out = NULL,
                                        span = 0.05)
 
-dim(scHOT_spatial@weightMatrix)
+dim(slot(scHOT_spatial, "weightMatrix"))
+
 
 scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
   scHOT_spatial, 
@@ -194,20 +195,21 @@ scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
   higherOrderFunctionType = "weighted")
 
 
-scHOT_spatial@scHOT_output
+
+slot(scHOT_spatial, "scHOT_output")
 
 scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial, 
                                               numberPermutations = 100)
 
 
-scHOT_spatial@scHOT_output
+slot(scHOT_spatial, "scHOT_output")
 
 
 scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
   scHOT_spatial,
   higherOrderSummaryFunction = sd)
 
-scHOT_spatial@scHOT_output
+slot(scHOT_spatial, "scHOT_output")
 
 
 system.time(scHOT_spatial <- scHOT_performPermutationTest(
@@ -218,9 +220,9 @@ system.time(scHOT_spatial <- scHOT_performPermutationTest(
 
 
 scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial)
-scHOT_spatial@scHOT_output
+slot(scHOT_spatial, "scHOT_output")
 
-ggplot(as.data.frame(scHOT_spatial@scHOT_output),
+ggplot(as.data.frame(slot(scHOT_spatial, "scHOT_output")),
        aes(x = -log10(pvalPermutations), y = -log10(pvalEstimated))) + 
   geom_point() + 
   theme_classic() + 
@@ -245,7 +247,7 @@ Please strip the scHOT output using `scHOT_stripOutput` before rerun scHOT.
 scHOT_spatial <- scHOT_stripOutput(scHOT_spatial, force = TRUE)
 
 scHOT_spatial
-scHOT_spatial@scHOT_output
+slot(scHOT_spatial, "scHOT_output")
 ```
 
 
@@ -264,7 +266,7 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        verbose = TRUE,
                        span = 0.05)
 
-scHOT_spatial@scHOT_output
+slot(scHOT_spatial, "scHOT_output")
 
 plotOrderedExpression(scHOT_spatial, c("Arrb1", "Mtor"),
                       positionColData = c("-x", "y"),

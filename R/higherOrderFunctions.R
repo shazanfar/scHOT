@@ -1,7 +1,10 @@
 
 ##############################################
 
-#' the weightedZIKendall function calculates weighted Tau*, where Tau* is described in Pimentel et al (2015) doi:10.1016/j.spl.2014.09.002. This association measure is defined for zero-inflated, non-negative random variables.
+#' the weightedZIKendall function calculates weighted Tau*,
+#' where Tau* is described in Pimentel et al (2015)
+#' doi:10.1016/j.spl.2014.09.002. This association measure
+#' is defined for zero-inflated, non-negative random variables.
 #'
 #' @title weightedZIKendall
 #' @param x x and y are non-negative data vectors
@@ -202,7 +205,10 @@ weightedVariance = function(x, y = NULL, w) {
 
 ##############################################
 
-#' the weightedZISpearman function calculates weighted rho\*, where rho\* is described in Pimentel et al (2009). This association measure is defined for zero-inflated, non-negative random variables.
+#' the weightedZISpearman function calculates weighted rho\*,
+#' where rho\* is described in Pimentel et al (2009).
+#' This association measure is defined for zero-inflated,
+#' non-negative random variables.
 #'
 #' @title weightedZISpearman
 #' @param w weight vector, values should be between 0 and 1
@@ -210,7 +216,9 @@ weightedVariance = function(x, y = NULL, w) {
 #' @param y x and y are non-negative data vectors
 #' @return \code{numeric} weighted rho* association value between x and y
 #'
-#'  Pimentel, Ronald Silva, "Kendall's Tau and Spearman's Rho for Zero-Inflated Data" (2009). Dissertations. 721. https://scholarworks.wmich.edu/dissertations/721
+#'  Pimentel, Ronald Silva, "Kendall's Tau and Spearman's Rho for
+#'  Zero-Inflated Data" (2009). Dissertations. 721.
+#'  https://scholarworks.wmich.edu/dissertations/721
 
 #' @examples
 #'
@@ -244,10 +252,12 @@ weightedZISpearman <- function(x, y, w = 1) {
   p_01 = sum(w * (!posx & posy))/sum(w)
   p_10 = sum(w * (posx & !posy))/sum(w)
   rho_11 = weightedSpearman(x = x[pospos], y = y[pospos], w = w[pospos])
-  rho_star = p_11 * (p_01 + p_11) * (p_10 + p_11) * rho_11 + 3*(p_00 * p_11 - p_10 * p_01)
+  rho_star = p_11 * (p_01 + p_11) * (p_10 + p_11) * rho_11 +
+    3*(p_00 * p_11 - p_10 * p_01)
 
   if (is.na(rho_star)) {
-    print("Zero inflated Spearman correlation is undefined, returning Spearman correlation")
+    print("Zero inflated Spearman correlation is undefined,
+          returning Spearman correlation")
     rho = weightedSpearman(x = x, y = y, w = w)
     return(rho)
   }

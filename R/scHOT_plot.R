@@ -2,20 +2,28 @@
 
 ##############################################
 
-#' the plotColouredExpression function plots an n-panel scatterplot of the gene pairs split by early, mid, and late in the sample ordering.
+#' the plotColouredExpression function plots an n-panel scatterplot
+#' of the gene pairs split by early, mid, and late in the sample ordering.
 #'
 #' @title plotColouredExpression
 #'
 #' @param scHOT A scHOT object.
-#' @param genes is either a single character string with a delimeter, or a length two character vector
-#' @param genes_delimeter is the delimeter to split into two gene names if genes is provided as a single character
-#' @param branches A character indicates that the colnames stored the branch information in colData
-#' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.
-#' @param subsetBranch subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
+#' @param genes is either a single character string with a delimeter,
+#' or a length two character vector
+#' @param genes_delimeter is the delimeter to split into two gene names
+#' if genes is provided as a single character
+#' @param branches A character indicates that the colnames stored
+#' the branch information in colData
+#' @param ranked_by A character indicates that the colnames stored
+#' the ranking information of the cells in colData, such as trajectory time,
+#' if it is NULL, it will be ranked based on the branch information.
+#' @param subsetBranch subsetBranch is a character vector containing
+#' the names of the branches to be plotted. If NULL it will plot all branches
 #' @param n number of panels to split ranked samples into, default 3.
 #' @param fittedline logical default TRUE, add a lm straight line to the plot
 #' @param assayName the name of the assay that are used to plot.
-#' @return \code{ggplot} a ggplot object of scatterplots of expression split by sample ordering
+#' @return \code{ggplot} a ggplot object of scatterplots of expression
+#' split by sample ordering
 #'
 #' @examples
 #'
@@ -51,7 +59,7 @@ plotColouredExpression = function(scHOT,
 
   if (length(genes) == 1) {
     message("genes given as single character, splitting using delimiter")
-    genepair = unlist(strsplit(genes, genes_delimeter))[1:2]
+    genepair = unlist(strsplit(genes, genes_delimeter))[seq_len(2)]
   }
 
   if (length(genes) == 2) {
@@ -60,7 +68,7 @@ plotColouredExpression = function(scHOT,
 
   if (length(genes) > 2) {
     message("only first two entries of genes will be used")
-    genepair = genes[1:2]
+    genepair = genes[seq_len(2)]
   }
 
 
@@ -71,14 +79,15 @@ plotColouredExpression = function(scHOT,
   branchData <- SummarizedExperiment::assay(scHOT, assayName)
 
   if (is.null(ranked_by)) {
-    message("ranked_by information is not provided, the expression data is ranked by the branches")
+    message("ranked_by information is not provided,
+            the expression data is ranked by the branches")
   } else {
 
     if (!(ranked_by %in% colnames(SummarizedExperiment::colData(scHOT)))) {
       stop("ranked_by provided is not found in colData(scHOT)")
     }
 
-    branchData <- branchData[, order(SummarizedExperiment::colData(scHOT)[, ranked_by])]
+    branchData <- branchData[, order(colData(scHOT)[, ranked_by])]
   }
 
 
@@ -94,7 +103,8 @@ plotColouredExpression = function(scHOT,
     branch_info <- SummarizedExperiment::colData(scHOT)[, branches]
 
     branchData <- lapply(split(seq_along(branch_info), branch_info),
-                         function(idx) branchData[, idx])[order(unique(branch_info))]
+                         function(idx)
+                           branchData[, idx])[order(unique(branch_info))]
   }
 
 
@@ -106,15 +116,21 @@ plotColouredExpression = function(scHOT,
 
 
   gdf = do.call(rbind, lapply(branchData, function(branch) {
-    gdf_list_1 = data.frame(Sample = colnames(branch), order = 1:ncol(branch),
-                            ExpressionGene1 = branch[genepair[1], ], ExpressionGene2 = branch[genepair[2], ])
+    gdf_list_1 = data.frame(Sample = colnames(branch),
+                            order = seq_len(ncol(branch)),
+                            ExpressionGene1 = branch[genepair[1], ],
+                            ExpressionGene2 = branch[genepair[2], ])
     if (n > 1) {
 
 
-      gdf_list_1$ordercut = cut(gdf_list_1$order, n, labels = unlist(ifelse(n == 3,
-                                                                            list(c("Early", "Middle", "Late")),
-                                                                            ifelse(n == 2, list(c("Early", "Late")),
-                                                                                   list(paste0("Group ", 1:n))))))
+      g_labels <- unlist(ifelse(n == 3,
+                                list(c("Early", "Middle",
+                                       "Late")),
+                                ifelse(n == 2, list(c("Early",
+                                                      "Late")),
+                                       list(paste0("Group ",
+                                                   seq_len(n))))))
+      gdf_list_1$ordercut = cut(gdf_list_1$order, n, labels = g_labels)
     } else {
       gdf_list_1$ordercut = rep("All cells", times = nrow(gdf_list_1))
     }
@@ -126,12 +142,14 @@ plotColouredExpression = function(scHOT,
   if (!is.null(subsetBranch)) {
     gdf_sub = subset(gdf, gdf$branch %in% subsetBranch)
     if (nrow(gdf_sub) == 0)
-      stop("no branches with names in subsetBranch, please re-run with correct names (should match names of branchData)")
+      stop("no branches with names in subsetBranch,
+           please re-run with correct names (should match names of branchData)")
   }
   else {
     gdf_sub = gdf
   }
-  g = ggplot2::ggplot(gdf_sub, aes(x = gdf_sub$ExpressionGene1, y = gdf_sub$ExpressionGene2,
+  g = ggplot2::ggplot(gdf_sub, aes(x = gdf_sub$ExpressionGene1,
+                                   y = gdf_sub$ExpressionGene2,
                                    color = order)) +
     geom_point(show.legend = FALSE, alpha = 0.7) +
     facet_grid(branch ~ ordercut, scales = "free_y") +
@@ -151,18 +169,26 @@ plotColouredExpression = function(scHOT,
 
 ##############################################
 
-#' the plotOrderedExpression function plots expression vectors along branches and genes as ribbon plots
+#' the plotOrderedExpression function plots expression vectors
+#' along branches and genes as ribbon plots
 #'
 #' @title plotOrderedExpression
-#' @param scHOT A scHOT object, where the expression data is stored in the assay slot, with assay name "expression".
+#' @param scHOT A scHOT object, where the expression
+#' data is stored in the assay slot, with assay name "expression".
 #' @param genes is a character vector for gene names
-#' @param positionType A string indicates the position type, either trajectory or spatial
-#' @param branches A character indicates that the colnames stored the branch information in colData
-#' @param ranked_by A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time
-#' @param xvals A character indicates that the colnames stored in colData of the x-values associated with the samples in branchData
-#' @param subsetBranch subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
+#' @param positionType A string indicates the position type,
+#' either trajectory or spatial
+#' @param branches A character indicates that the colnames stored
+#' the branch information in colData
+#' @param ranked_by A character indicates that the colnames stored
+#' the ranking information of the cells in colData, such as trajectory time
+#' @param xvals A character indicates that the colnames stored in
+#' colData of the x-values associated with the samples in branchData
+#' @param subsetBranch subsetBranch is a character vector containing
+#' the names of the branches to be plotted. If NULL it will plot all branches
 #' @param facet can either be FALSE, "branch", "gene", or "both"
-#' @param positionColData A vector indicates column names of colData that stored the postion informaton (for spatial type of data)
+#' @param positionColData A vector indicates column names of colData that
+#' stored the postion informaton (for spatial type of data)
 #' @param assayName the name of the assay that are used to plot.
 #'
 #' @return \code{ggplot} a ggplot object for ribbon plot with points
@@ -187,8 +213,11 @@ plotOrderedExpression = function(scHOT,
 
 
   # genes is character vector
-  # xvals is a list containing the x-values associated with the samples in branchData (if NULL, samples will just be plotted against their rank)
-  # subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches
+  # xvals is a list containing the x-values associated with the
+  # samples in branchData
+  # (if NULL, samples will just be plotted against their rank)
+  # subsetBranch is a character vector containing the names of
+  # the branches to be plotted. If NULL it will plot all branches
   # facet can either be FALSE, "branch", "gene", or "both"
 
 
@@ -225,14 +254,15 @@ plotOrderedExpression = function(scHOT,
 
 
     if (is.null(ranked_by)) {
-      message("ranked_by information is not provided, the expression data is ranked by the branches")
+      message("ranked_by information is not provided,
+              the expression data is ranked by the branches")
     } else {
 
       if (!(ranked_by %in% colnames(SummarizedExperiment::colData(scHOT)))) {
         stop("ranked_by provided is not found in colData(scHOT)")
       }
 
-      branchData <- branchData[, order(SummarizedExperiment::colData(scHOT)[, ranked_by])]
+      branchData <- branchData[, order(colData(scHOT)[, ranked_by])]
     }
 
 
@@ -248,10 +278,9 @@ plotOrderedExpression = function(scHOT,
       branch_info <- SummarizedExperiment::colData(scHOT)[, branches]
 
       branchData <- lapply(split(seq_along(branch_info), branch_info),
-                           function(idx) branchData[, idx])[order(unique(branch_info))]
+                           function(idx)
+                             branchData[, idx])[order(unique(branch_info))]
     }
-
-
 
 
     gdf_list = sapply(genes, function(g) {
@@ -259,13 +288,14 @@ plotOrderedExpression = function(scHOT,
       gdf = do.call(rbind,lapply(branchData, function(branch){
         gdf_list_1 = data.frame(
           Sample = colnames(branch),
-          order = 1:ncol(branch),
+          order = seq_len(ncol(branch)),
           ExpressionGene = branch[g,],
           gene = g
         )
         return(gdf_list_1)
       }))
-      gdf$branch = rep(names(branchData), times = unlist(lapply(branchData, ncol)))
+      gdf$branch = rep(names(branchData),
+                       times = unlist(lapply(branchData, ncol)))
       return(gdf)
     }, simplify = FALSE)
 
@@ -274,7 +304,8 @@ plotOrderedExpression = function(scHOT,
     if (!is.null(subsetBranch)) {
       gdf_sub = subset(gdf, gdf$branch %in% subsetBranch)
       if (nrow(gdf_sub) == 0) stop("no branches with names in subsetBranch,
-                                 please re-run with correct names (should match names of branchData)")
+                                 please re-run with correct names
+                                   (should match names of branchData)")
     } else {
       gdf_sub = gdf
     }
@@ -287,13 +318,16 @@ plotOrderedExpression = function(scHOT,
       }
       xval <- lapply(split(seq_along(branch_info), branch_info),
                      function(idx) xval[, idx])[order(unique(branch_info))]
-      xval <- apply(as.matrix(gdf_sub), 1, function(x)xvals[[x["branch"]]][as.numeric(x["order"])])
+      xval <- apply(as.matrix(gdf_sub), 1,
+                    function(x)xvals[[x["branch"]]][as.numeric(x["order"])])
       gdf_sub$order <- xval
 
     }
 
-    g = ggplot(gdf_sub, aes(x = order, y = gdf_sub$ExpressionGene, colour = gdf_sub$gene,
-                            fill = gdf_sub$gene, linetype = gdf_sub$branch, shape = gdf_sub$branch)) +
+    g = ggplot(gdf_sub, aes(x = order, y = gdf_sub$ExpressionGene,
+                            colour = gdf_sub$gene,
+                            fill = gdf_sub$gene, linetype = gdf_sub$branch,
+                            shape = gdf_sub$branch)) +
       geom_point() +
       labs(fill = "Gene", col = "Gene", linetype = "Branch", shape = "Branch") +
       theme_minimal() + geom_smooth() +
@@ -329,13 +363,16 @@ plotOrderedExpression = function(scHOT,
     coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, positionColData])
     colnames(coords_info) <- positionColData
 
-    branch_long <- reshape::melt(cbind(coords_info, t(branchData[genes, , drop = FALSE])),
+    branch_long <- reshape::melt(cbind(coords_info,
+                                       t(branchData[genes, , drop = FALSE])),
                                  id.vars = positionColData)
 
 
     colnames(branch_long) <- c("x", "y", "genes", "value")
 
-    g <- ggplot(branch_long,  aes(x = branch_long$x, y = branch_long$y, color = branch_long$value)) +
+    g <- ggplot(branch_long,  aes(x = branch_long$x,
+                                  y = branch_long$y,
+                                  color = branch_long$value)) +
       geom_point(size = 3) +
       # geom_point(size = 0.5, colour = "black") +
       theme_minimal() +
@@ -362,16 +399,20 @@ plotOrderedExpression = function(scHOT,
 
 ##############################################
 
-#' the plotEgoNetwork function plots network graphs with edges coloured by weights in the network
+#' the plotEgoNetwork function plots network graphs with edges coloured by
+#' weights in the network
 #'
 #' @title plotEgoNetwork
 #' @param scHOT a scHOT object
 #' @param hubnode is a character vector of node(s) to include as hub nodes
 #' @param network is an igraph network
-#' @param weight A string indicates the column name stored in scHOT_output slot that are used as the weights of the network
-#' @param subset is a logical asking if you should subset based on the weight (default FALSE)
+#' @param weight A string indicates the column name stored in scHOT_output slot
+#' that are used as the weights of the network
+#' @param subset is a logical asking if you should subset
+#' based on the weight (default FALSE)
 #' @param thresh is the subset weight threshold
-#' @return \code{igraph} object containing the network graphed. Produces an igraph plot
+#' @return \code{igraph} object containing the network graphed.
+#' Produces an igraph plot
 #'
 #'
 #' @import igraph
@@ -388,7 +429,8 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 
   # hubnode is a character vector of node(s) to include as hub nodes
   # g is an igraph network, with E(g)[[weight]] given as DCARS test statistics
-  # weight is a character vector containing edge weights, associated with different branches
+  # weight is a character vector containing edge weights,
+  # associated with different branches
   # subset is a logical asking if you should subset based on the weight
   # thresh is the subset weight threshold
 
@@ -413,15 +455,18 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 
   if (subset) {
     if (!all(weight %in% names(edge_attr(subego)))) {
-      stop("at least one weight missing from edge attributes, either re-specify weights or rerun with subset = FALSE")
+      stop("at least one weight missing from edge attributes,
+           either re-specify weights or rerun with subset = FALSE")
     }
     if (is.null(thresh)) {
       message("no threshold given, using 0 as default")
       thresh = 0
     }
-    keepedges = apply(sapply(weight, function(w) igraph::edge_attr(subego)[[w]] > thresh,
-                             simplify = TRUE),1,any)
-    subego = igraph::subgraph.edges(subego, which(keepedges))
+    keepedges <- apply(sapply(weight,
+                              function(w)
+                                igraph::edge_attr(subego)[[w]] > thresh,
+                              simplify = TRUE), 1, any)
+    subego <- igraph::subgraph.edges(subego, which(keepedges))
   }
 
   igraph::V(subego)$color = "beige"
@@ -459,14 +504,19 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 ##############################################
 
 
-#' the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
+#' the plotHigherOrderSequence function plots weighted higher order
+#' statistic vectors (stored in higherOrderSequence) as line plots
 #'
 #' @title plotHigherOrderSequence
 #' @param scHOT A scHOT object with higherOrderSequence in scHOT_output slot
-#' @param gene is either a logical vector matching rows of entries in wcorsList, or a character of a gene
-#' @param positionType A string indicates the position type, either trajectory or spatial
-#' @param branches A character indicates that the colnames stored the branch information in colData (for trajectory type of data)
-#' @param positionColData A vector indicates column names of colData that stored the postion informaton (for spatial type of data)
+#' @param gene is either a logical vector matching rows of entries
+#' in wcorsList, or a character of a gene
+#' @param positionType A string indicates the position type,
+#' either trajectory or spatial
+#' @param branches A character indicates that the colnames stored
+#' the branch information in colData (for trajectory type of data)
+#' @param positionColData A vector indicates column names of colData
+#' that stored the postion informaton (for spatial type of data)
 #' @return \code{ggplot} object with line plots
 #'
 #' @importFrom reshape melt
@@ -484,20 +534,24 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 #' scHOT_traj
 #' plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
 #'
-#' scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, t(as.matrix(c("Cdt1", "Top2a"))))
+#' scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj,
+#' t(as.matrix(c("Cdt1", "Top2a"))))
 #' scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
 #' positionColData = c("pseudotime"),
 #' positionType = "trajectory",
 #' nrow.out = NULL,
 #' span = 0.25)
 #' scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj,
-#'                                                       higherOrderFunction = weightedSpearman,
-#'                                                      higherOrderFunctionType = "weighted")
+#'                                                       higherOrderFunction =
+#'                                                       weightedSpearman,
+#'                                                      higherOrderFunctionType =
+#'                                                      "weighted")
 #'
 #' scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
-#'                                                       higherOrderSummaryFunction = sd)
+#'                                                       higherOrderSummaryFunction =
+#'                                                       sd)
 #'
-#' scHOT_traj@scHOT_output
+#' slot(scHOT_traj, "scHOT_output")
 #' plotHigherOrderSequence(scHOT_traj, c("Cdt1_Top2a"))
 #'
 #' @export
@@ -508,7 +562,8 @@ plotHigherOrderSequence <- function(scHOT,
                                     branches = NULL,
                                     positionColData = NULL) {
 
-  # matchExact matches gene names by splitting instead of using grep, but is slower
+  # matchExact matches gene names by splitting
+  #instead of using grep, but is slower
 
   if (!("higherOrderSequence" %in% colnames(scHOT@scHOT_output))) {
     stop("higherOrderSequence is not found in scHOT_output")
@@ -517,12 +572,16 @@ plotHigherOrderSequence <- function(scHOT,
   namescols = grep("gene_", colnames(scHOT@scHOT_output), value = TRUE)
 
   wcor <- as.matrix(scHOT@scHOT_output$higherOrderSequence)
-  # rownames(wcor) <- paste0(scHOT@scHOT_output$gene_1, scHOT@scHOT_output$gene_2, sep = "_")
-  rownames(wcor) <- apply(scHOT@scHOT_output[,namescols, drop = FALSE], 1, paste0, collapse = "_")
+  # rownames(wcor) <- paste0(scHOT@scHOT_output$gene_1,
+  # scHOT@scHOT_output$gene_2, sep = "_")
+  rownames(wcor) <- apply(scHOT@scHOT_output[,namescols, drop = FALSE],
+                          1, paste0, collapse = "_")
   colnames(wcor) <- NULL
 
   if (ncol(wcor) != ncol(scHOT)) {
-    warning("Not all the cell position has higherOrderSequence statistics, set nrow.out = NULL in scHOT_setWeightMatrix to calculate higherOrderSequence for all positions!")
+    warning("Not all the cell position has higherOrderSequence statistics,
+            set nrow.out = NULL in scHOT_setWeightMatrix to calculate
+            higherOrderSequence for all positions!")
   }
 
   if (is.null(positionType)) {
@@ -535,7 +594,8 @@ plotHigherOrderSequence <- function(scHOT,
 
   }
 
-  positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
+  positionType <- match.arg(positionType, c("trajectory","spatial"),
+                            several.ok = FALSE)
 
 
 
@@ -559,17 +619,19 @@ plotHigherOrderSequence <- function(scHOT,
 
 
     if (is.null(names(wcorsList))) {
-      names(wcorsList) <- paste0("Branch_",1:length(wcorsList))
+      names(wcorsList) <- paste0("Branch_", seq_len(length(wcorsList)))
     }
 
     if (is.logical(gene[1])) {
 
       if (length(unique(unlist(lapply(wcorsList,nrow)))) > 1) {
-        stop("cannot use logical subset when weighted higher order statistic matrices have differing rows")
+        stop("cannot use logical subset when weighted higher
+             order statistic matrices have differing rows")
       }
 
       if (length(gene) != nrow(wcorsList[[1]])) {
-        stop("cannot use logical subset when length of gene doesn't match nrow of wcorsList matrices")
+        stop("cannot use logical subset when length of gene
+             doesn't match nrow of wcorsList matrices")
       }
 
       wcors_longList = lapply(wcorsList,function(branch){
@@ -591,7 +653,8 @@ plotHigherOrderSequence <- function(scHOT,
     branch_long = cbind(
       rep(names(wcors_longList), unlist(lapply(wcors_longList, nrow))),
       branch_long)
-    colnames(branch_long) = c("branch","SampleOrder", "GenePair", "WeightedCorrelation")
+    colnames(branch_long) = c("branch","SampleOrder",
+                              "GenePair", "WeightedCorrelation")
 
 
 
@@ -627,11 +690,13 @@ plotHigherOrderSequence <- function(scHOT,
     if (is.logical(gene[1])) {
 
       if (length(unique(unlist(lapply(wcorsList, nrow)))) > 1) {
-        stop("cannot use logical subset when weighted higher order statistic matrices have differing rows")
+        stop("cannot use logical subset when weighted higher
+             order statistic matrices have differing rows")
       }
 
       if (length(gene) != nrow(wcor)) {
-        stop("cannot use logical subset when length of gene doesn't match nrow of wcorsList matrices")
+        stop("cannot use logical subset when length of gene
+             doesn't match nrow of wcorsList matrices")
       }
 
 
@@ -663,7 +728,7 @@ plotHigherOrderSequence <- function(scHOT,
 
     }
 
-    coords_info <- data.frame(SummarizedExperiment::colData(scHOT)[, positionColData])
+    coords_info <- data.frame(colData(scHOT)[, positionColData])
     colnames(coords_info) <- positionColData
 
     wcor_all <- matrix(NA, nrow = length(gene), ncol = ncol(scHOT))
@@ -677,13 +742,16 @@ plotHigherOrderSequence <- function(scHOT,
 
     colnames(branch_long) <- c("x", "y", "genepair", "value")
 
-    g <- ggplot(branch_long,  aes(x = branch_long$x, y = branch_long$y, fill = branch_long$value)) +
+    g <- ggplot(branch_long,  aes(x = branch_long$x,
+                                  y = branch_long$y,
+                                  fill = branch_long$value)) +
       ggforce::geom_voronoi_tile(max.radius = 1) +
       geom_point(size = 0.5, colour = "black") +
       theme_minimal() +
       facet_wrap(~genepair) +
       scale_alpha_continuous(range = c(0,0.5)) +
-      scale_fill_gradient2(low = "blue", mid = "white", high = "red", limits = c(-1,1)) +
+      scale_fill_gradient2(low = "blue", mid = "white",
+                           high = "red", limits = c(-1,1)) +
       theme(panel.grid = element_blank()) +
       theme(axis.ticks = element_blank()) +
       theme(axis.text = element_blank()) +
@@ -700,8 +768,9 @@ plotHigherOrderSequence <- function(scHOT,
 
 ##############################################
 
-#' the scHOT_plotPermutationDistributions function plots the permutation test statistics
-#' as a diagnostic plot for estimating p-values
+#' the scHOT_plotPermutationDistributions function plots
+#' the permutation test statistics as a diagnostic plot
+#' for estimating p-values
 #'
 #' @title scHOT_plotPermutationDistributions
 #' @param scHOT a scHOT object
@@ -721,7 +790,8 @@ scHOT_plotPermutationDistributions = function(scHOT) {
   scHOT_output = scHOT@scHOT_output
 
   if (length(scHOT_output$globalHigherOrderFunction) == 0) {
-    stop("No globalHigherOrderFunction found in scHOT object's scHOT_output slot,
+    stop("No globalHigherOrderFunction found in
+    scHOT object's scHOT_output slot,
          please run function scHOT_calculateGlobalHigherOrderFunction!")
   }
 
@@ -733,31 +803,43 @@ scHOT_plotPermutationDistributions = function(scHOT) {
   permstatsDF = data.frame(
     test = rep(seq_len(nrow(scHOT_output)),
                times = unlist(
-                 lapply(scHOT_output$permutations, function(x) length(unlist(x))))),
+                 lapply(scHOT_output$permutations,
+                        function(x) length(unlist(x))))),
     stat = unlist(scHOT_output$permutations),
     globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
                                     times = unlist(
-                                      lapply(scHOT_output$permutations, function(x) length(unlist(x)))))
+                                      lapply(scHOT_output$permutations,
+                                             function(x) length(unlist(x)))))
   )
 
   quantileDF = data.frame(
     test = rep(seq_len(nrow(scHOT_output)),
-               times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0)),
-    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) stats::quantile(x, 0.9, na.rm = TRUE))),
+               times = lapply(scHOT_output$permutations,
+                              function(x) length(unlist(x)) > 0)),
+    quantile_0.9 = unlist(lapply(scHOT_output$permutations,
+                                 function(x) stats::quantile(x, 0.9,
+                                                             na.rm = TRUE))),
     globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
-                                    times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0))
+                                    times = lapply(scHOT_output$permutations,
+                                                   function(x) length(unlist(x)) > 0))
   )
 
   quantileDF$quantile_0.9_fitted <- NA
-  quantileDF$quantile_0.9_fitted[!is.na(quantileDF$quantile_0.9)] = stats::loess(quantile_0.9 ~ globalHigherOrderFunction, data = quantileDF)$fitted
+  quantileDF$quantile_0.9_fitted[!is.na(quantileDF$quantile_0.9)] =
+    stats::loess(quantile_0.9 ~ globalHigherOrderFunction,
+                 data = quantileDF)$fitted
 
-  gBase = ggplot(permstatsDF, aes(x = permstatsDF$globalHigherOrderFunction, y = stat))
+  gBase = ggplot(permstatsDF,
+                 aes(x = permstatsDF$globalHigherOrderFunction,
+                     y = stat))
 
   if (requireNamespace(c("scales", "scattermore"), quietly = TRUE)) {
     gBase = gBase + scattermore::geom_scattermore()
   }
 
-  df_toPlot <- reshape::sort_df(subset(quantileDF, !is.na(quantileDF$quantile_0.9_fitted)), "globalHigherOrderFunction")
+  df_toPlot <- reshape::sort_df(subset(quantileDF,
+                                       !is.na(quantileDF$quantile_0.9_fitted)),
+                                "globalHigherOrderFunction")
   g = gBase +
     geom_line(aes(y = df_toPlot$quantile_0.9_fitted),
               data = df_toPlot) +

@@ -17,6 +17,32 @@
 #'
 #' @return scHOT A scHOT object with results stored in scHOT_output slot
 #'
+#' @examples
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#'                                      assayName = "logcounts",
+#'                                     positionType = "spatial",
+#'                                      positionColData = c("x", "y"))
+#' pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+#'
+#' rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+#' scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+#'
+#' scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+#'                                        positionColData = c("x","y"),
+#'                                         positionType = "spatial",
+#'                                         nrow.out = NULL,
+#'                                         span = 0.05)
+#' scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+#'   scHOT_spatial,
+#'   higherOrderFunction = weightedSpearman,
+#'   higherOrderFunctionType = "weighted")
+#' scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
+#'                                               numberPermutations = 100)
+#' scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+#'   scHOT_spatial,
+#'   higherOrderSummaryFunction = sd)
 #' @export
 
 
@@ -100,7 +126,7 @@ scHOT_calculateHigherOrderTestStatistics <- function(
       higherOrderSequence, 1)
   } else {
     scHOT@scHOT_output$higherOrderSequence = split(
-      higherOrderSequence, 1:nrow(higherOrderSequence))
+      higherOrderSequence, seq_len(nrow(higherOrderSequence)))
   }
 
 
@@ -125,9 +151,12 @@ scHOT_calculateHigherOrderTestStatistics <- function(
 #' @title scHOT_performPermutationTest
 #'
 #' @param scHOT A scHOT object
-#' @param verbose A logical input indicates whether the intermediate steps will be printed
-#' @param parallel A logical input indicates whether run the permutation test using multiple cores in parallel.
-#' @param BPPARAM  A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().
+#' @param verbose A logical input indicates whether the intermediate steps
+#' will be printed
+#' @param parallel A logical input indicates whether run the permutation test
+#' using multiple cores in parallel.
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #'
 #' @importFrom SummarizedExperiment assay
 #' @importFrom IRanges NumericList
@@ -135,6 +164,36 @@ scHOT_calculateHigherOrderTestStatistics <- function(
 #' @importFrom BiocParallel bplapply SerialParam
 #'
 #' @return scHOT A scHOT object with results stored in scHOT_output slot
+#'
+#' @examples
+#'  data(MOB_subset)
+#'  sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#'  scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#'                                      assayName = "logcounts",
+#'                                     positionType = "spatial",
+#'                                      positionColData = c("x", "y"))
+#' pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+#' rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+#' scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+#'  scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+#'                                        positionColData = c("x","y"),
+#'                                         positionType = "spatial",
+#'                                         nrow.out = NULL,
+#'                                         span = 0.05)
+#' scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+#'   scHOT_spatial,
+#'   higherOrderFunction = weightedSpearman,
+#'   higherOrderFunctionType = "weighted")
+#' scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
+#'                                               numberPermutations = 100)
+#' scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+#'   scHOT_spatial,
+#'   higherOrderSummaryFunction = sd)
+#'
+#' scHOT_spatial <- scHOT_performPermutationTest(
+#'   scHOT_spatial,
+#'   verbose = TRUE,
+#'   parallel = FALSE)
 #'
 #' @export
 
@@ -188,12 +247,12 @@ scHOT_performPermutationTest <- function(
   }
 
   if (any(DF$storePermutations)) {
-    DF$permutations = split(rep(NA, nrow(DF)), 1:nrow(DF))
+    DF$permutations = split(rep(NA, nrow(DF)), seq_len(nrow(DF)))
   }
 
   DF$pvalPermutations = rep(NA, nrow(DF))
 
-  for (i in 1:nrow(DF)) {
+  for (i in seq_len(nrow(DF))) {
 
     niter = DF[i,"numberPermutations"]
 
@@ -352,7 +411,7 @@ estimatePvalues <- function(stats,
       }
       else {
         permstatsDF_sorted = reshape::sort_df(na.omit(permstatsDF), "dist")
-        permstatsDF_sorted_sub = permstatsDF_sorted[1:nperm_estimate, ]
+        permstatsDF_sorted_sub = permstatsDF_sorted[seq_len(nperm_estimate), ]
       }
     } else {
       if (is.null(maxDist)) {
@@ -405,14 +464,51 @@ estimatePvalues <- function(stats,
 #' @title scHOT_estimatePvalues
 #'
 #' @param scHOT A scHOT object
-#' @param usenperm_estimate Logical (default FALSE) if number of neighbouring permutations should be used, or if difference of global higher order statistic should be used
-#' @param nperm_estimate Number of neighbouring permutations to use for p-value estimation
-#' @param maxDist max difference of global higher order statistic to use for p-value estimation (default 0.1)
+#' @param usenperm_estimate Logical (default FALSE) if
+#' number of neighbouring permutations should be used, or
+#' if difference of global higher order statistic should be used
+#' @param nperm_estimate Number of neighbouring permutations to
+#' use for p-value estimation
+#' @param maxDist max difference of global higher order statistic
+#' to use for p-value estimation (default 0.1)
 #' @param plot A logical input indicating whether the results are plotted
-#' @param verbose A logical input indicating whether the intermediate steps will be printed
+#' @param verbose A logical input indicating whether the intermediate
+#' steps will be printed
 #'
 #' @return scHOT A scHOT object with results stored in scHOT_output slot
+#' @examples
+#'  data(MOB_subset)
+#'  sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#'  scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#'                                      assayName = "logcounts",
+#'                                     positionType = "spatial",
+#'                                      positionColData = c("x", "y"))
+#' pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+#' rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
 #'
+#' scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+#'
+#' scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+#'                                        positionColData = c("x","y"),
+#'                                         positionType = "spatial",
+#'                                         nrow.out = NULL,
+#'                                         span = 0.05)
+#' scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+#'   scHOT_spatial,
+#'   higherOrderFunction = weightedSpearman,
+#'   higherOrderFunctionType = "weighted")
+#' scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
+#'                                               numberPermutations = 100)
+#' scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+#'   scHOT_spatial,
+#'   higherOrderSummaryFunction = sd)
+#'
+#' scHOT_spatial <- scHOT_performPermutationTest(
+#'   scHOT_spatial,
+#'   verbose = TRUE,
+#'   parallel = FALSE)
+#'
+#' scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial)
 #'
 #' @importFrom stats p.adjust
 #'
@@ -440,7 +536,8 @@ scHOT_estimatePvalues <- function(scHOT,
   }
 
   if (length(globalCors) == 0) {
-    stop("No globalHigherOrderFunction found in scHOT object's scHOT_output slot,
+    stop("No globalHigherOrderFunction found in
+    scHOT object's scHOT_output slot,
          please run function scHOT_calculateGlobalHigherOrderFunction!")
   }
 
@@ -454,7 +551,7 @@ scHOT_estimatePvalues <- function(scHOT,
   }
 
   if (is.null(names(stats))) {
-    names(stats) <- paste0("stat_", 1:length(stats))
+    names(stats) <- paste0("stat_", seq_len(length(stats)))
   }
 
   names(globalCors) <- names(stats)
