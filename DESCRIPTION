@@ -25,7 +25,9 @@ Imports:
     ggplot2,
     igraph,
     grDevices,
-    ggforce
+    ggforce,
+    graphics
 RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown, scater, scattermore, scales, matrixStats
 VignetteBuilder: knitr
+biocViews: GeneExpression, RNASeq, Sequencing, SingleCell, Software, Transcriptomics

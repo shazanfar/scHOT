@@ -9,8 +9,25 @@ scHOT_addTestingScaffold(scHOT, testingScaffold)
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{testingScaffold}{A matrix with rows for each testing combination, and columns for level of dimensionality (1 for single gene etc.)}
+\item{testingScaffold}{A matrix with rows for each testing combination,
+and columns for level of dimensionality (1 for single gene etc.)}
+}
+\value{
+A scHOT object with slot testingScaffold saved
 }
 \description{
 Add a testing scaffold to a scHOT object
+}
+\examples{
+
+data(MOB_subset)
+sce_MOB_subset <- MOB_subset$sce_MOB_subset
+scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+assayName = "logcounts",
+positionType = "spatial",
+positionColData = c("x", "y"))
+pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+
+
 }

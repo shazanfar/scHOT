@@ -14,15 +14,49 @@ scHOT_performPermutationTest(
 \arguments{
 \item{scHOT}{A scHOT object}
 
-\item{verbose}{A logical input indicates whether the intermediate steps will be printed}
+\item{verbose}{A logical input indicates whether the intermediate steps
+will be printed}
 
-\item{parallel}{A logical input indicates whether run the permutation test using multiple cores in parallel.}
+\item{parallel}{A logical input indicates whether run the permutation test
+using multiple cores in parallel.}
 
-\item{BPPARAM}{A \code{BiocParallelParam} class object from the \code{BiocParallel} package is used. Default is SerialParam().}
+\item{BPPARAM}{A \code{BiocParallelParam} class object
+from the \code{BiocParallel} package is used. Default is SerialParam().}
 }
 \value{
 scHOT A scHOT object with results stored in scHOT_output slot
 }
 \description{
 Perform permutation test
+}
+\examples{
+ data(MOB_subset)
+ sce_MOB_subset <- MOB_subset$sce_MOB_subset
+ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+                                     assayName = "logcounts",
+                                    positionType = "spatial",
+                                     positionColData = c("x", "y"))
+pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
+rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+ scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+                                       positionColData = c("x","y"),
+                                        positionType = "spatial",
+                                        nrow.out = NULL,
+                                        span = 0.05)
+scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
+  scHOT_spatial,
+  higherOrderFunction = weightedSpearman,
+  higherOrderFunctionType = "weighted")
+scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial,
+                                              numberPermutations = 100)
+scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
+  scHOT_spatial,
+  higherOrderSummaryFunction = sd)
+
+scHOT_spatial <- scHOT_performPermutationTest(
+  scHOT_spatial,
+  verbose = TRUE,
+  parallel = FALSE)
+
 }

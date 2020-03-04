@@ -9,9 +9,13 @@ trajectoryWeightMatrix(n, type = NULL, span = NULL)
 \arguments{
 \item{n}{indicates the number of cels}
 
-\item{type}{Type of weight matrix, one of "triangular" (default), "block", and "harmonic"}
+\item{type}{Type of weight matrix, one of "triangular" (default),
+"block", and "harmonic"}
 
 \item{span}{proportion of samples to include on either side, default is 0.25}
+}
+\value{
+A weighted matrix
 }
 \description{
 Create weight matrix for trajectory data

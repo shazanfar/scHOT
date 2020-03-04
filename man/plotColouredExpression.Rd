@@ -19,15 +19,21 @@ plotColouredExpression(
 \arguments{
 \item{scHOT}{A scHOT object.}
 
-\item{genes}{is either a single character string with a delimeter, or a length two character vector}
+\item{genes}{is either a single character string with a delimeter,
+or a length two character vector}
 
-\item{genes_delimeter}{is the delimeter to split into two gene names if genes is provided as a single character}
+\item{genes_delimeter}{is the delimeter to split into two gene names
+if genes is provided as a single character}
 
-\item{branches}{A character indicates that the colnames stored the branch information in colData}
+\item{branches}{A character indicates that the colnames stored
+the branch information in colData}
 
-\item{ranked_by}{A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.}
+\item{ranked_by}{A character indicates that the colnames stored
+the ranking information of the cells in colData, such as trajectory time,
+if it is NULL, it will be ranked based on the branch information.}
 
-\item{subsetBranch}{subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches}
+\item{subsetBranch}{subsetBranch is a character vector containing
+the names of the branches to be plotted. If NULL it will plot all branches}
 
 \item{n}{number of panels to split ranked samples into, default 3.}
 
@@ -36,10 +42,12 @@ plotColouredExpression(
 \item{assayName}{the name of the assay that are used to plot.}
 }
 \value{
-\code{ggplot} a ggplot object of scatterplots of expression split by sample ordering
+\code{ggplot} a ggplot object of scatterplots of expression
+split by sample ordering
 }
 \description{
-the plotColouredExpression function plots an n-panel scatterplot of the gene pairs split by early, mid, and late in the sample ordering.
+the plotColouredExpression function plots an n-panel scatterplot
+of the gene pairs split by early, mid, and late in the sample ordering.
 }
 \examples{
 

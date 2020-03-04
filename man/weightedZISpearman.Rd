@@ -16,10 +16,15 @@ weightedZISpearman(x, y, w = 1)
 \value{
 \code{numeric} weighted rho* association value between x and y
 
- Pimentel, Ronald Silva, "Kendall's Tau and Spearman's Rho for Zero-Inflated Data" (2009). Dissertations. 721. https://scholarworks.wmich.edu/dissertations/721
+ Pimentel, Ronald Silva, "Kendall's Tau and Spearman's Rho for
+ Zero-Inflated Data" (2009). Dissertations. 721.
+ https://scholarworks.wmich.edu/dissertations/721
 }
 \description{
-the weightedZISpearman function calculates weighted rho\*, where rho\* is described in Pimentel et al (2009). This association measure is defined for zero-inflated, non-negative random variables.
+the weightedZISpearman function calculates weighted rho\*,
+where rho\* is described in Pimentel et al (2009).
+This association measure is defined for zero-inflated,
+non-negative random variables.
 }
 \examples{
 

@@ -15,19 +15,24 @@ plotHigherOrderSequence(
 \arguments{
 \item{scHOT}{A scHOT object with higherOrderSequence in scHOT_output slot}
 
-\item{gene}{is either a logical vector matching rows of entries in wcorsList, or a character of a gene}
+\item{gene}{is either a logical vector matching rows of entries
+in wcorsList, or a character of a gene}
 
-\item{positionType}{A string indicates the position type, either trajectory or spatial}
+\item{positionType}{A string indicates the position type,
+either trajectory or spatial}
 
-\item{branches}{A character indicates that the colnames stored the branch information in colData (for trajectory type of data)}
+\item{branches}{A character indicates that the colnames stored
+the branch information in colData (for trajectory type of data)}
 
-\item{positionColData}{A vector indicates column names of colData that stored the postion informaton (for spatial type of data)}
+\item{positionColData}{A vector indicates column names of colData
+that stored the postion informaton (for spatial type of data)}
 }
 \value{
 \code{ggplot} object with line plots
 }
 \description{
-the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots
+the plotHigherOrderSequence function plots weighted higher order
+statistic vectors (stored in higherOrderSequence) as line plots
 }
 \examples{
 data(liver)
@@ -40,20 +45,24 @@ positionColData = "pseudotime")
 scHOT_traj
 plotColouredExpression(scHOT_traj, c("Cdt1","Top2a"), n = 5)
 
-scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, t(as.matrix(c("Cdt1", "Top2a"))))
+scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj,
+t(as.matrix(c("Cdt1", "Top2a"))))
 scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
 positionColData = c("pseudotime"),
 positionType = "trajectory",
 nrow.out = NULL,
 span = 0.25)
 scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(scHOT_traj,
-                                                      higherOrderFunction = weightedSpearman,
-                                                     higherOrderFunctionType = "weighted")
+                                                      higherOrderFunction =
+                                                      weightedSpearman,
+                                                     higherOrderFunctionType =
+                                                     "weighted")
 
 scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(scHOT_traj,
-                                                      higherOrderSummaryFunction = sd)
+                                                      higherOrderSummaryFunction =
+                                                      sd)
 
-scHOT_traj@scHOT_output
+slot(scHOT_traj, "scHOT_output")
 plotHigherOrderSequence(scHOT_traj, c("Cdt1_Top2a"))
 
 }
