@@ -36,7 +36,8 @@
 
 
 <meta property="og:title" content="plotColouredExpression — plotColouredExpression" />
-<meta property="og:description" content="the plotColouredExpression function plots an n-panel scatterplot of the gene pairs split by early, mid, and late in the sample ordering." />
+<meta property="og:description" content="the plotColouredExpression function plots an n-panel scatterplot
+of the gene pairs split by early, mid, and late in the sample ordering." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,7 +110,8 @@
     </div>
 
     <div class="ref-description">
-    <p>the plotColouredExpression function plots an n-panel scatterplot of the gene pairs split by early, mid, and late in the sample ordering.</p>
+    <p>the plotColouredExpression function plots an n-panel scatterplot
+of the gene pairs split by early, mid, and late in the sample ordering.</p>
     </div>
 
     <pre class="usage"><span class='fu'>plotColouredExpression</span>(
@@ -133,23 +135,29 @@
     </tr>
     <tr>
       <th>genes</th>
-      <td><p>is either a single character string with a delimeter, or a length two character vector</p></td>
+      <td><p>is either a single character string with a delimeter,
+or a length two character vector</p></td>
     </tr>
     <tr>
       <th>genes_delimeter</th>
-      <td><p>is the delimeter to split into two gene names if genes is provided as a single character</p></td>
+      <td><p>is the delimeter to split into two gene names
+if genes is provided as a single character</p></td>
     </tr>
     <tr>
       <th>branches</th>
-      <td><p>A character indicates that the colnames stored the branch information in colData</p></td>
+      <td><p>A character indicates that the colnames stored
+the branch information in colData</p></td>
     </tr>
     <tr>
       <th>ranked_by</th>
-      <td><p>A character indicates that the colnames stored the ranking information of the cells in colData, such as trajectory time, if it is NULL, it will be ranked based on the branch information.</p></td>
+      <td><p>A character indicates that the colnames stored
+the ranking information of the cells in colData, such as trajectory time,
+if it is NULL, it will be ranked based on the branch information.</p></td>
     </tr>
     <tr>
       <th>subsetBranch</th>
-      <td><p>subsetBranch is a character vector containing the names of the branches to be plotted. If NULL it will plot all branches</p></td>
+      <td><p>subsetBranch is a character vector containing
+the names of the branches to be plotted. If NULL it will plot all branches</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -167,7 +175,8 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>ggplot</code> a ggplot object of scatterplots of expression split by sample ordering</p>
+    <p><code>ggplot</code> a ggplot object of scatterplots of expression
+split by sample ordering</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -180,10 +189,10 @@
 <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='st'>"pseudotime"</span>)
 
 <span class='no'>scHOT_traj</span></div><div class='output co'>#&gt; class: scHOT 
-#&gt; dim: 6038 408 
+#&gt; dim: 583 408 
 #&gt; metadata(0):
 #&gt; assays(1): expression
-#&gt; rownames(6038): 0610009B22Rik 0610009O20Rik ... Zzef1 Zzz3
+#&gt; rownames(583): 2810474O19Rik Abca1 ... Ahsg Epcam
 #&gt; rowData names(0):
 #&gt; colnames(408): E10.5D_3_02 E10.5D_2_01 ... E17.5D_1_01 F5A_E16.5
 #&gt; colData names(1): pseudotime
@@ -195,7 +204,8 @@
 #&gt; scHOT_output colnames (0):
 #&gt; param names (0):
 #&gt; position type: trajectory </div><div class='input'>
-<span class='fu'>plotColouredExpression</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided, the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotColouredExpression-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotColouredExpression</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided,</span>
+#&gt; <span class='message'>            the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotColouredExpression-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

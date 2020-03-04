@@ -36,7 +36,8 @@
 
 
 <meta property="og:title" content="plotHigherOrderSequence — plotHigherOrderSequence" />
-<meta property="og:description" content="the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots" />
+<meta property="og:description" content="the plotHigherOrderSequence function plots weighted higher order
+statistic vectors (stored in higherOrderSequence) as line plots" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,7 +110,8 @@
     </div>
 
     <div class="ref-description">
-    <p>the plotHigherOrderSequence function plots weighted higher order statistic vectors (stored in higherOrderSequence) as line plots</p>
+    <p>the plotHigherOrderSequence function plots weighted higher order
+statistic vectors (stored in higherOrderSequence) as line plots</p>
     </div>
 
     <pre class="usage"><span class='fu'>plotHigherOrderSequence</span>(
@@ -129,19 +131,23 @@
     </tr>
     <tr>
       <th>gene</th>
-      <td><p>is either a logical vector matching rows of entries in wcorsList, or a character of a gene</p></td>
+      <td><p>is either a logical vector matching rows of entries
+in wcorsList, or a character of a gene</p></td>
     </tr>
     <tr>
       <th>positionType</th>
-      <td><p>A string indicates the position type, either trajectory or spatial</p></td>
+      <td><p>A string indicates the position type,
+either trajectory or spatial</p></td>
     </tr>
     <tr>
       <th>branches</th>
-      <td><p>A character indicates that the colnames stored the branch information in colData (for trajectory type of data)</p></td>
+      <td><p>A character indicates that the colnames stored
+the branch information in colData (for trajectory type of data)</p></td>
     </tr>
     <tr>
       <th>positionColData</th>
-      <td><p>A vector indicates column names of colData that stored the postion informaton (for spatial type of data)</p></td>
+      <td><p>A vector indicates column names of colData
+that stored the postion informaton (for spatial type of data)</p></td>
     </tr>
     </table>
 
@@ -158,10 +164,10 @@
 <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"trajectory"</span>,
 <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='st'>"pseudotime"</span>)
 <span class='no'>scHOT_traj</span></div><div class='output co'>#&gt; class: scHOT 
-#&gt; dim: 6038 408 
+#&gt; dim: 583 408 
 #&gt; metadata(0):
 #&gt; assays(1): expression
-#&gt; rownames(6038): 0610009B22Rik 0610009O20Rik ... Zzef1 Zzz3
+#&gt; rownames(583): 2810474O19Rik Abca1 ... Ahsg Epcam
 #&gt; rowData names(0):
 #&gt; colnames(408): E10.5D_3_02 E10.5D_2_01 ... E17.5D_1_01 F5A_E16.5
 #&gt; colData names(1): pseudotime
@@ -172,18 +178,23 @@
 #&gt; weightMatrix dim: 0 0 
 #&gt; scHOT_output colnames (0):
 #&gt; param names (0):
-#&gt; position type: trajectory </div><div class='input'><span class='fu'><a href='plotColouredExpression.html'>plotColouredExpression</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided, the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>, <span class='st'>"Top2a"</span>))))
+#&gt; position type: trajectory </div><div class='input'><span class='fu'><a href='plotColouredExpression.html'>plotColouredExpression</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided,</span>
+#&gt; <span class='message'>            the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_traj</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>, <span class='st'>"Top2a"</span>))))
 <span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_traj</span>,
 <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pseudotime"</span>),
 <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"trajectory"</span>,
 <span class='kw'>nrow.out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
 <span class='kw'>span</span> <span class='kw'>=</span> <span class='fl'>0.25</span>)</div><div class='output co'>#&gt; <span class='message'>weightMatrix not provided, generating one using parameter settings...</span></div><div class='output co'>#&gt; <span class='message'>type not specified, defaulting to triangular</span></div><div class='input'><span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_calculateGlobalHigherOrderFunction.html'>scHOT_calculateGlobalHigherOrderFunction</a></span>(<span class='no'>scHOT_traj</span>,
-                                                      <span class='kw'>higherOrderFunction</span> <span class='kw'>=</span> <span class='no'>weightedSpearman</span>,
-                                                     <span class='kw'>higherOrderFunctionType</span> <span class='kw'>=</span> <span class='st'>"weighted"</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderFunctionType given will replace any stored param</span></div><div class='output co'>#&gt; <span class='message'>higherOrderFunction given will replace any stored param</span></div><div class='input'>
+                                                      <span class='kw'>higherOrderFunction</span> <span class='kw'>=</span>
+                                                      <span class='no'>weightedSpearman</span>,
+                                                     <span class='kw'>higherOrderFunctionType</span> <span class='kw'>=</span>
+                                                     <span class='st'>"weighted"</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderFunctionType given will replace any stored param</span></div><div class='output co'>#&gt; <span class='message'>higherOrderFunction given will replace any stored param</span></div><div class='input'>
 <span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_calculateHigherOrderTestStatistics.html'>scHOT_calculateHigherOrderTestStatistics</a></span>(<span class='no'>scHOT_traj</span>,
-                                                      <span class='kw'>higherOrderSummaryFunction</span> <span class='kw'>=</span> <span class='no'>sd</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderSummaryFunction will replace any stored param</span></div><div class='input'>
-<span class='no'>scHOT_traj</span>@<span class='kw'>scHOT_output</span></div><div class='output co'>#&gt; DataFrame with 1 row and 5 columns
+                                                      <span class='kw'>higherOrderSummaryFunction</span> <span class='kw'>=</span>
+                                                      <span class='no'>sd</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderSummaryFunction will replace any stored param</span></div><div class='input'>
+<span class='fu'>slot</span>(<span class='no'>scHOT_traj</span>, <span class='st'>"scHOT_output"</span>)</div><div class='output co'>#&gt; DataFrame with 1 row and 5 columns
 #&gt;        gene_1      gene_2 globalHigherOrderFunction
 #&gt;   &lt;character&gt; &lt;character&gt;                 &lt;numeric&gt;
 #&gt; 1        Cdt1       Top2a        -0.107678406542206
