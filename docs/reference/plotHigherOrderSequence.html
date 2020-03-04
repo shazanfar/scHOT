@@ -149,12 +149,58 @@
 
     <p><code>ggplot</code> object with line plots</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>liver</span>)
+
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_buildFromMatrix.html'>scHOT_buildFromMatrix</a></span>(
+<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>liver</span>$<span class='no'>liver_branch_hep</span>,
+<span class='kw'>cellData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>pseudotime</span> <span class='kw'>=</span> <span class='no'>liver</span>$<span class='no'>liver_pseudotime_hep</span>),
+<span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"trajectory"</span>,
+<span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='st'>"pseudotime"</span>)
+<span class='no'>scHOT_traj</span></div><div class='output co'>#&gt; class: scHOT 
+#&gt; dim: 6038 408 
+#&gt; metadata(0):
+#&gt; assays(1): expression
+#&gt; rownames(6038): 0610009B22Rik 0610009O20Rik ... Zzef1 Zzz3
+#&gt; rowData names(0):
+#&gt; colnames(408): E10.5D_3_02 E10.5D_2_01 ... E17.5D_1_01 F5A_E16.5
+#&gt; colData names(1): pseudotime
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):
+#&gt; altExpNames(0):
+#&gt; testingScaffold dim: 0 0 
+#&gt; weightMatrix dim: 0 0 
+#&gt; scHOT_output colnames (0):
+#&gt; param names (0):
+#&gt; position type: trajectory </div><div class='input'><span class='fu'><a href='plotColouredExpression.html'>plotColouredExpression</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided, the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>, <span class='st'>"Top2a"</span>))))
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_traj</span>,
+<span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pseudotime"</span>),
+<span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"trajectory"</span>,
+<span class='kw'>nrow.out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='kw'>span</span> <span class='kw'>=</span> <span class='fl'>0.25</span>)</div><div class='output co'>#&gt; <span class='message'>weightMatrix not provided, generating one using parameter settings...</span></div><div class='output co'>#&gt; <span class='message'>type not specified, defaulting to triangular</span></div><div class='input'><span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_calculateGlobalHigherOrderFunction.html'>scHOT_calculateGlobalHigherOrderFunction</a></span>(<span class='no'>scHOT_traj</span>,
+                                                      <span class='kw'>higherOrderFunction</span> <span class='kw'>=</span> <span class='no'>weightedSpearman</span>,
+                                                     <span class='kw'>higherOrderFunctionType</span> <span class='kw'>=</span> <span class='st'>"weighted"</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderFunctionType given will replace any stored param</span></div><div class='output co'>#&gt; <span class='message'>higherOrderFunction given will replace any stored param</span></div><div class='input'>
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_calculateHigherOrderTestStatistics.html'>scHOT_calculateHigherOrderTestStatistics</a></span>(<span class='no'>scHOT_traj</span>,
+                                                      <span class='kw'>higherOrderSummaryFunction</span> <span class='kw'>=</span> <span class='no'>sd</span>)</div><div class='output co'>#&gt; <span class='message'>higherOrderSummaryFunction will replace any stored param</span></div><div class='input'>
+<span class='no'>scHOT_traj</span>@<span class='kw'>scHOT_output</span></div><div class='output co'>#&gt; DataFrame with 1 row and 5 columns
+#&gt;        gene_1      gene_2 globalHigherOrderFunction
+#&gt;   &lt;character&gt; &lt;character&gt;                 &lt;numeric&gt;
+#&gt; 1        Cdt1       Top2a        -0.107678406542206
+#&gt;                                            higherOrderSequence
+#&gt;                                                  &lt;NumericList&gt;
+#&gt; 1 -0.475230713854877,-0.474384320273458,-0.471804351344481,...
+#&gt;   higherOrderStatistic
+#&gt;              &lt;numeric&gt;
+#&gt; 1    0.213390406022998</div><div class='input'><span class='fu'>plotHigherOrderSequence</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1_Top2a"</span>))</div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
@@ -163,7 +209,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Shila Ghazanfar.</p>
+  <p>Developed by Shila Ghazanfar, Yingxin Lin.</p>
 </div>
 
 <div class="pkgdown">

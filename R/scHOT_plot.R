@@ -22,8 +22,8 @@
 #' data(liver)
 #'
 #' scHOT_traj <- scHOT_buildFromMatrix(
-#' mat = liver_branch_hep,
-#' cellData = list(pseudotime = liver_pseudotime_hep),
+#' mat = liver$liver_branch_hep,
+#' cellData = list(pseudotime = liver$liver_pseudotime_hep),
 #' positionType = "trajectory",
 #' positionColData = "pseudotime")
 #'
@@ -474,9 +474,11 @@ plotEgoNetwork = function(scHOT, hubnode, network,
 #' @importFrom ggforce geom_voronoi_tile
 #'
 #' @examples
-#' data(liver)scHOT_traj <- scHOT_buildFromMatrix(
-#' mat = liver_branch_hep,
-#' cellData = list(pseudotime = liver_pseudotime_hep),
+#' data(liver)
+#'
+#' scHOT_traj <- scHOT_buildFromMatrix(
+#' mat = liver$liver_branch_hep,
+#' cellData = list(pseudotime = liver$liver_pseudotime_hep),
 #' positionType = "trajectory",
 #' positionColData = "pseudotime")
 #' scHOT_traj
@@ -710,6 +712,7 @@ plotHigherOrderSequence <- function(scHOT,
 #'
 #' @import ggplot2
 #' @importFrom ggplot2 ggplot
+#' @importFrom stats loess quantile
 #'
 #' @export
 
@@ -740,25 +743,27 @@ scHOT_plotPermutationDistributions = function(scHOT) {
   quantileDF = data.frame(
     test = rep(seq_len(nrow(scHOT_output)),
                times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0)),
-    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) quantile(x, 0.9, na.rm = TRUE))),
+    quantile_0.9 = unlist(lapply(scHOT_output$permutations, function(x) stats::quantile(x, 0.9, na.rm = TRUE))),
     globalHigherOrderFunction = rep(scHOT_output$globalHigherOrderFunction,
                                     times = lapply(scHOT_output$permutations, function(x) length(unlist(x)) > 0))
   )
 
   quantileDF$quantile_0.9_fitted <- NA
-  quantileDF$quantile_0.9_fitted[!is.na(quantileDF$quantile_0.9)] = loess(quantile_0.9 ~ globalHigherOrderFunction, data = quantileDF)$fitted
+  quantileDF$quantile_0.9_fitted[!is.na(quantileDF$quantile_0.9)] = stats::loess(quantile_0.9 ~ globalHigherOrderFunction, data = quantileDF)$fitted
 
-  gBase = ggplot(permstatsDF, aes(x = globalHigherOrderFunction, y = stat))
+  gBase = ggplot(permstatsDF, aes(x = permstatsDF$globalHigherOrderFunction, y = stat))
 
-  if (require(scattermore) & require(scales)) {
-    gBase = gBase + geom_scattermore()
+  if (requireNamespace(c("scales", "scattermore"), quietly = TRUE)) {
+    gBase = gBase + scattermore::geom_scattermore()
   }
 
+  df_toPlot <- reshape::sort_df(subset(quantileDF, !is.na(quantileDF$quantile_0.9_fitted)), "globalHigherOrderFunction")
   g = gBase +
-    geom_line(aes(y = quantile_0.9_fitted),
-              data = reshape::sort_df(subset(quantileDF, !is.na(quantile_0.9_fitted)), "globalHigherOrderFunction")) +
+    geom_line(aes(y = df_toPlot$quantile_0.9_fitted),
+              data = df_toPlot) +
     theme_classic() +
     ylab("Permuted scHOT test statistics") +
+    xlab("globalHigherOrderFunction") +
     NULL
 
   return(g)

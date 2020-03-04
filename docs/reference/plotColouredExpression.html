@@ -169,12 +169,41 @@
 
     <p><code>ggplot</code> a ggplot object of scatterplots of expression split by sample ordering</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>liver</span>)
+
+<span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_buildFromMatrix.html'>scHOT_buildFromMatrix</a></span>(
+<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>liver</span>$<span class='no'>liver_branch_hep</span>,
+<span class='kw'>cellData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>pseudotime</span> <span class='kw'>=</span> <span class='no'>liver</span>$<span class='no'>liver_pseudotime_hep</span>),
+<span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"trajectory"</span>,
+<span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='st'>"pseudotime"</span>)
+
+<span class='no'>scHOT_traj</span></div><div class='output co'>#&gt; class: scHOT 
+#&gt; dim: 6038 408 
+#&gt; metadata(0):
+#&gt; assays(1): expression
+#&gt; rownames(6038): 0610009B22Rik 0610009O20Rik ... Zzef1 Zzz3
+#&gt; rowData names(0):
+#&gt; colnames(408): E10.5D_3_02 E10.5D_2_01 ... E17.5D_1_01 F5A_E16.5
+#&gt; colData names(1): pseudotime
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):
+#&gt; altExpNames(0):
+#&gt; testingScaffold dim: 0 0 
+#&gt; weightMatrix dim: 0 0 
+#&gt; scHOT_output colnames (0):
+#&gt; param names (0):
+#&gt; position type: trajectory </div><div class='input'>
+<span class='fu'>plotColouredExpression</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided, the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotColouredExpression-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
@@ -183,7 +212,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Shila Ghazanfar.</p>
+  <p>Developed by Shila Ghazanfar, Yingxin Lin.</p>
 </div>
 
 <div class="pkgdown">

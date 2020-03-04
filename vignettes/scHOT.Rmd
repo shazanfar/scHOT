@@ -23,6 +23,8 @@ knitr::opts_chunk$set(
 library(SingleCellExperiment)
 library(ggplot2)
 library(scHOT)
+library(scater)
+library(matrixStats)
 ```
 
 
@@ -35,6 +37,10 @@ in the `matrixStats` package.
 ```{r}
 data(liver)
 # load("../data/liver.RData", verbose = TRUE)
+liver_pseudotime_hep <- liver$liver_pseudotime_hep
+liver_pseudotime_chol <- liver$liver_pseudotime_chol
+liver_branch_hep <- liver$liver_branch_hep
+liver_branch_chol <- liver$liver_branch_chol
 ```
 
 
@@ -146,7 +152,9 @@ We load up the Spatial Transcriptomics mouse olfactory bulb data, and build a
 ```{r}
 data(MOB_subset)
 # load("../data/MOB_subset.RData", verbose = TRUE)
-sce_MOB_subset
+sce_MOB_subset <- MOB_subset$sce_MOB_subset
+HVG <- MOB_subset$HVG
+nonDEgenes <- MOB_subset$nonDEgenes
 
 scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
                                     assayName = "logcounts",
