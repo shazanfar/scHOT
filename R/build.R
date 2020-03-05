@@ -17,7 +17,7 @@
 #'
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom methods as validObject
+#' @importFrom methods as validObject is
 #'
 #' @examples
 #'
@@ -37,7 +37,7 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL, positionType = NULL,
     cellData <- S4Vectors::DataFrame(row.names = colnames(mat))
   }
 
-  if (!class(cellData) == "DataFrame") {
+  if (!"DataFrame" %in% methods::is(cellData)) {
     cellData <- S4Vectors::DataFrame(cellData)
   }
 
@@ -400,7 +400,7 @@ thin = function(W, n = 100) {
 #'                                         nrow.out = NULL,
 #'                                         span = 0.05)
 #'
-#' @importFrom methods as
+#' @importFrom methods as is
 #'
 #' @export
 
@@ -419,7 +419,7 @@ scHOT_setWeightMatrix <- function(scHOT,
 
   # input check
 
-  if (class(scHOT) != "scHOT") {
+  if (!"scHOT" %in% methods::is(scHOT)) {
     stop("scHOT needs to be scHOT class")
   }
 
@@ -612,6 +612,7 @@ weightedFunctionOverScaffold = function(testingScaffold,
 #'   higherOrderFunctionType = "weighted")
 #'
 #' @importFrom SummarizedExperiment assay
+#' @importFrom methods is
 #'
 #'
 #' @export
@@ -652,7 +653,7 @@ scHOT_calculateGlobalHigherOrderFunction <- function(
     message("higherOrderFunction given will replace any stored param")
     scHOT@params$higherOrderFunction <- higherOrderFunction
   }
-  if (class(higherOrderFunction) != "function") {
+  if (! "function" %in% methods::is(higherOrderFunction)) {
     stop("higherOrderFunction must be a function object")
   }
   if (is.null(higherOrderFunction)) {

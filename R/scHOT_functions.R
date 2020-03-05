@@ -332,6 +332,7 @@ scHOT_performPermutationTest <- function(
     }
 
     pval = mean(permutations >= obs, na.rm = TRUE)
+
     if (pval == 0) {
       pval <- 1/(length(stats::na.omit(permutations)) + 1)
     }
