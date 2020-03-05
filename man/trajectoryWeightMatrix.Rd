@@ -22,9 +22,9 @@ Create weight matrix for trajectory data
 }
 \examples{
 
-trajectoryWeightMatrix(100)
-trajectoryWeightMatrix(100, type = "triangular")
-trajectoryWeightMatrix(100, type = "block")
-trajectoryWeightMatrix(100, type = "harmonic")
+W <- trajectoryWeightMatrix(100)
+W <- trajectoryWeightMatrix(100, type = "triangular")
+W <- trajectoryWeightMatrix(100, type = "block")
+W <- trajectoryWeightMatrix(100, type = "harmonic")
 
 }
