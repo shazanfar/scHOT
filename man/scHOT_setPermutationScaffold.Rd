@@ -16,7 +16,7 @@ scHOT_setPermutationScaffold(
 
 \item{numberPermutations}{The number of permutations, set as 1000 by default}
 
-\item{numberScaffold}{The number of scaffold, set as 100 by default.
+\item{numberScaffold}{The number of scaffold, set as 100 by default, minimum 6.
 if you want all combinations to do permutations then set,
 numberScaffold much higher than the testingScaffold}
 

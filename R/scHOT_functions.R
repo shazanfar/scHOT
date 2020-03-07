@@ -51,7 +51,7 @@
 
 scHOT_calculateHigherOrderTestStatistics <- function(
   scHOT,
-  higherOrderSummaryFunction = NULL,
+  higherOrderSummaryFunction = stats::sd,
   ...) {
   # calculate and store the higherOrderSequence and higherOrderTestStatistic
 

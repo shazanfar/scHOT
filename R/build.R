@@ -406,7 +406,7 @@ thin = function(W, n = 100) {
 
 scHOT_setWeightMatrix <- function(scHOT,
                                   weightMatrix = NULL,
-                                  positionType = "trajectory",
+                                  positionType = NULL,
                                   positionColData = NULL,
                                   nrow.out = NULL,
                                   averageAcrossTrajectoryTies = FALSE,
@@ -422,6 +422,35 @@ scHOT_setWeightMatrix <- function(scHOT,
   if (!"scHOT" %in% methods::is(scHOT)) {
     stop("scHOT needs to be scHOT class")
   }
+
+  if (is.null(positionType)) {
+
+    if (is.null(scHOT@positionType)) {
+      stop("Both positionType and scHOT@positionType are NULL.")
+    } else {
+      positionType <- scHOT@positionType
+    }
+
+  }
+
+  positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
+
+
+
+  if (is.null(positionColData)) {
+
+    if (is.null(scHOT@positionColData)) {
+      stop("Both positionColData and scHOT@positionColData are NULL.")
+    } else {
+      positionColData <- scHOT@positionColData
+    }
+
+  }
+
+  if (!all(positionColData %in% colnames(colData(scHOT)))) {
+    stop("at least one positionColData column names not found in colData(scHOT)")
+  }
+
 
   if (!is.null(weightMatrix)) {
 
@@ -443,32 +472,6 @@ scHOT_setWeightMatrix <- function(scHOT,
     #   stop("select either \"trajectory\", or \"spatial\" as positionType")
     # }
 
-
-    if (is.null(positionType)) {
-
-      if (is.null(scHOT@positionType)) {
-        stop("Both positionType and scHOT@positionType are NULL.")
-      } else {
-        positionType <- scHOT@positionType
-      }
-
-    }
-
-    positionType <- match.arg(positionType, c("trajectory","spatial"), several.ok = FALSE)
-
-    if (is.null(positionColData)) {
-
-      if (is.null(scHOT@positionColData)) {
-        stop("Both positionColData and scHOT@positionColData are NULL.")
-      } else {
-        positionColData <- scHOT@positionColData
-      }
-
-    }
-
-    if (!all(positionColData %in% colnames(colData(scHOT)))) {
-      stop("at least one positionColData column names not found in colData(scHOT)")
-    }
 
     if (positionType == "trajectory") {
 
@@ -496,6 +499,7 @@ scHOT_setWeightMatrix <- function(scHOT,
     if (positionType == "spatial") {
       weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[, positionColData]), ...)
       colnames(weightMatrix) <- colnames(scHOT)
+      # rownames(weightMatrix) <- colnames(scHOT)
     }
 
     if (!is.null(nrow.out)) {
@@ -740,7 +744,7 @@ stratifiedSample = function(stats, length = 100) {
 #'
 #' @param scHOT A scHOT object
 #' @param numberPermutations The number of permutations, set as 1000 by default
-#' @param numberScaffold The number of scaffold, set as 100 by default.
+#' @param numberScaffold The number of scaffold, set as 100 by default, minimum 6.
 #' if you want all combinations to do permutations then set,
 #' numberScaffold much higher than the testingScaffold
 #' @param storePermutations  a logical flag on whether
@@ -805,6 +809,12 @@ scHOT_setPermutationScaffold = function(scHOT,
                    "setting permutation number for all tests"))
     scHOT@scHOT_output$numberPermutations = numberPermutations
   } else {
+
+    if (numberScaffold < 6) {
+      message(paste0("numberScaffold set lower than 6, ",
+                     "resetting to 6"))
+      numberScaffold <- 6
+    }
 
     if (is.null(scHOT@scHOT_output$globalHigherOrderFunction)) {
       stop(paste("need scHOT@scHOT_output$globalHigherOrderFunction to",

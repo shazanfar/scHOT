@@ -17,7 +17,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
 
+Single cell Higher Order Testing (scHOT) is an R package that facilitates 
+testing changes in higher order structure along either a developmental
+trajectory or across space. In this vignette, we go through two example 
+analyses: 1) Testing variability changes along liver trajectory, and 2) Testing
+differential correlation across the mouse olfactory bulb.
 
 ```{r}
 library(SingleCellExperiment)
@@ -27,39 +33,41 @@ library(scater)
 library(matrixStats)
 ```
 
-
 # Testing variability changes along liver trajectory
 
-Investigate changes in variability along the first part of the trajectory,
-from hepatoblast to the decision point. Using weighted variance as implemented
-in the `matrixStats` package.
+The `liver` dataset contains data from two branches of a developmental 
+trajectory, starting from immature hepatoblasts and bifurcates into either
+the hepatocyte or cholangiocyte lineages. For file size 
+reasons we only load up a small number of genes. In this example, we take the cells
+that belong to the initial part of the trajectory, i.e. from hepatoblast to 
+the bifurcation point, and test for differential variability along this 
+trajectory for a few genes.
 
 ```{r}
 data(liver)
-# load("../data/liver.RData", verbose = TRUE)
+
 liver_pseudotime_hep <- liver$liver_pseudotime_hep
 liver_pseudotime_chol <- liver$liver_pseudotime_chol
 liver_branch_hep <- liver$liver_branch_hep
 liver_branch_chol <- liver$liver_branch_chol
 ```
 
-
 ```{r}
 first_branch_cells = intersect(colnames(liver_branch_chol),
                                colnames(liver_branch_hep))
 
 gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
-
-# weightedVar2 <- function(w, x) {
-#   weightedVar2 <- weightedVar(x, w)
-# }
 ```
 
-## First branch
+## Build the `scHOT` object
 
 First we build the `scHOT` object, which is based on the `SingleCellExperiment` 
-object. `scHOT` objects can be built either from a matrix format or from an 
-existing `SingleCellExperiment` object. 
+object class. `scHOT` objects can be built either from a matrix format or from 
+an existing `SingleCellExperiment` object. In this case, we have matrix data 
+so we build the `scHOT` object using `scHOT_buildFromMatrix`. Since the liver
+data represents a trajectory, we set the `positionType` as `"trajectory"`, and 
+provide the column name of the cell metadata (argument `cellData`) for which 
+the cells should be ordered.
 
 ```{r}
 scHOT_traj <- scHOT_buildFromMatrix(
@@ -68,94 +76,218 @@ scHOT_traj <- scHOT_buildFromMatrix(
   positionType = "trajectory",
   positionColData = "pseudotime")
 scHOT_traj
+```
 
+`scHOT_traj` is a `scHOT` object, but methods associated with 
+`SingleCellExperiment` can also be used. For example, we use the `scater` 
+package to plot the expression of the hepatoblast marker _Sall4_ along 
+pseudotime, and note that this decreases as pseudotime increases.
+
+```{r}
 scater::plotExpression(scHOT_traj, c("Sall4"),
                        exprs_values = "expression", x = "pseudotime")
 ```
 
+## scHOT wrapper function
+
 Now using the `scHOT` wrapper function, we can perform higher order testing on 
-the selected genes.
+the selected genes, provided as a one-column matrix. To do this, we also need 
+to set the underlying higher order function, which in this case we use weighed 
+variance as implemented in the `matrixStats` package. Since this function has 
+a weight parameter, we set `higherOrderFunctionType = "weighted"`. For basic 
+implementation, no other parameters need to be specified (for speed, we set 
+`numberPermutations = 100`).
 
 ```{r}
 scHOT_traj_wrap = scHOT(scHOT_traj,
                         testingScaffold = gene_to_test,
                         higherOrderFunction = matrixStats::weightedVar,
                         higherOrderFunctionType = "weighted",
-                        numberScaffold = 100,
-                        numberPermutations = 100,
-                        higherOrderSummaryFunction = sd,
-                        parallel = TRUE,
-                        plot = FALSE,
-                        BPPARAM = MulticoreParam(workers = 4),
-                        verbose = TRUE,
-                        span = 0.25)
+                        numberPermutations = 100)
+```
 
+Output is saved as a `DataFrame` in the `scHOT_output` slot, accessible either 
+using the `slot` function, or using the `@` accessor. In particular, we can
+interrogate the higher order sequence, the sequence of locally weighted 
+variances along the trajectory. We can see from the plot that each of these 
+genes increases in variability along pseudotime. Note that the plots are 
+based on `ggplot2` and so can be customised as desired.
+
+```{r}
 slot(scHOT_traj_wrap, "scHOT_output")
+scHOT_traj_wrap@scHOT_output
 
 slot(scHOT_traj_wrap, "scHOT_output")$higherOrderSequence
 
-plotHigherOrderSequence(scHOT_traj_wrap, "Tacc3")
+plotHigherOrderSequence(scHOT_traj_wrap, gene_to_test)
+
+plotOrderedExpression(scHOT_traj_wrap, gene_to_test) + 
+  facet_wrap(~gene, scales = "free_y")
 ```
 
-Now, we can perform the same testing but step-by-step.
+## scHOT step-by-step
+
+Now, we can perform the same testing but step-by-step, with description of the
+parameter selection at each step.
+
+First, we add the testing scaffold. This is the set of genes for which we wish
+to perform higher order testing.
 
 ```{r}
+scHOT_traj@testingScaffold
 scHOT_traj <- scHOT_addTestingScaffold(scHOT_traj, gene_to_test)
+scHOT_traj@testingScaffold
+```
 
+Next, we provide parameters to build a weighting scheme. The most important 
+parameter here is `span`, a value between 0 and 1 (default 0.25) which 
+determines how large or small a window we wish to use for higher order testing. 
+To distinguish between either ranked samples in a trajectory or in a spatial 
+setting, we set `positionType = "trajectory"` and instruct to extract the 
+trajectory ordering from the `"pseudotime"` column from `colData(scHOT_traj)`.
+
+```{r}
+scHOT_traj@weightMatrix
 scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
-                                    positionColData = c("pseudotime"),
                                     positionType = "trajectory",
+                                    positionColData = c("pseudotime"),
                                     nrow.out = NULL,
                                     span = 0.25)
+dim(scHOT_traj@weightMatrix)
+class(scHOT_traj@weightMatrix)
+plot(scHOT_traj@weightMatrix[50,])
+```
 
+By default the weight matrix is square, with as many rows as the number of 
+cells (columns), but if you have especially large data, you may want to reduce 
+the weight matrix rows for faster runtimes. Here we reduce the weight matrix to 
+roughly 50 rows using the `nrow.out` arguemnt. Note you can provide your own 
+pre-prepared matrix using the `weightMatrix` argument.
+
+```{r}
+scHOT_traj <- scHOT_setWeightMatrix(scHOT_traj,
+                                    positionType = "trajectory",
+                                    positionColData = c("pseudotime"),
+                                    nrow.out = 50,
+                                    span = 0.25)
+dim(scHOT_traj@weightMatrix)
+class(scHOT_traj@weightMatrix)
+plot(scHOT_traj@weightMatrix[50,])
+```
+
+Now we calculate the global higher order function, in this case is simply the
+sample variance giving equal weight to all cells. This becomes important when you 
+wish to test many genes and use a fast p-value estimation approach to speed up 
+computation.
+
+```{r}
 scHOT_traj <- scHOT_calculateGlobalHigherOrderFunction(
   scHOT_traj, 
   higherOrderFunction = matrixStats::weightedVar,
   higherOrderFunctionType = "weighted")
 
-
 slot(scHOT_traj, "scHOT_output")
+apply(assay(scHOT_traj, "expression")[c(gene_to_test),],1,var)
+```
 
+`scHOT` allows for a lot of customisation. In particular, you can set which
+tests you wish to perform permutation testing for, and if so, what number of 
+permutations can be used, and if they should be stored for later use. Here, we 
+set the number of permutations to a mix of 50 and 100. Allowing different 
+permutation numbers is useful if we wish to perform a lot of permutations for 
+one test, and few for another.
+
+Note if you wish to explicitly set the number of permutations for all tests, 
+then ensure that `numberScaffold` is set above the number of tests (default 
+100).
+
+`scHOT_setPermutationScaffold` only gives the instructions for running 
+permutation testing, it doesn't actually perform the testing.
+
+```{r}
 scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj, 
-                                           numberPermutations = 100)
-
-
+                                           numberPermutations = c(50,100,50),
+                                           storePermutations = c(TRUE, FALSE, TRUE))
 slot(scHOT_traj, "scHOT_output")
+```
 
+Now we can calculate the observed test statistic. This is calculated as a 
+summary function (default standard deviation) of the local higher order 
+sequence, which is parametrised using the higher order function (here weighted 
+variance) and weighting scheme (here thinned triangular weight matrix 
+with span 0.25).
 
+```{r}
 scHOT_traj <- scHOT_calculateHigherOrderTestStatistics(
   scHOT_traj,
   higherOrderSummaryFunction = sd)
 
 slot(scHOT_traj, "scHOT_output")
+```
 
+Once the test statistic is calculated, we perform permutation testing, using
+the instructions we provided earlier.
+
+```{r}
 system.time(scHOT_traj <- scHOT_performPermutationTest(
   scHOT_traj, 
   verbose = TRUE,
   parallel = TRUE,
   BPPARAM = MulticoreParam(workers = 4)))
 
-
-scHOT_traj <- scHOT_estimatePvalues(scHOT_traj)
 slot(scHOT_traj, "scHOT_output")
+```
 
-slot(scHOT_traj, "scHOT_output")$higherOrderSequence
+To avoid P-values identically zero, we rescale zero P-values to 
+1/(1+numberPermutations).
 
-plotHigherOrderSequence(scHOT_traj, "Tacc3")
+We could also use the existing stored permutations to estimate P-values, 
+since genes with a similar global higher order function are likely to have a 
+similar null distribution. In this example case it does not show much gain
+computationally, but this can significantly reduce the number of permutation 
+tests needed for large datasets and testing strategies.
+
+Running `scHOT_estimatePvalues` results in more columns in the `scHOT_output`
+slot, corresponding to the number of permutations used in estimating, the
+range of the global higher order function used for estimating, as well as the 
+estimated P-value itself and FDR adjusted P-value. Here, we set a maximum of 
+10,000 permutations to be used, for genes with at most a difference of 5 in the 
+global higher order function (the variance).
+
+```{r}
+scHOT_traj <- scHOT_estimatePvalues(scHOT_traj,
+                                    nperm_estimate = 10000,
+                                    maxDist = 5)
+slot(scHOT_traj, "scHOT_output")
+```
+
+Note that having performed the testing using the thinned weight matrix, we can
+still plot, but beware that not every position is sampled.
+
+```{r}
+plotHigherOrderSequence(scHOT_traj, gene_to_test)
 ```
 
 # Spatial differential correlation in Mouse Olfactory Bulb
 
-We load up the Spatial Transcriptomics mouse olfactory bulb data, and build a 
-`scHOT` object from the `SingleCellExperiment` object.
+In this example, we look at the Spatial Transcriptomics mouse olfactory bulb 
+data. This data is provided in the form of a `SingleCellExperiment` object, 
+with the spatial coordinates provided in the `colData` slot. For file size 
+reasons we only load up a small number of genes.
 
 ```{r}
 data(MOB_subset)
-# load("../data/MOB_subset.RData", verbose = TRUE)
 sce_MOB_subset <- MOB_subset$sce_MOB_subset
 HVG <- MOB_subset$HVG
 nonDEgenes <- MOB_subset$nonDEgenes
 
+sce_MOB_subset
+```
+
+We build the `scHOT` object using `scHOT_buildFromSCE`. Note that `scHOT` only
+takes in a single `assay` slot, for which testing is based on.
+
+```{r}
 scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
                                     assayName = "logcounts",
                                     positionType = "spatial",
@@ -167,19 +299,44 @@ scHOT_spatial
 ## Perform scHOT step by step - skip 
 [ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
 
+In this example, we want to perform spatial differential correlation testing 
+between distinct pairs of genes. We build up our testing scaffold by taking
+highly variable genes (HVGs) that are not found to be significantly 
+differentially expressed in space. For practicality, we only consider a small
+set of pairs for testing here.
+
 ```{r}
 pairs <- t(combn(intersect(HVG, nonDEgenes),2))
 rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
 head(pairs)
 
 set.seed(2020)
-pairs <- pairs[sample(nrow(pairs), 10), ]
-
-cat("Pairs to be tested")
+pairs <- pairs[sample(nrow(pairs), 100), ]
+if (!"Arrb1_Mtor" %in% rownames(pairs)) {
 pairs <- rbind(pairs, "Arrb1_Mtor" = c("Arrb1", "Mtor"))
+}
+if (!"Dnm1l_Fam63b" %in% rownames(pairs)) {
+pairs <- rbind(pairs, "Dnm1l_Fam63b" = c("Dnm1l", "Fam63b"))
+}
 
 scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
+scHOT_spatial@testingScaffold
+```
 
+Note that since we are performing differential correlation testing, our 
+testing scaffold is a matrix with two columns. If you wish to use some higher
+order function with more than two genes, you can simply add more columns to the 
+testing scaffold, and ensure there are more arguments in the provided
+higher order function.
+
+Now we set the weight matrix, using the positional coordinates in the `scHOT` 
+object. The `span` parameter here corresponds to the proportion of cells that 
+have nonzero values around a radius of the central cell. 
+
+This can also be thinned for faster computation by setting the `nrow.out` 
+argument to the number of samples to roughly thin to.
+
+```{r}
 scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
                                        positionColData = c("x","y"),
                                        positionType = "spatial",
@@ -187,39 +344,92 @@ scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
                                        span = 0.05)
 
 dim(slot(scHOT_spatial, "weightMatrix"))
+```
 
+We can visualise the weighting scheme for each row of the weight matrix.
 
+```{r}
+cellID = 75
+ggplot(as.data.frame(colData(scHOT_spatial)), aes(x = -x, y = y)) + 
+  geom_point(aes(colour = slot(scHOT_spatial, "weightMatrix")[cellID,],
+                 size = slot(scHOT_spatial, "weightMatrix")[cellID,])) + 
+  scale_colour_gradient(low = "black", high = "purple") + 
+  scale_size_continuous(range = c(1,5)) +
+  theme_classic() +
+  guides(colour = guide_legend(title = "Spatial Weight"),
+         size = guide_legend(title = "Spatial Weight")) + 
+    ggtitle(paste0("Central cell: ", cellID))
+```
+
+Now we can calculate the global higher order function. In this case, we use 
+weighted Spearman correlation as our weighted higher order function, and so 
+this is simply equivalent to calculating Spearman correlation for the gene pairs
+of interest.
+
+```{r}
 scHOT_spatial <- scHOT_calculateGlobalHigherOrderFunction(
   scHOT_spatial, 
   higherOrderFunction = weightedSpearman,
   higherOrderFunctionType = "weighted")
 
-
-
 slot(scHOT_spatial, "scHOT_output")
 
+head(diag(cor(t(assay(scHOT_spatial, "expression")[pairs[,1],]),
+         t(assay(scHOT_spatial, "expression")[pairs[,2],]),
+         method = "spearman")))
+```
+
+Now we can set the permutation parameters. In this case, we only perform 50 
+permutations for around 30 randomly selected tests.
+
+```{r}
 scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial, 
-                                              numberPermutations = 100)
-
-
-slot(scHOT_spatial, "scHOT_output")
-
-
-scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(
-  scHOT_spatial,
-  higherOrderSummaryFunction = sd)
+                                              numberPermutations = 50,
+                                              numberScaffold = 30)
 
 slot(scHOT_spatial, "scHOT_output")
+```
 
+Now we calculate the observed higher order test statistics, which in this case
+correspond to the summary of local correlation vectors.
 
+```{r}
+scHOT_spatial <- scHOT_calculateHigherOrderTestStatistics(scHOT_spatial)
+
+slot(scHOT_spatial, "scHOT_output")
+```
+
+Now we perform permutation testing for those tests which we provided with a 
+nonzero value for number of permutations.
+
+```{r}
 system.time(scHOT_spatial <- scHOT_performPermutationTest(
   scHOT_spatial, 
   verbose = TRUE,
   parallel = TRUE,
   BPPARAM = MulticoreParam(workers = 4)))
 
+slot(scHOT_spatial, "scHOT_output")
+```
 
-scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial)
+With the above, we calculated P-values for some of the tests, but we have not 
+performed permutation testing for all tests. Here, we employ a
+permutation sharing approach to estimate significance for the other tests. 
+Ideally this would be performed with around a hundred tests each with around 
+1,000 permutations to ensure accurate P-value estimation. You can check how 
+good an estimate you can expect by plotting the global higher order statistic 
+against the permuted test statistics, there should be good representation 
+along the x-axis and the fitted curve should appear fairly smooth.
+
+We estimate P-values by borrowing 100 permutations from closest tests with a 
+difference in global higher order statistic of at most 0.1
+
+```{r}
+scHOT_plotPermutationDistributions(scHOT_spatial)
+
+scHOT_spatial <- scHOT_estimatePvalues(scHOT_spatial,
+                                       nperm_estimate = 100,
+                                       maxDist = 0.1)
 slot(scHOT_spatial, "scHOT_output")
 
 ggplot(as.data.frame(slot(scHOT_spatial, "scHOT_output")),
@@ -230,19 +440,31 @@ ggplot(as.data.frame(slot(scHOT_spatial, "scHOT_output")),
   xlab("Permutation -log10(p-value)") +
   ylab("Estimated -log10(p-value)") +
   NULL
+```
 
+In this example we can see fairly good concordance between the estimated and 
+direct permutation tests, even with a very small number of permutations.
+
+Once testing is done, we can interrogate the results with various plots. The 
+`plotHigherOrderSequence` function will plot the points in space, coloured by
+the local correlation estimates, and `plotOrderedExpression` will plot the 
+points in space, coloured by expression of each gene.
+
+```{r}
 colData(scHOT_spatial)[, "-x"] <- -colData(scHOT_spatial)[, "x"]
-plotHigherOrderSequence(scHOT_spatial, c("Dnm1l_Gucy1b3"),
+plotHigherOrderSequence(scHOT_spatial, c("Dnm1l_Fam63b"),
                         positionColData = c("-x", "y"))
 
-plotOrderedExpression(scHOT_spatial, c("Dnm1l", "Gucy1b3"),
+plotOrderedExpression(scHOT_spatial, c("Dnm1l", "Fam63b"),
                       positionColData = c("-x", "y"),
                       assayName = "expression")
 ```
 
 ## Perform scHOT using `scHOT` wrapper function
 
-Please strip the scHOT output using `scHOT_stripOutput` before rerun scHOT. 
+Strip the existing scHOT output using `scHOT_stripOutput` before rerunning 
+scHOT in a new context.
+
 ```{r}
 scHOT_spatial <- scHOT_stripOutput(scHOT_spatial, force = TRUE)
 
@@ -250,6 +472,8 @@ scHOT_spatial
 slot(scHOT_spatial, "scHOT_output")
 ```
 
+We can perform `scHOT` in a single wrapper function, which will perform the 
+steps as described above, with all parameters given at once.
 
 ```{r}
 scHOT_spatial <- scHOT(scHOT_spatial,
@@ -259,15 +483,21 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        nrow.out = NULL,
                        higherOrderFunction = weightedSpearman,
                        higherOrderFunctionType = "weighted",
-                       numberPermutations = 100,
+                       numberPermutations = 50,
+                       numberScaffold = 30,
                        higherOrderSummaryFunction = sd,
                        parallel = TRUE,
                        BPPARAM = MulticoreParam(workers = 4),
-                       verbose = TRUE,
+                       verbose = FALSE,
                        span = 0.05)
 
 slot(scHOT_spatial, "scHOT_output")
+```
 
+Again, we can examine the results in terms of the spatial expression and the 
+local higher order sequences.
+
+```{r}
 plotOrderedExpression(scHOT_spatial, c("Arrb1", "Mtor"),
                       positionColData = c("-x", "y"),
                       assayName = "expression")
@@ -276,6 +506,7 @@ plotHigherOrderSequence(scHOT_spatial, "Arrb1_Mtor",
                         positionColData = c("-x", "y"))
 ```
 
+# Misc
 
 ```{r}
 sessionInfo()

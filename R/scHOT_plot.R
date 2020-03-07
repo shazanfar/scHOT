@@ -154,7 +154,7 @@ plotColouredExpression = function(scHOT,
     geom_point(show.legend = FALSE, alpha = 0.7) +
     facet_grid(branch ~ ordercut, scales = "free_y") +
     scale_color_gradientn(colours = c("orange", "blue")) +
-    xlab(genepair[1]) + ylab(genepair[2]) + theme_minimal() +
+    xlab(genepair[1]) + ylab(genepair[2]) + theme_classic() +
     NULL
   if (fittedline) {
     g = g +
@@ -330,7 +330,7 @@ plotOrderedExpression = function(scHOT,
                             shape = gdf_sub$branch)) +
       geom_point() +
       labs(fill = "Gene", col = "Gene", linetype = "Branch", shape = "Branch") +
-      theme_minimal() + geom_smooth() +
+      theme_classic() + geom_smooth() +
       ylab("Expression") +
       ggtitle(paste0(genes, collapse = ", ")) +
       NULL
@@ -375,7 +375,7 @@ plotOrderedExpression = function(scHOT,
                                   color = branch_long$value)) +
       geom_point(size = 3) +
       # geom_point(size = 0.5, colour = "black") +
-      theme_minimal() +
+      theme_classic() +
       facet_wrap(~genes) +
       scale_alpha_continuous(range = c(0,0.5)) +
       scale_color_viridis_c(breaks = c(0,max(branch_long$value)),
@@ -671,7 +671,7 @@ plotHigherOrderSequence <- function(scHOT,
                     col = branch_long$GenePair)) +
       geom_line(size = 2, alpha = 0.6) +
       facet_grid(~branch, scales = "free_x") +
-      theme_minimal() +
+      theme_classic() +
       ylimit +
       geom_hline(yintercept = 0, size = 1, colour = "grey") +
       ggtitle(gene) +
@@ -734,6 +734,7 @@ plotHigherOrderSequence <- function(scHOT,
     wcor_all <- matrix(NA, nrow = length(gene), ncol = ncol(scHOT))
     rownames(wcor_all) <- gene
     colnames(wcor_all) <- seq_len(ncol(scHOT))
+    # colnames(wcor_all) <- colnames(scHOT)
     wcor_all[gene, rownames(scHOT@weightMatrix)] <- wcor[gene, , drop = FALSE]
 
 
@@ -747,7 +748,7 @@ plotHigherOrderSequence <- function(scHOT,
                                   fill = branch_long$value)) +
       ggforce::geom_voronoi_tile(max.radius = 1) +
       geom_point(size = 0.5, colour = "black") +
-      theme_minimal() +
+      theme_classic() +
       facet_wrap(~genepair) +
       scale_alpha_continuous(range = c(0,0.5)) +
       scale_fill_gradient2(low = "blue", mid = "white",

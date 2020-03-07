@@ -6,7 +6,7 @@
 \usage{
 scHOT_calculateHigherOrderTestStatistics(
   scHOT,
-  higherOrderSummaryFunction = NULL,
+  higherOrderSummaryFunction = stats::sd,
   ...
 )
 }

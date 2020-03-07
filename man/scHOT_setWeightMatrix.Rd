@@ -7,7 +7,7 @@
 scHOT_setWeightMatrix(
   scHOT,
   weightMatrix = NULL,
-  positionType = "trajectory",
+  positionType = NULL,
   positionColData = NULL,
   nrow.out = NULL,
   averageAcrossTrajectoryTies = FALSE,
