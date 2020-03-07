@@ -548,7 +548,8 @@ scHOT_estimatePvalues <- function(scHOT,
   }
 
   if (plot) {
-    scHOT_plotPermutationDistributions(scHOT)
+    p <- scHOT_plotPermutationDistributions(scHOT)
+    plot(p)
   }
 
   if (is.null(names(stats))) {

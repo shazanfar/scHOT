@@ -826,27 +826,29 @@ scHOT_plotPermutationDistributions = function(scHOT) {
 
   quantileDF$quantile_0.9_fitted <- NA
   quantileDF$quantile_0.9_fitted[!is.na(quantileDF$quantile_0.9)] =
-    stats::loess(quantile_0.9 ~ globalHigherOrderFunction,
-                 data = quantileDF)$fitted
+    loess(quantile_0.9 ~ globalHigherOrderFunction, data = quantileDF)$fitted
 
-  gBase = ggplot(permstatsDF,
-                 aes(x = permstatsDF$globalHigherOrderFunction,
-                     y = stat))
+  gBase = ggplot(permstatsDF, aes(x = permstatsDF$globalHigherOrderFunction,
+                                  y = permstatsDF$stat))
+
 
   if (requireNamespace(c("scales", "scattermore"), quietly = TRUE)) {
     gBase = gBase + scattermore::geom_scattermore()
   }
 
+
   df_toPlot <- reshape::sort_df(subset(quantileDF,
                                        !is.na(quantileDF$quantile_0.9_fitted)),
                                 "globalHigherOrderFunction")
   g = gBase +
-    geom_line(aes(y = df_toPlot$quantile_0.9_fitted),
+    geom_line(aes(x = df_toPlot$globalHigherOrderFunction,
+                  y = df_toPlot$quantile_0.9_fitted),
               data = df_toPlot) +
     theme_classic() +
     ylab("Permuted scHOT test statistics") +
     xlab("globalHigherOrderFunction") +
     NULL
+
 
   return(g)
 }
