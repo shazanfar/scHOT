@@ -833,7 +833,8 @@ scHOT_plotPermutationDistributions = function(scHOT) {
                                   y = permstatsDF$stat))
 
 
-  if (requireNamespace(c("scales", "scattermore"), quietly = TRUE)) {
+  if (requireNamespace("scales", quietly = TRUE) &
+      requireNamespace("scattermore", quietly = TRUE)) {
     gBase = gBase + scattermore::geom_scattermore()
   }
 
