@@ -1,7 +1,7 @@
 Package: scHOT
 Type: Package
 Title: single-cell higher order testing
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Shila", "Ghazanfar", email = "shazanfar@gmail.com", role = c("aut", "cre")
     ),
@@ -28,6 +28,6 @@ Imports:
     ggforce,
     graphics
 RoxygenNote: 7.0.2
-Suggests: knitr, rmarkdown, scater, scattermore, scales, matrixStats
+Suggests: knitr, rmarkdown, scater, scattermore, scales, matrixStats, deldir
 VignetteBuilder: knitr
 biocViews: GeneExpression, RNASeq, Sequencing, SingleCell, Software, Transcriptomics

@@ -296,8 +296,7 @@ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
 scHOT_spatial
 ```
 
-## Perform scHOT step by step - skip 
-[ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
+## Perform scHOT step by step - skip [ahead](#perform-schot-using-schot-wrapper-function) for wrapper using `scHOT`
 
 In this example, we want to perform spatial differential correlation testing 
 between distinct pairs of genes. We build up our testing scaffold by taking
