@@ -4,7 +4,7 @@
 \name{MOB_subset}
 \alias{MOB_subset}
 \title{MOB_subset spatial example data}
-\format{An object of class \code{list} of length 3.}
+\format{An object of class \code{list} of length 1.}
 \usage{
 data(MOB_subset, package = 'scHOT')
 }

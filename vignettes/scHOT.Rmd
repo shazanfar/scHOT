@@ -38,7 +38,8 @@ library(matrixStats)
 The `liver` dataset contains data from two branches of a developmental 
 trajectory, starting from immature hepatoblasts and bifurcates into either
 the hepatocyte or cholangiocyte lineages. For file size 
-reasons we only load up a small number of genes. In this example, we take the cells
+reasons we only load up the hepatocyte lineage for a small number of genes. 
+In this example, we take the cells
 that belong to the initial part of the trajectory, i.e. from hepatoblast to 
 the bifurcation point, and test for differential variability along this 
 trajectory for a few genes.
@@ -47,15 +48,11 @@ trajectory for a few genes.
 data(liver)
 
 liver_pseudotime_hep <- liver$liver_pseudotime_hep
-liver_pseudotime_chol <- liver$liver_pseudotime_chol
 liver_branch_hep <- liver$liver_branch_hep
-liver_branch_chol <- liver$liver_branch_chol
+first_branch_cells <- liver$first_branch_cells
 ```
 
 ```{r}
-first_branch_cells = intersect(colnames(liver_branch_chol),
-                               colnames(liver_branch_hep))
-
 gene_to_test <- as.matrix(c("Birc5", "H2afz", "Tacc3"))
 ```
 
@@ -96,14 +93,14 @@ to set the underlying higher order function, which in this case we use weighed
 variance as implemented in the `matrixStats` package. Since this function has 
 a weight parameter, we set `higherOrderFunctionType = "weighted"`. For basic 
 implementation, no other parameters need to be specified (for speed, we set 
-`numberPermutations = 100`).
+`numberPermutations` to a small value).
 
 ```{r}
 scHOT_traj_wrap = scHOT(scHOT_traj,
                         testingScaffold = gene_to_test,
                         higherOrderFunction = matrixStats::weightedVar,
                         higherOrderFunctionType = "weighted",
-                        numberPermutations = 100)
+                        numberPermutations = 50)
 ```
 
 Output is saved as a `DataFrame` in the `scHOT_output` slot, accessible either 
@@ -193,7 +190,7 @@ apply(assay(scHOT_traj, "expression")[c(gene_to_test),],1,var)
 `scHOT` allows for a lot of customisation. In particular, you can set which
 tests you wish to perform permutation testing for, and if so, what number of 
 permutations can be used, and if they should be stored for later use. Here, we 
-set the number of permutations to a mix of 50 and 100. Allowing different 
+set the number of permutations to a mix of 20 and 50. Allowing different 
 permutation numbers is useful if we wish to perform a lot of permutations for 
 one test, and few for another.
 
@@ -206,7 +203,7 @@ permutation testing, it doesn't actually perform the testing.
 
 ```{r}
 scHOT_traj <- scHOT_setPermutationScaffold(scHOT_traj, 
-                                           numberPermutations = c(50,100,50),
+                                           numberPermutations = c(20,50,20),
                                            storePermutations = c(TRUE, FALSE, TRUE))
 slot(scHOT_traj, "scHOT_output")
 ```
@@ -232,8 +229,7 @@ the instructions we provided earlier.
 system.time(scHOT_traj <- scHOT_performPermutationTest(
   scHOT_traj, 
   verbose = TRUE,
-  parallel = TRUE,
-  BPPARAM = MulticoreParam(workers = 4)))
+  parallel = FALSE))
 
 slot(scHOT_traj, "scHOT_output")
 ```
@@ -273,13 +269,13 @@ plotHigherOrderSequence(scHOT_traj, gene_to_test)
 In this example, we look at the Spatial Transcriptomics mouse olfactory bulb 
 data. This data is provided in the form of a `SingleCellExperiment` object, 
 with the spatial coordinates provided in the `colData` slot. For file size 
-reasons we only load up a small number of genes.
+reasons we only load up a small number of genes, corresponding to highly 
+variable genes (HVGs) that are not found to be significantly 
+differentially expressed in space.
 
 ```{r}
 data(MOB_subset)
 sce_MOB_subset <- MOB_subset$sce_MOB_subset
-HVG <- MOB_subset$HVG
-nonDEgenes <- MOB_subset$nonDEgenes
 
 sce_MOB_subset
 ```
@@ -300,17 +296,16 @@ scHOT_spatial
 
 In this example, we want to perform spatial differential correlation testing 
 between distinct pairs of genes. We build up our testing scaffold by taking
-highly variable genes (HVGs) that are not found to be significantly 
-differentially expressed in space. For practicality, we only consider a small
-set of pairs for testing here.
+all pairs of the non-differentially expressed HVGs. For practicality, we only 
+consider a small set of pairs for testing here.
 
 ```{r}
-pairs <- t(combn(intersect(HVG, nonDEgenes),2))
+pairs <- t(combn(rownames(sce_MOB_subset),2))
 rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
 head(pairs)
 
 set.seed(2020)
-pairs <- pairs[sample(nrow(pairs), 100), ]
+pairs <- pairs[sample(nrow(pairs), 20), ]
 if (!"Arrb1_Mtor" %in% rownames(pairs)) {
 pairs <- rbind(pairs, "Arrb1_Mtor" = c("Arrb1", "Mtor"))
 }
@@ -379,12 +374,12 @@ head(diag(cor(t(assay(scHOT_spatial, "expression")[pairs[,1],]),
 ```
 
 Now we can set the permutation parameters. In this case, we only perform 50 
-permutations for around 30 randomly selected tests.
+permutations for around 10 randomly selected tests.
 
 ```{r}
 scHOT_spatial <- scHOT_setPermutationScaffold(scHOT_spatial, 
                                               numberPermutations = 50,
-                                              numberScaffold = 30)
+                                              numberScaffold = 10)
 
 slot(scHOT_spatial, "scHOT_output")
 ```
@@ -399,14 +394,13 @@ slot(scHOT_spatial, "scHOT_output")
 ```
 
 Now we perform permutation testing for those tests which we provided with a 
-nonzero value for number of permutations.
+nonzero value for number of permutations. This takes about a minute to run.
 
 ```{r}
 system.time(scHOT_spatial <- scHOT_performPermutationTest(
   scHOT_spatial, 
   verbose = TRUE,
-  parallel = TRUE,
-  BPPARAM = MulticoreParam(workers = 4)))
+  parallel = FALSE))
 
 slot(scHOT_spatial, "scHOT_output")
 ```
@@ -418,7 +412,9 @@ Ideally this would be performed with around a hundred tests each with around
 1,000 permutations to ensure accurate P-value estimation. You can check how 
 good an estimate you can expect by plotting the global higher order statistic 
 against the permuted test statistics, there should be good representation 
-along the x-axis and the fitted curve should appear fairly smooth.
+along the x-axis and the fitted curve should appear quite smooth. Here the 
+fitted curve is bumpy, so we would suggest selecting more genes and more 
+permutations.
 
 We estimate P-values by borrowing 100 permutations from closest tests with a 
 difference in global higher order statistic of at most 0.1
@@ -441,8 +437,8 @@ ggplot(as.data.frame(slot(scHOT_spatial, "scHOT_output")),
   NULL
 ```
 
-In this example we can see fairly good concordance between the estimated and 
-direct permutation tests, even with a very small number of permutations.
+In this example we can still see fairly good concordance between the estimated 
+and direct permutation tests, even with a very small number of permutations.
 
 Once testing is done, we can interrogate the results with various plots. The 
 `plotHigherOrderSequence` function will plot the points in space, coloured by
@@ -483,10 +479,9 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        higherOrderFunction = weightedSpearman,
                        higherOrderFunctionType = "weighted",
                        numberPermutations = 50,
-                       numberScaffold = 30,
+                       numberScaffold = 10,
                        higherOrderSummaryFunction = sd,
-                       parallel = TRUE,
-                       BPPARAM = MulticoreParam(workers = 4),
+                       parallel = FALSE,
                        verbose = FALSE,
                        span = 0.05)
 
