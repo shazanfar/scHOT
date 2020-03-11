@@ -2,7 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rproj
+*.Rproj
 inst/doc
 doc
 Meta
+docs/
+.DS_Store
+vignettes/.DS_Store
