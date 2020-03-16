@@ -172,14 +172,13 @@ that stored the postion informaton (for spatial type of data)</p></td>
 #&gt; colnames(408): E10.5D_3_02 E10.5D_2_01 ... E17.5D_1_01 F5A_E16.5
 #&gt; colData names(1): pseudotime
 #&gt; reducedDimNames(0):
-#&gt; spikeNames(0):
 #&gt; altExpNames(0):
 #&gt; testingScaffold dim: 0 0 
 #&gt; weightMatrix dim: 0 0 
 #&gt; scHOT_output colnames (0):
 #&gt; param names (0):
 #&gt; position type: trajectory </div><div class='input'><span class='fu'><a href='plotColouredExpression.html'>plotColouredExpression</a></span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>,<span class='st'>"Top2a"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>ranked_by information is not provided,</span>
-#&gt; <span class='message'>            the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; <span class='message'>            the expression data is ranked by the branches</span></div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `gdf_sub$ExpressionGene1` is discouraged. Use `ExpressionGene1` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `gdf_sub$ExpressionGene2` is discouraged. Use `ExpressionGene2` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `gdf_sub$ExpressionGene1` is discouraged. Use `ExpressionGene1` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `gdf_sub$ExpressionGene2` is discouraged. Use `ExpressionGene2` instead.</span></div><div class='output co'>#&gt; <span class='message'>`geom_smooth()` using formula 'y ~ x'</span></div><div class='img'><img src='plotHigherOrderSequence-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_traj</span>,
 <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1"</span>, <span class='st'>"Top2a"</span>))))
 <span class='no'>scHOT_traj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_traj</span>,
@@ -197,13 +196,10 @@ that stored the postion informaton (for spatial type of data)</p></td>
 <span class='fu'>slot</span>(<span class='no'>scHOT_traj</span>, <span class='st'>"scHOT_output"</span>)</div><div class='output co'>#&gt; DataFrame with 1 row and 5 columns
 #&gt;        gene_1      gene_2 globalHigherOrderFunction
 #&gt;   &lt;character&gt; &lt;character&gt;                 &lt;numeric&gt;
-#&gt; 1        Cdt1       Top2a        -0.107678406542206
-#&gt;                                            higherOrderSequence
-#&gt;                                                  &lt;NumericList&gt;
-#&gt; 1 -0.475230713854877,-0.474384320273458,-0.471804351344481,...
-#&gt;   higherOrderStatistic
-#&gt;              &lt;numeric&gt;
-#&gt; 1    0.213390406022998</div><div class='input'><span class='fu'>plotHigherOrderSequence</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1_Top2a"</span>))</div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='img'><img src='plotHigherOrderSequence-2.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; 1        Cdt1       Top2a                 -0.107678
+#&gt;                 higherOrderSequence higherOrderStatistic
+#&gt;                       &lt;NumericList&gt;            &lt;numeric&gt;
+#&gt; 1 -0.475231,-0.474384,-0.471804,...              0.21339</div><div class='input'><span class='fu'>plotHigherOrderSequence</span>(<span class='no'>scHOT_traj</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Cdt1_Top2a"</span>))</div><div class='output co'>#&gt; <span class='message'>branches information is not provided</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `branch_long$SampleOrder` is discouraged. Use `SampleOrder` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `branch_long$WeightedCorrelation` is discouraged. Use `WeightedCorrelation` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `branch_long$GenePair` is discouraged. Use `GenePair` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `branch_long$GenePair` is discouraged. Use `GenePair` instead.</span></div><div class='img'><img src='plotHigherOrderSequence-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

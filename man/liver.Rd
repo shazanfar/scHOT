@@ -4,7 +4,9 @@
 \name{liver}
 \alias{liver}
 \title{Liver trajectory example data}
-\format{A `list` object.}
+\format{
+A `list` object.
+}
 \usage{
 data(liver, package = 'scHOT')
 }

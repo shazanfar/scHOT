@@ -65,7 +65,7 @@
     <div class="page-header toc-ignore">
       <h1>Getting started: scHOT</h1>
             
-            <h4 class="date">2020-03-12</h4>
+            <h4 class="date">2020-03-16</h4>
       
       
       <div class="hidden name"><code>scHOT.Rmd</code></div>
@@ -113,13 +113,12 @@
 <a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; colnames(176): E10.5D_3_02 E10.5D_2_01 ... C1A_E16.5 E11.5D_2_12</span></a>
 <a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; colData names(1): pseudotime</span></a>
 <a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; altExpNames(0):</span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; testingScaffold dim: 0 0 </span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; weightMatrix dim: 0 0 </span></a>
-<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; param names (0):</span></a>
-<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; position type: trajectory</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; altExpNames(0):</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; testingScaffold dim: 0 0 </span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; weightMatrix dim: 0 0 </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; param names (0):</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; position type: trajectory</span></a></code></pre></div>
 <p><code>scHOT_traj</code> is a <code>scHOT</code> object, but methods associated with <code>SingleCellExperiment</code> can also be used. For example, we use the <code>scater</code> package to plot the expression of the hepatoblast marker <em>Sall4</em> along pseudotime, and note that this decreases as pseudotime increases.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">scater<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/plotExpression.html">plotExpression</a></span>(scHOT_traj, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sall4"</span>),</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">                       <span class="dt">exprs_values =</span> <span class="st">"expression"</span>, <span class="dt">x =</span> <span class="st">"pseudotime"</span>)</a></code></pre></div>
@@ -151,94 +150,64 @@
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; DataFrame with 3 rows and 14 columns</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;            gene_1 globalHigherOrderFunction numberPermutations</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;       &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Birc5       Birc5           1.9916742413209                 50</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; H2afz       H2afz         0.238446227321547                 50</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Tacc3       Tacc3          2.34659756452498                 50</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;       storePermutations</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;               &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Birc5              TRUE</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; H2afz              TRUE</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; Tacc3              TRUE</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;                                                higherOrderSequence</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;                                                      &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; Birc5          0.32636792198,0.323758922618346,0.3227893310179,...</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; H2afz 0.0622930368665992,0.0619537046607012,0.0615606584376545,...</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Tacc3    0.803192064768597,0.801351141908489,0.820288785312957,...</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;       higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;                  &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Birc5      1.6348540306463</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; H2afz    0.216770984534113</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; Tacc3      0.9305978594095</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;                                                      permutations</span></a>
-<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt;                                                     &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; Birc5   0.915238766494683,0.393437584620836,0.443751736833158,...</span></a>
-<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt; H2afz 0.101832483677432,0.0563162853729091,0.0741753542235742,...</span></a>
-<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt; Tacc3   0.603774229123659,0.255396917828794,0.698301315263051,...</span></a>
-<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt;         pvalPermutations    FDRPermutations numberPermutationsEstimated</span></a>
-<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt;                &lt;numeric&gt;          &lt;numeric&gt;                   &lt;integer&gt;</span></a>
-<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt; Birc5 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt; H2afz 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-32" data-line-number="32"><span class="co">#&gt; Tacc3 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt;       globalLowerRangeEstimated globalUpperRangeEstimated      pvalEstimated</span></a>
-<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt;                       &lt;numeric&gt;                 &lt;numeric&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; Birc5           1.9916742413209           1.9916742413209 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; H2afz         0.238446227321547         0.238446227321547 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; Tacc3          2.34659756452498          2.34659756452498 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt;             FDREstimated</span></a>
-<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt;                &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">#&gt; Birc5 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#&gt; H2afz 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">#&gt; Tacc3 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-43" data-line-number="43">scHOT_traj_wrap<span class="op">@</span>scHOT_output</a>
-<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">#&gt; DataFrame with 3 rows and 14 columns</span></a>
-<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#&gt;            gene_1 globalHigherOrderFunction numberPermutations</span></a>
-<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#&gt;       &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">#&gt; Birc5       Birc5           1.9916742413209                 50</span></a>
-<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">#&gt; H2afz       H2afz         0.238446227321547                 50</span></a>
-<a class="sourceLine" id="cb7-49" data-line-number="49"><span class="co">#&gt; Tacc3       Tacc3          2.34659756452498                 50</span></a>
-<a class="sourceLine" id="cb7-50" data-line-number="50"><span class="co">#&gt;       storePermutations</span></a>
-<a class="sourceLine" id="cb7-51" data-line-number="51"><span class="co">#&gt;               &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb7-52" data-line-number="52"><span class="co">#&gt; Birc5              TRUE</span></a>
-<a class="sourceLine" id="cb7-53" data-line-number="53"><span class="co">#&gt; H2afz              TRUE</span></a>
-<a class="sourceLine" id="cb7-54" data-line-number="54"><span class="co">#&gt; Tacc3              TRUE</span></a>
-<a class="sourceLine" id="cb7-55" data-line-number="55"><span class="co">#&gt;                                                higherOrderSequence</span></a>
-<a class="sourceLine" id="cb7-56" data-line-number="56"><span class="co">#&gt;                                                      &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb7-57" data-line-number="57"><span class="co">#&gt; Birc5          0.32636792198,0.323758922618346,0.3227893310179,...</span></a>
-<a class="sourceLine" id="cb7-58" data-line-number="58"><span class="co">#&gt; H2afz 0.0622930368665992,0.0619537046607012,0.0615606584376545,...</span></a>
-<a class="sourceLine" id="cb7-59" data-line-number="59"><span class="co">#&gt; Tacc3    0.803192064768597,0.801351141908489,0.820288785312957,...</span></a>
-<a class="sourceLine" id="cb7-60" data-line-number="60"><span class="co">#&gt;       higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb7-61" data-line-number="61"><span class="co">#&gt;                  &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-62" data-line-number="62"><span class="co">#&gt; Birc5      1.6348540306463</span></a>
-<a class="sourceLine" id="cb7-63" data-line-number="63"><span class="co">#&gt; H2afz    0.216770984534113</span></a>
-<a class="sourceLine" id="cb7-64" data-line-number="64"><span class="co">#&gt; Tacc3      0.9305978594095</span></a>
-<a class="sourceLine" id="cb7-65" data-line-number="65"><span class="co">#&gt;                                                      permutations</span></a>
-<a class="sourceLine" id="cb7-66" data-line-number="66"><span class="co">#&gt;                                                     &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb7-67" data-line-number="67"><span class="co">#&gt; Birc5   0.915238766494683,0.393437584620836,0.443751736833158,...</span></a>
-<a class="sourceLine" id="cb7-68" data-line-number="68"><span class="co">#&gt; H2afz 0.101832483677432,0.0563162853729091,0.0741753542235742,...</span></a>
-<a class="sourceLine" id="cb7-69" data-line-number="69"><span class="co">#&gt; Tacc3   0.603774229123659,0.255396917828794,0.698301315263051,...</span></a>
-<a class="sourceLine" id="cb7-70" data-line-number="70"><span class="co">#&gt;         pvalPermutations    FDRPermutations numberPermutationsEstimated</span></a>
-<a class="sourceLine" id="cb7-71" data-line-number="71"><span class="co">#&gt;                &lt;numeric&gt;          &lt;numeric&gt;                   &lt;integer&gt;</span></a>
-<a class="sourceLine" id="cb7-72" data-line-number="72"><span class="co">#&gt; Birc5 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-73" data-line-number="73"><span class="co">#&gt; H2afz 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-74" data-line-number="74"><span class="co">#&gt; Tacc3 0.0196078431372549 0.0196078431372549                          50</span></a>
-<a class="sourceLine" id="cb7-75" data-line-number="75"><span class="co">#&gt;       globalLowerRangeEstimated globalUpperRangeEstimated      pvalEstimated</span></a>
-<a class="sourceLine" id="cb7-76" data-line-number="76"><span class="co">#&gt;                       &lt;numeric&gt;                 &lt;numeric&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-77" data-line-number="77"><span class="co">#&gt; Birc5           1.9916742413209           1.9916742413209 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-78" data-line-number="78"><span class="co">#&gt; H2afz         0.238446227321547         0.238446227321547 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-79" data-line-number="79"><span class="co">#&gt; Tacc3          2.34659756452498          2.34659756452498 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-80" data-line-number="80"><span class="co">#&gt;             FDREstimated</span></a>
-<a class="sourceLine" id="cb7-81" data-line-number="81"><span class="co">#&gt;                &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb7-82" data-line-number="82"><span class="co">#&gt; Birc5 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-83" data-line-number="83"><span class="co">#&gt; H2afz 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-84" data-line-number="84"><span class="co">#&gt; Tacc3 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb7-85" data-line-number="85"></a>
-<a class="sourceLine" id="cb7-86" data-line-number="86"><span class="kw">slot</span>(scHOT_traj_wrap, <span class="st">"scHOT_output"</span>)<span class="op">$</span>higherOrderSequence</a>
-<a class="sourceLine" id="cb7-87" data-line-number="87"><span class="co">#&gt; NumericList of length 3</span></a>
-<a class="sourceLine" id="cb7-88" data-line-number="88"><span class="co">#&gt; [["1"]] 0.32636792198 0.323758922618346 ... 5.13350080711913 5.1463258826534</span></a>
-<a class="sourceLine" id="cb7-89" data-line-number="89"><span class="co">#&gt; [["2"]] 0.0622930368665992 0.0619537046607012 ... 0.752024900446298</span></a>
-<a class="sourceLine" id="cb7-90" data-line-number="90"><span class="co">#&gt; [["3"]] 0.803192064768597 0.801351141908489 ... 3.96122878375288</span></a>
-<a class="sourceLine" id="cb7-91" data-line-number="91"></a>
-<a class="sourceLine" id="cb7-92" data-line-number="92"><span class="kw"><a href="../reference/plotHigherOrderSequence.html">plotHigherOrderSequence</a></span>(scHOT_traj_wrap, gene_to_test)</a></code></pre></div>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Birc5       Birc5                  1.991674                 50</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; H2afz       H2afz                  0.238446                 50</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Tacc3       Tacc3                  2.346598                 50</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;       storePermutations               higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;               &lt;logical&gt;                     &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Birc5              TRUE    0.326368,0.323759,0.322789,...             1.634854</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; H2afz              TRUE 0.0622930,0.0619537,0.0615607,...             0.216771</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; Tacc3              TRUE    0.803192,0.801351,0.820289,...             0.930598</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;                            permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;                           &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; Birc5    0.500240,0.315507,0.295761,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; H2afz 0.0612162,0.0416660,0.0982411,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Tacc3    0.417440,0.722567,0.790969,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;       numberPermutationsEstimated globalLowerRangeEstimated</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;                         &lt;integer&gt;                 &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Birc5                          50                  1.991674</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; H2afz                          50                  0.238446</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; Tacc3                          50                  2.346598</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;       globalUpperRangeEstimated pvalEstimated FDREstimated</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt;                       &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; Birc5                  1.991674     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt; H2afz                  0.238446     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt; Tacc3                  2.346598     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-28" data-line-number="28">scHOT_traj_wrap<span class="op">@</span>scHOT_output</a>
+<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt; DataFrame with 3 rows and 14 columns</span></a>
+<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt;            gene_1 globalHigherOrderFunction numberPermutations</span></a>
+<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt;       &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-32" data-line-number="32"><span class="co">#&gt; Birc5       Birc5                  1.991674                 50</span></a>
+<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt; H2afz       H2afz                  0.238446                 50</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; Tacc3       Tacc3                  2.346598                 50</span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt;       storePermutations               higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt;               &lt;logical&gt;                     &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; Birc5              TRUE    0.326368,0.323759,0.322789,...             1.634854</span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; H2afz              TRUE 0.0622930,0.0619537,0.0615607,...             0.216771</span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; Tacc3              TRUE    0.803192,0.801351,0.820289,...             0.930598</span></a>
+<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">#&gt;                            permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#&gt;                           &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">#&gt; Birc5    0.500240,0.315507,0.295761,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; H2afz 0.0612162,0.0416660,0.0982411,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">#&gt; Tacc3    0.417440,0.722567,0.790969,...        0.0196078       0.0196078</span></a>
+<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#&gt;       numberPermutationsEstimated globalLowerRangeEstimated</span></a>
+<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#&gt;                         &lt;integer&gt;                 &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">#&gt; Birc5                          50                  1.991674</span></a>
+<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">#&gt; H2afz                          50                  0.238446</span></a>
+<a class="sourceLine" id="cb7-49" data-line-number="49"><span class="co">#&gt; Tacc3                          50                  2.346598</span></a>
+<a class="sourceLine" id="cb7-50" data-line-number="50"><span class="co">#&gt;       globalUpperRangeEstimated pvalEstimated FDREstimated</span></a>
+<a class="sourceLine" id="cb7-51" data-line-number="51"><span class="co">#&gt;                       &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb7-52" data-line-number="52"><span class="co">#&gt; Birc5                  1.991674     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-53" data-line-number="53"><span class="co">#&gt; H2afz                  0.238446     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-54" data-line-number="54"><span class="co">#&gt; Tacc3                  2.346598     0.0196078    0.0196078</span></a>
+<a class="sourceLine" id="cb7-55" data-line-number="55"></a>
+<a class="sourceLine" id="cb7-56" data-line-number="56"><span class="kw">slot</span>(scHOT_traj_wrap, <span class="st">"scHOT_output"</span>)<span class="op">$</span>higherOrderSequence</a>
+<a class="sourceLine" id="cb7-57" data-line-number="57"><span class="co">#&gt; NumericList of length 3</span></a>
+<a class="sourceLine" id="cb7-58" data-line-number="58"><span class="co">#&gt; [["1"]] 0.32636792198 0.323758922618346 ... 5.13350080711913 5.1463258826534</span></a>
+<a class="sourceLine" id="cb7-59" data-line-number="59"><span class="co">#&gt; [["2"]] 0.0622930368665992 0.0619537046607012 ... 0.752024900446298</span></a>
+<a class="sourceLine" id="cb7-60" data-line-number="60"><span class="co">#&gt; [["3"]] 0.803192064768597 0.801351141908489 ... 3.96122878375288</span></a>
+<a class="sourceLine" id="cb7-61" data-line-number="61"></a>
+<a class="sourceLine" id="cb7-62" data-line-number="62"><span class="kw"><a href="../reference/plotHigherOrderSequence.html">plotHigherOrderSequence</a></span>(scHOT_traj_wrap, gene_to_test)</a></code></pre></div>
 <p><img src="scHOT_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="../reference/plotOrderedExpression.html">plotOrderedExpression</a></span>(scHOT_traj_wrap, gene_to_test) <span class="op">+</span><span class="st"> </span></a>
@@ -272,7 +241,7 @@
 <a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; [1] "dgCMatrix"</span></a>
 <a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; attr(,"package")</span></a>
 <a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; [1] "Matrix"</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(scHOT_traj<span class="op">@</span>weightMatrix[<span class="dv">50</span>,])</a></code></pre></div>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(scHOT_traj<span class="op">@</span>weightMatrix[<span class="dv">50</span>,])</a></code></pre></div>
 <p><img src="scHOT_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>By default the weight matrix is square, with as many rows as the number of cells (columns), but if you have especially large data, you may want to reduce the weight matrix rows for faster runtimes. Here we reduce the weight matrix to roughly 50 rows using the <code>nrow.out</code> arguemnt. Note you can provide your own pre-prepared matrix using the <code>weightMatrix</code> argument.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">scHOT_traj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_setWeightMatrix.html">scHOT_setWeightMatrix</a></span>(scHOT_traj,</a>
@@ -286,7 +255,7 @@
 <a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; [1] "dgCMatrix"</span></a>
 <a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; attr(,"package")</span></a>
 <a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; [1] "Matrix"</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(scHOT_traj<span class="op">@</span>weightMatrix[<span class="dv">50</span>,])</a></code></pre></div>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(scHOT_traj<span class="op">@</span>weightMatrix[<span class="dv">50</span>,])</a></code></pre></div>
 <p><img src="scHOT_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>Now we calculate the global higher order function, in this case is simply the sample variance giving equal weight to all cells. This becomes important when you wish to test many genes and use a fast p-value estimation approach to speed up computation.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">scHOT_traj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_calculateGlobalHigherOrderFunction.html">scHOT_calculateGlobalHigherOrderFunction</a></span>(</a>
@@ -298,9 +267,9 @@
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; DataFrame with 3 rows and 2 columns</span></a>
 <a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;        gene_1 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;   &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; 1       Birc5           1.9916742413209</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 2       H2afz         0.238446227321547</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 3       Tacc3          2.34659756452498</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; 1       Birc5                  1.991674</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 2       H2afz                  0.238446</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 3       Tacc3                  2.346598</span></a>
 <a class="sourceLine" id="cb12-13" data-line-number="13"><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw">assay</span>(scHOT_traj, <span class="st">"expression"</span>)[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(gene_to_test),],<span class="dv">1</span>,var)</a>
 <a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt;     Birc5     H2afz     Tacc3 </span></a>
 <a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; 1.9916742 0.2384462 2.3465976</span></a></code></pre></div>
@@ -314,9 +283,9 @@
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; DataFrame with 3 rows and 4 columns</span></a>
 <a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;        gene_1 globalHigherOrderFunction numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;   &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;         &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 1       Birc5           1.9916742413209                 20              TRUE</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; 2       H2afz         0.238446227321547                 50             FALSE</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; 3       Tacc3          2.34659756452498                 20              TRUE</span></a></code></pre></div>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 1       Birc5                  1.991674                 20              TRUE</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; 2       H2afz                  0.238446                 50             FALSE</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; 3       Tacc3                  2.346598                 20              TRUE</span></a></code></pre></div>
 <p>Now we can calculate the observed test statistic. This is calculated as a summary function (default standard deviation) of the local higher order sequence, which is parametrised using the higher order function (here weighted variance) and weighting scheme (here thinned triangular weight matrix with span 0.25).</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">scHOT_traj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_calculateHigherOrderTestStatistics.html">scHOT_calculateHigherOrderTestStatistics</a></span>(</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">  scHOT_traj,</a>
@@ -326,19 +295,14 @@
 <a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; DataFrame with 3 rows and 6 columns</span></a>
 <a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;        gene_1 globalHigherOrderFunction numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;         &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 1       Birc5           1.9916742413209                 20              TRUE</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 2       H2afz         0.238446227321547                 50             FALSE</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 3       Tacc3          2.34659756452498                 20              TRUE</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;                                            higherOrderSequence</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;                                                  &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 1        0.32636792198,0.322652303679249,0.312198680576961,...</span></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; 2 0.0622930368665992,0.0611996295023108,0.0600874370944832,...</span></a>
-<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; 3     0.803192064768597,0.83850419912899,0.873359334834947,...</span></a>
-<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt;   higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt;              &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt; 1     1.64464833847084</span></a>
-<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt; 2    0.217727066469606</span></a>
-<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt; 3    0.940252805440159</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 1       Birc5                  1.991674                 20              TRUE</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 2       H2afz                  0.238446                 50             FALSE</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 3       Tacc3                  2.346598                 20              TRUE</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;                 higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;                       &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 1    0.326368,0.322652,0.312199,...             1.644648</span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; 2 0.0622930,0.0611996,0.0600874,...             0.217727</span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; 3    0.803192,0.838504,0.873359,...             0.940253</span></a></code></pre></div>
 <p>Once the test statistic is calculated, we perform permutation testing, using the instructions we provided earlier.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scHOT_traj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_performPermutationTest.html">scHOT_performPermutationTest</a></span>(</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">  scHOT_traj, </a>
@@ -348,35 +312,25 @@
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; Permutation testing combination 2 of 3...</span></a>
 <a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; Permutation testing combination 3 of 3...</span></a>
 <a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;   3.678   0.065   3.751</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;   3.842   0.079   3.926</span></a>
 <a class="sourceLine" id="cb15-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb15-11" data-line-number="11"><span class="kw">slot</span>(scHOT_traj, <span class="st">"scHOT_output"</span>)</a>
 <a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; DataFrame with 3 rows and 9 columns</span></a>
 <a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;        gene_1 globalHigherOrderFunction numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt;   &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;         &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 1       Birc5           1.9916742413209                 20              TRUE</span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 2       H2afz         0.238446227321547                 50             FALSE</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 3       Tacc3          2.34659756452498                 20              TRUE</span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt;                                            higherOrderSequence</span></a>
-<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt;                                                  &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; 1        0.32636792198,0.322652303679249,0.312198680576961,...</span></a>
-<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; 2 0.0622930368665992,0.0611996295023108,0.0600874370944832,...</span></a>
-<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; 3     0.803192064768597,0.83850419912899,0.873359334834947,...</span></a>
-<a class="sourceLine" id="cb15-23" data-line-number="23"><span class="co">#&gt;   higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co">#&gt;              &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb15-25" data-line-number="25"><span class="co">#&gt; 1     1.64464833847084</span></a>
-<a class="sourceLine" id="cb15-26" data-line-number="26"><span class="co">#&gt; 2    0.217727066469606</span></a>
-<a class="sourceLine" id="cb15-27" data-line-number="27"><span class="co">#&gt; 3    0.940252805440159</span></a>
-<a class="sourceLine" id="cb15-28" data-line-number="28"><span class="co">#&gt;                                                permutations   pvalPermutations</span></a>
-<a class="sourceLine" id="cb15-29" data-line-number="29"><span class="co">#&gt;                                               &lt;NumericList&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb15-30" data-line-number="30"><span class="co">#&gt; 1   0.2074620007827,0.668631958114992,0.301895458498793,... 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb15-31" data-line-number="31"><span class="co">#&gt; 2                                                        NA 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb15-32" data-line-number="32"><span class="co">#&gt; 3 0.441623102481692,0.441392135500405,0.472312757792341,... 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb15-33" data-line-number="33"><span class="co">#&gt;      FDRPermutations</span></a>
-<a class="sourceLine" id="cb15-34" data-line-number="34"><span class="co">#&gt;            &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb15-35" data-line-number="35"><span class="co">#&gt; 1 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb15-36" data-line-number="36"><span class="co">#&gt; 2 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb15-37" data-line-number="37"><span class="co">#&gt; 3 0.0476190476190476</span></a></code></pre></div>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 1       Birc5                  1.991674                 20              TRUE</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 2       H2afz                  0.238446                 50             FALSE</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 3       Tacc3                  2.346598                 20              TRUE</span></a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt;                 higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt;                       &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; 1    0.326368,0.322652,0.312199,...             1.644648</span></a>
+<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; 2 0.0622930,0.0611996,0.0600874,...             0.217727</span></a>
+<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; 3    0.803192,0.838504,0.873359,...             0.940253</span></a>
+<a class="sourceLine" id="cb15-23" data-line-number="23"><span class="co">#&gt;                     permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co">#&gt;                    &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb15-25" data-line-number="25"><span class="co">#&gt; 1 0.157494,0.638945,0.529321,...        0.0476190        0.047619</span></a>
+<a class="sourceLine" id="cb15-26" data-line-number="26"><span class="co">#&gt; 2                             NA        0.0196078        0.047619</span></a>
+<a class="sourceLine" id="cb15-27" data-line-number="27"><span class="co">#&gt; 3 0.321295,0.320501,0.519373,...        0.0476190        0.047619</span></a></code></pre></div>
 <p>To avoid P-values identically zero, we rescale zero P-values to 1/(1+numberPermutations).</p>
 <p>We could also use the existing stored permutations to estimate P-values, since genes with a similar global higher order function are likely to have a similar null distribution. In this example case it does not show much gain computationally, but this can significantly reduce the number of permutation tests needed for large datasets and testing strategies.</p>
 <p>Running <code>scHOT_estimatePvalues</code> results in more columns in the <code>scHOT_output</code> slot, corresponding to the number of permutations used in estimating, the range of the global higher order function used for estimating, as well as the estimated P-value itself and FDR adjusted P-value. Here, we set a maximum of 10,000 permutations to be used, for genes with at most a difference of 5 in the global higher order function (the variance).</p>
@@ -387,34 +341,29 @@
 <a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; DataFrame with 3 rows and 14 columns</span></a>
 <a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;        gene_1 globalHigherOrderFunction numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;   &lt;character&gt;                  &lt;matrix&gt;          &lt;numeric&gt;         &lt;logical&gt;</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 1       Birc5           1.9916742413209                 20              TRUE</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 2       H2afz         0.238446227321547                 50             FALSE</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 3       Tacc3          2.34659756452498                 20              TRUE</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt;                                            higherOrderSequence</span></a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt;                                                  &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; 1        0.32636792198,0.322652303679249,0.312198680576961,...</span></a>
-<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; 2 0.0622930368665992,0.0611996295023108,0.0600874370944832,...</span></a>
-<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 3     0.803192064768597,0.83850419912899,0.873359334834947,...</span></a>
-<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt;   higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt;              &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; 1     1.64464833847084</span></a>
-<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; 2    0.217727066469606</span></a>
-<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; 3    0.940252805440159</span></a>
-<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt;                                                permutations   pvalPermutations</span></a>
-<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt;                                               &lt;NumericList&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; 1   0.2074620007827,0.668631958114992,0.301895458498793,... 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt; 2                                                        NA 0.0196078431372549</span></a>
-<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="co">#&gt; 3 0.441623102481692,0.441392135500405,0.472312757792341,... 0.0476190476190476</span></a>
-<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="co">#&gt;      FDRPermutations numberPermutationsEstimated globalLowerRangeEstimated</span></a>
-<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt;            &lt;numeric&gt;                   &lt;integer&gt;                 &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb16-28" data-line-number="28"><span class="co">#&gt; 1 0.0476190476190476                          40           1.9916742413209</span></a>
-<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt; 2 0.0476190476190476                          40           1.9916742413209</span></a>
-<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt; 3 0.0476190476190476                          40           1.9916742413209</span></a>
-<a class="sourceLine" id="cb16-31" data-line-number="31"><span class="co">#&gt;   globalUpperRangeEstimated     pvalEstimated       FDREstimated</span></a>
-<a class="sourceLine" id="cb16-32" data-line-number="32"><span class="co">#&gt;                   &lt;numeric&gt;         &lt;numeric&gt;          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb16-33" data-line-number="33"><span class="co">#&gt; 1          2.34659756452498 0.024390243902439 0.0365853658536585</span></a>
-<a class="sourceLine" id="cb16-34" data-line-number="34"><span class="co">#&gt; 2          2.34659756452498             0.875              0.875</span></a>
-<a class="sourceLine" id="cb16-35" data-line-number="35"><span class="co">#&gt; 3          2.34659756452498 0.024390243902439 0.0365853658536585</span></a></code></pre></div>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 1       Birc5                  1.991674                 20              TRUE</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 2       H2afz                  0.238446                 50             FALSE</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 3       Tacc3                  2.346598                 20              TRUE</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt;                 higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt;                       &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; 1    0.326368,0.322652,0.312199,...             1.644648</span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; 2 0.0622930,0.0611996,0.0600874,...             0.217727</span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 3    0.803192,0.838504,0.873359,...             0.940253</span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt;                     permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt;                    &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; 1 0.157494,0.638945,0.529321,...        0.0476190        0.047619</span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; 2                             NA        0.0196078        0.047619</span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; 3 0.321295,0.320501,0.519373,...        0.0476190        0.047619</span></a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt;   numberPermutationsEstimated globalLowerRangeEstimated</span></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt;                     &lt;integer&gt;                 &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; 1                          40                   1.99167</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt; 2                          40                   1.99167</span></a>
+<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="co">#&gt; 3                          40                   1.99167</span></a>
+<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="co">#&gt;   globalUpperRangeEstimated pvalEstimated FDREstimated</span></a>
+<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt;                   &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb16-28" data-line-number="28"><span class="co">#&gt; 1                    2.3466     0.0243902       0.0375</span></a>
+<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt; 2                    2.3466     0.9500000       0.9500</span></a>
+<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt; 3                    2.3466     0.0250000       0.0375</span></a></code></pre></div>
 <p>Note that having performed the testing using the thinned weight matrix, we can still plot, but beware that not every position is sampled.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/plotHigherOrderSequence.html">plotHigherOrderSequence</a></span>(scHOT_traj, gene_to_test)</a></code></pre></div>
 <p><img src="scHOT_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
@@ -438,8 +387,7 @@
 <a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;   17.964x10.137</span></a>
 <a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; colData names(2): x y</span></a>
 <a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; altExpNames(0):</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; altExpNames(0):</span></a></code></pre></div>
 <p>We build the <code>scHOT</code> object using <code>scHOT_buildFromSCE</code>. Note that <code>scHOT</code> only takes in a single <code>assay</code> slot, for which testing is based on.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">scHOT_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_buildFromSCE.html">scHOT_buildFromSCE</a></span>(sce_MOB_subset,</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2">                                    <span class="dt">assayName =</span> <span class="st">"logcounts"</span>,</a>
@@ -457,13 +405,12 @@
 <a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt;   17.964x10.137</span></a>
 <a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt; colData names(2): x y</span></a>
 <a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb19-18" data-line-number="18"><span class="co">#&gt; altExpNames(0):</span></a>
-<a class="sourceLine" id="cb19-19" data-line-number="19"><span class="co">#&gt; testingScaffold dim: 0 0 </span></a>
-<a class="sourceLine" id="cb19-20" data-line-number="20"><span class="co">#&gt; weightMatrix dim: 0 0 </span></a>
-<a class="sourceLine" id="cb19-21" data-line-number="21"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
-<a class="sourceLine" id="cb19-22" data-line-number="22"><span class="co">#&gt; param names (0):</span></a>
-<a class="sourceLine" id="cb19-23" data-line-number="23"><span class="co">#&gt; position type: spatial</span></a></code></pre></div>
+<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt; altExpNames(0):</span></a>
+<a class="sourceLine" id="cb19-18" data-line-number="18"><span class="co">#&gt; testingScaffold dim: 0 0 </span></a>
+<a class="sourceLine" id="cb19-19" data-line-number="19"><span class="co">#&gt; weightMatrix dim: 0 0 </span></a>
+<a class="sourceLine" id="cb19-20" data-line-number="20"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
+<a class="sourceLine" id="cb19-21" data-line-number="21"><span class="co">#&gt; param names (0):</span></a>
+<a class="sourceLine" id="cb19-22" data-line-number="22"><span class="co">#&gt; position type: spatial</span></a></code></pre></div>
 <div id="perform-schot-step-by-step---skip-ahead-for-wrapper-using-schot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#perform-schot-step-by-step---skip-ahead-for-wrapper-using-schot" class="anchor"></a>Perform scHOT step by step - skip <a href="#perform-schot-using-schot-wrapper-function">ahead</a> for wrapper using <code>scHOT</code>
@@ -547,17 +494,17 @@
 <a class="sourceLine" id="cb23-7" data-line-number="7"><span class="co">#&gt; DataFrame with 22 rows and 3 columns</span></a>
 <a class="sourceLine" id="cb23-8" data-line-number="8"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb23-9" data-line-number="9"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb23-10" data-line-number="10"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb23-11" data-line-number="11"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb23-13" data-line-number="13"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb23-10" data-line-number="10"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb23-15" data-line-number="15"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb23-17" data-line-number="17"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb23-18" data-line-number="18"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb23-19" data-line-number="19"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb23-20" data-line-number="20"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb23-17" data-line-number="17"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb23-18" data-line-number="18"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb23-19" data-line-number="19"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb23-20" data-line-number="20"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb23-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb23-22" data-line-number="22"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">assay</span>(scHOT_spatial, <span class="st">"expression"</span>)[pairs[,<span class="dv">1</span>],]),</a>
 <a class="sourceLine" id="cb23-23" data-line-number="23">         <span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">assay</span>(scHOT_spatial, <span class="st">"expression"</span>)[pairs[,<span class="dv">2</span>],]),</a>
@@ -572,17 +519,17 @@
 <a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co">#&gt; DataFrame with 22 rows and 5 columns</span></a>
 <a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb24-9" data-line-number="9"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb24-10" data-line-number="10"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb24-11" data-line-number="11"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb24-12" data-line-number="12"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb24-13" data-line-number="13"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb24-9" data-line-number="9"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb24-10" data-line-number="10"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb24-11" data-line-number="11"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb24-12" data-line-number="12"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb24-13" data-line-number="13"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb24-14" data-line-number="14"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb24-15" data-line-number="15"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb24-16" data-line-number="16"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb24-17" data-line-number="17"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb24-18" data-line-number="18"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb24-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb24-15" data-line-number="15"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb24-16" data-line-number="16"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb24-17" data-line-number="17"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb24-18" data-line-number="18"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb24-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb24-20" data-line-number="20"><span class="co">#&gt;               numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb24-21" data-line-number="21"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;logical&gt;</span></a>
 <a class="sourceLine" id="cb24-22" data-line-number="22"><span class="co">#&gt; Dnm1l_Gucy1b3                  0              TRUE</span></a>
@@ -603,17 +550,17 @@
 <a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">#&gt; DataFrame with 22 rows and 7 columns</span></a>
 <a class="sourceLine" id="cb25-5" data-line-number="5"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb25-6" data-line-number="6"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb25-10" data-line-number="10"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb25-11" data-line-number="11"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb25-10" data-line-number="10"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb25-11" data-line-number="11"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb25-12" data-line-number="12"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb25-13" data-line-number="13"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb25-14" data-line-number="14"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb25-15" data-line-number="15"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb25-16" data-line-number="16"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb25-17" data-line-number="17"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb25-13" data-line-number="13"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb25-14" data-line-number="14"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb25-15" data-line-number="15"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb25-16" data-line-number="16"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb25-17" data-line-number="17"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb25-18" data-line-number="18"><span class="co">#&gt;               numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb25-19" data-line-number="19"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;logical&gt;</span></a>
 <a class="sourceLine" id="cb25-20" data-line-number="20"><span class="co">#&gt; Dnm1l_Gucy1b3                  0              TRUE</span></a>
@@ -627,32 +574,19 @@
 <a class="sourceLine" id="cb25-28" data-line-number="28"><span class="co">#&gt; Cldn11_Mlc1                    0              TRUE</span></a>
 <a class="sourceLine" id="cb25-29" data-line-number="29"><span class="co">#&gt; Arrb1_Mtor                     0              TRUE</span></a>
 <a class="sourceLine" id="cb25-30" data-line-number="30"><span class="co">#&gt; Dnm1l_Fam63b                   0              TRUE</span></a>
-<a class="sourceLine" id="cb25-31" data-line-number="31"><span class="co">#&gt;                                                        higherOrderSequence</span></a>
-<a class="sourceLine" id="cb25-32" data-line-number="32"><span class="co">#&gt;                                                              &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb25-33" data-line-number="33"><span class="co">#&gt; Dnm1l_Gucy1b3   0.161981945274213,0.0935047582055998,0.307121773069247,...</span></a>
-<a class="sourceLine" id="cb25-34" data-line-number="34"><span class="co">#&gt; Bai1_Vdac3    0.0173442351843226,-0.670954697960648,-0.176849283198559,...</span></a>
-<a class="sourceLine" id="cb25-35" data-line-number="35"><span class="co">#&gt; Igf2_Tuba1a      0.841092518534058,0.751829715149417,0.817549059664069,...</span></a>
-<a class="sourceLine" id="cb25-36" data-line-number="36"><span class="co">#&gt; Gm15421_Myo10 0.132795734739607,-0.0544596110686273,-0.036475075560555,...</span></a>
-<a class="sourceLine" id="cb25-37" data-line-number="37"><span class="co">#&gt; Mtor_Tuba1a    0.409751611312058,-0.046538147726021,0.0754223079129962,...</span></a>
-<a class="sourceLine" id="cb25-38" data-line-number="38"><span class="co">#&gt; ...                                                                    ...</span></a>
-<a class="sourceLine" id="cb25-39" data-line-number="39"><span class="co">#&gt; Ildr2_Nfib    0.0684620062840911,-0.109704210754198,0.0142887721802513,...</span></a>
-<a class="sourceLine" id="cb25-40" data-line-number="40"><span class="co">#&gt; Cst3_Mlc1      -0.320555376833473,0.234776738766259,-0.228425488014548,...</span></a>
-<a class="sourceLine" id="cb25-41" data-line-number="41"><span class="co">#&gt; Cldn11_Mlc1   -0.504075018521154,-0.197785806963993,-0.346224725013224,...</span></a>
-<a class="sourceLine" id="cb25-42" data-line-number="42"><span class="co">#&gt; Arrb1_Mtor       0.290686976469263,0.420980070599745,0.301204098163697,...</span></a>
-<a class="sourceLine" id="cb25-43" data-line-number="43"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722243382072,0.208850353541951,0.0133499067872466,...</span></a>
-<a class="sourceLine" id="cb25-44" data-line-number="44"><span class="co">#&gt;               higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb25-45" data-line-number="45"><span class="co">#&gt;                          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb25-46" data-line-number="46"><span class="co">#&gt; Dnm1l_Gucy1b3      0.2768944745582</span></a>
-<a class="sourceLine" id="cb25-47" data-line-number="47"><span class="co">#&gt; Bai1_Vdac3       0.368064869663849</span></a>
-<a class="sourceLine" id="cb25-48" data-line-number="48"><span class="co">#&gt; Igf2_Tuba1a      0.311370448079063</span></a>
-<a class="sourceLine" id="cb25-49" data-line-number="49"><span class="co">#&gt; Gm15421_Myo10    0.285365861860501</span></a>
-<a class="sourceLine" id="cb25-50" data-line-number="50"><span class="co">#&gt; Mtor_Tuba1a      0.345201798116256</span></a>
-<a class="sourceLine" id="cb25-51" data-line-number="51"><span class="co">#&gt; ...                            ...</span></a>
-<a class="sourceLine" id="cb25-52" data-line-number="52"><span class="co">#&gt; Ildr2_Nfib       0.281278097700734</span></a>
-<a class="sourceLine" id="cb25-53" data-line-number="53"><span class="co">#&gt; Cst3_Mlc1          0.2896250256511</span></a>
-<a class="sourceLine" id="cb25-54" data-line-number="54"><span class="co">#&gt; Cldn11_Mlc1      0.321269756520595</span></a>
-<a class="sourceLine" id="cb25-55" data-line-number="55"><span class="co">#&gt; Arrb1_Mtor       0.323072078286733</span></a>
-<a class="sourceLine" id="cb25-56" data-line-number="56"><span class="co">#&gt; Dnm1l_Fam63b     0.364277204057592</span></a></code></pre></div>
+<a class="sourceLine" id="cb25-31" data-line-number="31"><span class="co">#&gt;                                higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb25-32" data-line-number="32"><span class="co">#&gt;                                      &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb25-33" data-line-number="33"><span class="co">#&gt; Dnm1l_Gucy1b3    0.1619819,0.0935048,0.3071218,...             0.276894</span></a>
+<a class="sourceLine" id="cb25-34" data-line-number="34"><span class="co">#&gt; Bai1_Vdac3     0.0173442,-0.6709547,-0.1768493,...             0.368065</span></a>
+<a class="sourceLine" id="cb25-35" data-line-number="35"><span class="co">#&gt; Igf2_Tuba1a         0.841093,0.751830,0.817549,...             0.311370</span></a>
+<a class="sourceLine" id="cb25-36" data-line-number="36"><span class="co">#&gt; Gm15421_Myo10  0.1327957,-0.0544596,-0.0364751,...             0.285366</span></a>
+<a class="sourceLine" id="cb25-37" data-line-number="37"><span class="co">#&gt; Mtor_Tuba1a    0.4097516,-0.0465381, 0.0754223,...             0.345202</span></a>
+<a class="sourceLine" id="cb25-38" data-line-number="38"><span class="co">#&gt; ...                                            ...                  ...</span></a>
+<a class="sourceLine" id="cb25-39" data-line-number="39"><span class="co">#&gt; Ildr2_Nfib     0.0684620,-0.1097042, 0.0142888,...             0.281278</span></a>
+<a class="sourceLine" id="cb25-40" data-line-number="40"><span class="co">#&gt; Cst3_Mlc1        -0.320555, 0.234777,-0.228425,...             0.289625</span></a>
+<a class="sourceLine" id="cb25-41" data-line-number="41"><span class="co">#&gt; Cldn11_Mlc1      -0.504075,-0.197786,-0.346225,...             0.321270</span></a>
+<a class="sourceLine" id="cb25-42" data-line-number="42"><span class="co">#&gt; Arrb1_Mtor          0.290687,0.420980,0.301204,...             0.323072</span></a>
+<a class="sourceLine" id="cb25-43" data-line-number="43"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722, 0.2088504, 0.0133499,...             0.364277</span></a></code></pre></div>
 <p>Now we perform permutation testing for those tests which we provided with a nonzero value for number of permutations. This takes about a minute to run.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scHOT_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT_performPermutationTest.html">scHOT_performPermutationTest</a></span>(</a>
 <a class="sourceLine" id="cb26-2" data-line-number="2">  scHOT_spatial, </a>
@@ -664,23 +598,23 @@
 <a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">#&gt; Permutation testing combination 18 of 22...</span></a>
 <a class="sourceLine" id="cb26-9" data-line-number="9"><span class="co">#&gt; Permutation testing combination 19 of 22...</span></a>
 <a class="sourceLine" id="cb26-10" data-line-number="10"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">#&gt;  57.003   0.371  58.186</span></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">#&gt;  57.574   0.483  58.123</span></a>
 <a class="sourceLine" id="cb26-12" data-line-number="12"></a>
 <a class="sourceLine" id="cb26-13" data-line-number="13"><span class="kw">slot</span>(scHOT_spatial, <span class="st">"scHOT_output"</span>)</a>
 <a class="sourceLine" id="cb26-14" data-line-number="14"><span class="co">#&gt; DataFrame with 22 rows and 10 columns</span></a>
 <a class="sourceLine" id="cb26-15" data-line-number="15"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb26-16" data-line-number="16"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb26-17" data-line-number="17"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb26-18" data-line-number="18"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb26-19" data-line-number="19"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb26-20" data-line-number="20"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb26-21" data-line-number="21"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb26-17" data-line-number="17"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb26-18" data-line-number="18"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb26-19" data-line-number="19"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb26-20" data-line-number="20"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb26-21" data-line-number="21"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb26-22" data-line-number="22"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb26-23" data-line-number="23"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb26-24" data-line-number="24"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb26-25" data-line-number="25"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb26-26" data-line-number="26"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb26-27" data-line-number="27"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb26-23" data-line-number="23"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb26-24" data-line-number="24"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb26-25" data-line-number="25"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb26-26" data-line-number="26"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb26-27" data-line-number="27"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb26-28" data-line-number="28"><span class="co">#&gt;               numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb26-29" data-line-number="29"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;logical&gt;</span></a>
 <a class="sourceLine" id="cb26-30" data-line-number="30"><span class="co">#&gt; Dnm1l_Gucy1b3                  0              TRUE</span></a>
@@ -694,58 +628,32 @@
 <a class="sourceLine" id="cb26-38" data-line-number="38"><span class="co">#&gt; Cldn11_Mlc1                    0              TRUE</span></a>
 <a class="sourceLine" id="cb26-39" data-line-number="39"><span class="co">#&gt; Arrb1_Mtor                     0              TRUE</span></a>
 <a class="sourceLine" id="cb26-40" data-line-number="40"><span class="co">#&gt; Dnm1l_Fam63b                   0              TRUE</span></a>
-<a class="sourceLine" id="cb26-41" data-line-number="41"><span class="co">#&gt;                                                        higherOrderSequence</span></a>
-<a class="sourceLine" id="cb26-42" data-line-number="42"><span class="co">#&gt;                                                              &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb26-43" data-line-number="43"><span class="co">#&gt; Dnm1l_Gucy1b3   0.161981945274213,0.0935047582055998,0.307121773069247,...</span></a>
-<a class="sourceLine" id="cb26-44" data-line-number="44"><span class="co">#&gt; Bai1_Vdac3    0.0173442351843226,-0.670954697960648,-0.176849283198559,...</span></a>
-<a class="sourceLine" id="cb26-45" data-line-number="45"><span class="co">#&gt; Igf2_Tuba1a      0.841092518534058,0.751829715149417,0.817549059664069,...</span></a>
-<a class="sourceLine" id="cb26-46" data-line-number="46"><span class="co">#&gt; Gm15421_Myo10 0.132795734739607,-0.0544596110686273,-0.036475075560555,...</span></a>
-<a class="sourceLine" id="cb26-47" data-line-number="47"><span class="co">#&gt; Mtor_Tuba1a    0.409751611312058,-0.046538147726021,0.0754223079129962,...</span></a>
-<a class="sourceLine" id="cb26-48" data-line-number="48"><span class="co">#&gt; ...                                                                    ...</span></a>
-<a class="sourceLine" id="cb26-49" data-line-number="49"><span class="co">#&gt; Ildr2_Nfib    0.0684620062840911,-0.109704210754198,0.0142887721802513,...</span></a>
-<a class="sourceLine" id="cb26-50" data-line-number="50"><span class="co">#&gt; Cst3_Mlc1      -0.320555376833473,0.234776738766259,-0.228425488014548,...</span></a>
-<a class="sourceLine" id="cb26-51" data-line-number="51"><span class="co">#&gt; Cldn11_Mlc1   -0.504075018521154,-0.197785806963993,-0.346224725013224,...</span></a>
-<a class="sourceLine" id="cb26-52" data-line-number="52"><span class="co">#&gt; Arrb1_Mtor       0.290686976469263,0.420980070599745,0.301204098163697,...</span></a>
-<a class="sourceLine" id="cb26-53" data-line-number="53"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722243382072,0.208850353541951,0.0133499067872466,...</span></a>
-<a class="sourceLine" id="cb26-54" data-line-number="54"><span class="co">#&gt;               higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb26-55" data-line-number="55"><span class="co">#&gt;                          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb26-56" data-line-number="56"><span class="co">#&gt; Dnm1l_Gucy1b3      0.2768944745582</span></a>
-<a class="sourceLine" id="cb26-57" data-line-number="57"><span class="co">#&gt; Bai1_Vdac3       0.368064869663849</span></a>
-<a class="sourceLine" id="cb26-58" data-line-number="58"><span class="co">#&gt; Igf2_Tuba1a      0.311370448079063</span></a>
-<a class="sourceLine" id="cb26-59" data-line-number="59"><span class="co">#&gt; Gm15421_Myo10    0.285365861860501</span></a>
-<a class="sourceLine" id="cb26-60" data-line-number="60"><span class="co">#&gt; Mtor_Tuba1a      0.345201798116256</span></a>
-<a class="sourceLine" id="cb26-61" data-line-number="61"><span class="co">#&gt; ...                            ...</span></a>
-<a class="sourceLine" id="cb26-62" data-line-number="62"><span class="co">#&gt; Ildr2_Nfib       0.281278097700734</span></a>
-<a class="sourceLine" id="cb26-63" data-line-number="63"><span class="co">#&gt; Cst3_Mlc1          0.2896250256511</span></a>
-<a class="sourceLine" id="cb26-64" data-line-number="64"><span class="co">#&gt; Cldn11_Mlc1      0.321269756520595</span></a>
-<a class="sourceLine" id="cb26-65" data-line-number="65"><span class="co">#&gt; Arrb1_Mtor       0.323072078286733</span></a>
-<a class="sourceLine" id="cb26-66" data-line-number="66"><span class="co">#&gt; Dnm1l_Fam63b     0.364277204057592</span></a>
-<a class="sourceLine" id="cb26-67" data-line-number="67"><span class="co">#&gt;                                                            permutations</span></a>
-<a class="sourceLine" id="cb26-68" data-line-number="68"><span class="co">#&gt;                                                           &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb26-69" data-line-number="69"><span class="co">#&gt; Dnm1l_Gucy1b3                                                        NA</span></a>
-<a class="sourceLine" id="cb26-70" data-line-number="70"><span class="co">#&gt; Bai1_Vdac3                                                           NA</span></a>
-<a class="sourceLine" id="cb26-71" data-line-number="71"><span class="co">#&gt; Igf2_Tuba1a                                                          NA</span></a>
-<a class="sourceLine" id="cb26-72" data-line-number="72"><span class="co">#&gt; Gm15421_Myo10 0.311943647662755,0.312378435388056,0.324099177969887,...</span></a>
-<a class="sourceLine" id="cb26-73" data-line-number="73"><span class="co">#&gt; Mtor_Tuba1a                                                          NA</span></a>
-<a class="sourceLine" id="cb26-74" data-line-number="74"><span class="co">#&gt; ...                                                                 ...</span></a>
-<a class="sourceLine" id="cb26-75" data-line-number="75"><span class="co">#&gt; Ildr2_Nfib      0.310644190740378,0.3476054940215,0.368242070905011,...</span></a>
-<a class="sourceLine" id="cb26-76" data-line-number="76"><span class="co">#&gt; Cst3_Mlc1      0.249664307758231,0.27353859934971,0.280371660356752,...</span></a>
-<a class="sourceLine" id="cb26-77" data-line-number="77"><span class="co">#&gt; Cldn11_Mlc1                                                          NA</span></a>
-<a class="sourceLine" id="cb26-78" data-line-number="78"><span class="co">#&gt; Arrb1_Mtor                                                           NA</span></a>
-<a class="sourceLine" id="cb26-79" data-line-number="79"><span class="co">#&gt; Dnm1l_Fam63b                                                         NA</span></a>
-<a class="sourceLine" id="cb26-80" data-line-number="80"><span class="co">#&gt;               pvalPermutations FDRPermutations</span></a>
-<a class="sourceLine" id="cb26-81" data-line-number="81"><span class="co">#&gt;                      &lt;numeric&gt;       &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb26-82" data-line-number="82"><span class="co">#&gt; Dnm1l_Gucy1b3               NA              NA</span></a>
-<a class="sourceLine" id="cb26-83" data-line-number="83"><span class="co">#&gt; Bai1_Vdac3                  NA              NA</span></a>
-<a class="sourceLine" id="cb26-84" data-line-number="84"><span class="co">#&gt; Igf2_Tuba1a                 NA              NA</span></a>
-<a class="sourceLine" id="cb26-85" data-line-number="85"><span class="co">#&gt; Gm15421_Myo10             0.94            0.98</span></a>
-<a class="sourceLine" id="cb26-86" data-line-number="86"><span class="co">#&gt; Mtor_Tuba1a                 NA              NA</span></a>
-<a class="sourceLine" id="cb26-87" data-line-number="87"><span class="co">#&gt; ...                        ...             ...</span></a>
-<a class="sourceLine" id="cb26-88" data-line-number="88"><span class="co">#&gt; Ildr2_Nfib                0.98            0.98</span></a>
-<a class="sourceLine" id="cb26-89" data-line-number="89"><span class="co">#&gt; Cst3_Mlc1                 0.22             0.7</span></a>
-<a class="sourceLine" id="cb26-90" data-line-number="90"><span class="co">#&gt; Cldn11_Mlc1                 NA              NA</span></a>
-<a class="sourceLine" id="cb26-91" data-line-number="91"><span class="co">#&gt; Arrb1_Mtor                  NA              NA</span></a>
-<a class="sourceLine" id="cb26-92" data-line-number="92"><span class="co">#&gt; Dnm1l_Fam63b                NA              NA</span></a></code></pre></div>
+<a class="sourceLine" id="cb26-41" data-line-number="41"><span class="co">#&gt;                                higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb26-42" data-line-number="42"><span class="co">#&gt;                                      &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb26-43" data-line-number="43"><span class="co">#&gt; Dnm1l_Gucy1b3    0.1619819,0.0935048,0.3071218,...             0.276894</span></a>
+<a class="sourceLine" id="cb26-44" data-line-number="44"><span class="co">#&gt; Bai1_Vdac3     0.0173442,-0.6709547,-0.1768493,...             0.368065</span></a>
+<a class="sourceLine" id="cb26-45" data-line-number="45"><span class="co">#&gt; Igf2_Tuba1a         0.841093,0.751830,0.817549,...             0.311370</span></a>
+<a class="sourceLine" id="cb26-46" data-line-number="46"><span class="co">#&gt; Gm15421_Myo10  0.1327957,-0.0544596,-0.0364751,...             0.285366</span></a>
+<a class="sourceLine" id="cb26-47" data-line-number="47"><span class="co">#&gt; Mtor_Tuba1a    0.4097516,-0.0465381, 0.0754223,...             0.345202</span></a>
+<a class="sourceLine" id="cb26-48" data-line-number="48"><span class="co">#&gt; ...                                            ...                  ...</span></a>
+<a class="sourceLine" id="cb26-49" data-line-number="49"><span class="co">#&gt; Ildr2_Nfib     0.0684620,-0.1097042, 0.0142888,...             0.281278</span></a>
+<a class="sourceLine" id="cb26-50" data-line-number="50"><span class="co">#&gt; Cst3_Mlc1        -0.320555, 0.234777,-0.228425,...             0.289625</span></a>
+<a class="sourceLine" id="cb26-51" data-line-number="51"><span class="co">#&gt; Cldn11_Mlc1      -0.504075,-0.197786,-0.346225,...             0.321270</span></a>
+<a class="sourceLine" id="cb26-52" data-line-number="52"><span class="co">#&gt; Arrb1_Mtor          0.290687,0.420980,0.301204,...             0.323072</span></a>
+<a class="sourceLine" id="cb26-53" data-line-number="53"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722, 0.2088504, 0.0133499,...             0.364277</span></a>
+<a class="sourceLine" id="cb26-54" data-line-number="54"><span class="co">#&gt;                                 permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb26-55" data-line-number="55"><span class="co">#&gt;                                &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb26-56" data-line-number="56"><span class="co">#&gt; Dnm1l_Gucy1b3                             NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-57" data-line-number="57"><span class="co">#&gt; Bai1_Vdac3                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-58" data-line-number="58"><span class="co">#&gt; Igf2_Tuba1a                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-59" data-line-number="59"><span class="co">#&gt; Gm15421_Myo10 0.311944,0.312378,0.324099,...             0.94            0.98</span></a>
+<a class="sourceLine" id="cb26-60" data-line-number="60"><span class="co">#&gt; Mtor_Tuba1a                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-61" data-line-number="61"><span class="co">#&gt; ...                                      ...              ...             ...</span></a>
+<a class="sourceLine" id="cb26-62" data-line-number="62"><span class="co">#&gt; Ildr2_Nfib    0.310644,0.347605,0.368242,...             0.98            0.98</span></a>
+<a class="sourceLine" id="cb26-63" data-line-number="63"><span class="co">#&gt; Cst3_Mlc1     0.249664,0.273539,0.280372,...             0.22            0.70</span></a>
+<a class="sourceLine" id="cb26-64" data-line-number="64"><span class="co">#&gt; Cldn11_Mlc1                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-65" data-line-number="65"><span class="co">#&gt; Arrb1_Mtor                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb26-66" data-line-number="66"><span class="co">#&gt; Dnm1l_Fam63b                              NA               NA              NA</span></a></code></pre></div>
 <p>With the above, we calculated P-values for some of the tests, but we have not performed permutation testing for all tests. Here, we employ a permutation sharing approach to estimate significance for the other tests. Ideally this would be performed with around a hundred tests each with around 1,000 permutations to ensure accurate P-value estimation. You can check how good an estimate you can expect by plotting the global higher order statistic against the permuted test statistics, there should be good representation along the x-axis and the fitted curve should appear quite smooth. Here the fitted curve is bumpy, so we would suggest selecting more genes and more permutations.</p>
 <p>We estimate P-values by borrowing 100 permutations from closest tests with a difference in global higher order statistic of at most 0.1</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="../reference/scHOT_plotPermutationDistributions.html">scHOT_plotPermutationDistributions</a></span>(scHOT_spatial)</a></code></pre></div>
@@ -758,17 +666,17 @@
 <a class="sourceLine" id="cb28-6" data-line-number="6"><span class="co">#&gt; DataFrame with 22 rows and 15 columns</span></a>
 <a class="sourceLine" id="cb28-7" data-line-number="7"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb28-8" data-line-number="8"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb28-9" data-line-number="9"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb28-10" data-line-number="10"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb28-11" data-line-number="11"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb28-12" data-line-number="12"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-13" data-line-number="13"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb28-9" data-line-number="9"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb28-10" data-line-number="10"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb28-11" data-line-number="11"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb28-12" data-line-number="12"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb28-13" data-line-number="13"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb28-14" data-line-number="14"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb28-15" data-line-number="15"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb28-16" data-line-number="16"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb28-17" data-line-number="17"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb28-18" data-line-number="18"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb28-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb28-15" data-line-number="15"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb28-16" data-line-number="16"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb28-17" data-line-number="17"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb28-18" data-line-number="18"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb28-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb28-20" data-line-number="20"><span class="co">#&gt;               numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb28-21" data-line-number="21"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;logical&gt;</span></a>
 <a class="sourceLine" id="cb28-22" data-line-number="22"><span class="co">#&gt; Dnm1l_Gucy1b3                  0              TRUE</span></a>
@@ -782,93 +690,67 @@
 <a class="sourceLine" id="cb28-30" data-line-number="30"><span class="co">#&gt; Cldn11_Mlc1                    0              TRUE</span></a>
 <a class="sourceLine" id="cb28-31" data-line-number="31"><span class="co">#&gt; Arrb1_Mtor                     0              TRUE</span></a>
 <a class="sourceLine" id="cb28-32" data-line-number="32"><span class="co">#&gt; Dnm1l_Fam63b                   0              TRUE</span></a>
-<a class="sourceLine" id="cb28-33" data-line-number="33"><span class="co">#&gt;                                                        higherOrderSequence</span></a>
-<a class="sourceLine" id="cb28-34" data-line-number="34"><span class="co">#&gt;                                                              &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb28-35" data-line-number="35"><span class="co">#&gt; Dnm1l_Gucy1b3   0.161981945274213,0.0935047582055998,0.307121773069247,...</span></a>
-<a class="sourceLine" id="cb28-36" data-line-number="36"><span class="co">#&gt; Bai1_Vdac3    0.0173442351843226,-0.670954697960648,-0.176849283198559,...</span></a>
-<a class="sourceLine" id="cb28-37" data-line-number="37"><span class="co">#&gt; Igf2_Tuba1a      0.841092518534058,0.751829715149417,0.817549059664069,...</span></a>
-<a class="sourceLine" id="cb28-38" data-line-number="38"><span class="co">#&gt; Gm15421_Myo10 0.132795734739607,-0.0544596110686273,-0.036475075560555,...</span></a>
-<a class="sourceLine" id="cb28-39" data-line-number="39"><span class="co">#&gt; Mtor_Tuba1a    0.409751611312058,-0.046538147726021,0.0754223079129962,...</span></a>
-<a class="sourceLine" id="cb28-40" data-line-number="40"><span class="co">#&gt; ...                                                                    ...</span></a>
-<a class="sourceLine" id="cb28-41" data-line-number="41"><span class="co">#&gt; Ildr2_Nfib    0.0684620062840911,-0.109704210754198,0.0142887721802513,...</span></a>
-<a class="sourceLine" id="cb28-42" data-line-number="42"><span class="co">#&gt; Cst3_Mlc1      -0.320555376833473,0.234776738766259,-0.228425488014548,...</span></a>
-<a class="sourceLine" id="cb28-43" data-line-number="43"><span class="co">#&gt; Cldn11_Mlc1   -0.504075018521154,-0.197785806963993,-0.346224725013224,...</span></a>
-<a class="sourceLine" id="cb28-44" data-line-number="44"><span class="co">#&gt; Arrb1_Mtor       0.290686976469263,0.420980070599745,0.301204098163697,...</span></a>
-<a class="sourceLine" id="cb28-45" data-line-number="45"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722243382072,0.208850353541951,0.0133499067872466,...</span></a>
-<a class="sourceLine" id="cb28-46" data-line-number="46"><span class="co">#&gt;               higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb28-47" data-line-number="47"><span class="co">#&gt;                          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb28-48" data-line-number="48"><span class="co">#&gt; Dnm1l_Gucy1b3      0.2768944745582</span></a>
-<a class="sourceLine" id="cb28-49" data-line-number="49"><span class="co">#&gt; Bai1_Vdac3       0.368064869663849</span></a>
-<a class="sourceLine" id="cb28-50" data-line-number="50"><span class="co">#&gt; Igf2_Tuba1a      0.311370448079063</span></a>
-<a class="sourceLine" id="cb28-51" data-line-number="51"><span class="co">#&gt; Gm15421_Myo10    0.285365861860501</span></a>
-<a class="sourceLine" id="cb28-52" data-line-number="52"><span class="co">#&gt; Mtor_Tuba1a      0.345201798116256</span></a>
-<a class="sourceLine" id="cb28-53" data-line-number="53"><span class="co">#&gt; ...                            ...</span></a>
-<a class="sourceLine" id="cb28-54" data-line-number="54"><span class="co">#&gt; Ildr2_Nfib       0.281278097700734</span></a>
-<a class="sourceLine" id="cb28-55" data-line-number="55"><span class="co">#&gt; Cst3_Mlc1          0.2896250256511</span></a>
-<a class="sourceLine" id="cb28-56" data-line-number="56"><span class="co">#&gt; Cldn11_Mlc1      0.321269756520595</span></a>
-<a class="sourceLine" id="cb28-57" data-line-number="57"><span class="co">#&gt; Arrb1_Mtor       0.323072078286733</span></a>
-<a class="sourceLine" id="cb28-58" data-line-number="58"><span class="co">#&gt; Dnm1l_Fam63b     0.364277204057592</span></a>
-<a class="sourceLine" id="cb28-59" data-line-number="59"><span class="co">#&gt;                                                            permutations</span></a>
-<a class="sourceLine" id="cb28-60" data-line-number="60"><span class="co">#&gt;                                                           &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb28-61" data-line-number="61"><span class="co">#&gt; Dnm1l_Gucy1b3                                                        NA</span></a>
-<a class="sourceLine" id="cb28-62" data-line-number="62"><span class="co">#&gt; Bai1_Vdac3                                                           NA</span></a>
-<a class="sourceLine" id="cb28-63" data-line-number="63"><span class="co">#&gt; Igf2_Tuba1a                                                          NA</span></a>
-<a class="sourceLine" id="cb28-64" data-line-number="64"><span class="co">#&gt; Gm15421_Myo10 0.311943647662755,0.312378435388056,0.324099177969887,...</span></a>
-<a class="sourceLine" id="cb28-65" data-line-number="65"><span class="co">#&gt; Mtor_Tuba1a                                                          NA</span></a>
-<a class="sourceLine" id="cb28-66" data-line-number="66"><span class="co">#&gt; ...                                                                 ...</span></a>
-<a class="sourceLine" id="cb28-67" data-line-number="67"><span class="co">#&gt; Ildr2_Nfib      0.310644190740378,0.3476054940215,0.368242070905011,...</span></a>
-<a class="sourceLine" id="cb28-68" data-line-number="68"><span class="co">#&gt; Cst3_Mlc1      0.249664307758231,0.27353859934971,0.280371660356752,...</span></a>
-<a class="sourceLine" id="cb28-69" data-line-number="69"><span class="co">#&gt; Cldn11_Mlc1                                                          NA</span></a>
-<a class="sourceLine" id="cb28-70" data-line-number="70"><span class="co">#&gt; Arrb1_Mtor                                                           NA</span></a>
-<a class="sourceLine" id="cb28-71" data-line-number="71"><span class="co">#&gt; Dnm1l_Fam63b                                                         NA</span></a>
-<a class="sourceLine" id="cb28-72" data-line-number="72"><span class="co">#&gt;               pvalPermutations FDRPermutations numberPermutationsEstimated</span></a>
-<a class="sourceLine" id="cb28-73" data-line-number="73"><span class="co">#&gt;                      &lt;numeric&gt;       &lt;numeric&gt;                   &lt;integer&gt;</span></a>
-<a class="sourceLine" id="cb28-74" data-line-number="74"><span class="co">#&gt; Dnm1l_Gucy1b3               NA              NA                         100</span></a>
-<a class="sourceLine" id="cb28-75" data-line-number="75"><span class="co">#&gt; Bai1_Vdac3                  NA              NA                         150</span></a>
-<a class="sourceLine" id="cb28-76" data-line-number="76"><span class="co">#&gt; Igf2_Tuba1a                 NA              NA                          50</span></a>
-<a class="sourceLine" id="cb28-77" data-line-number="77"><span class="co">#&gt; Gm15421_Myo10             0.94            0.98                         150</span></a>
-<a class="sourceLine" id="cb28-78" data-line-number="78"><span class="co">#&gt; Mtor_Tuba1a                 NA              NA                         150</span></a>
-<a class="sourceLine" id="cb28-79" data-line-number="79"><span class="co">#&gt; ...                        ...             ...                         ...</span></a>
-<a class="sourceLine" id="cb28-80" data-line-number="80"><span class="co">#&gt; Ildr2_Nfib                0.98            0.98                         150</span></a>
-<a class="sourceLine" id="cb28-81" data-line-number="81"><span class="co">#&gt; Cst3_Mlc1                 0.22             0.7                          50</span></a>
-<a class="sourceLine" id="cb28-82" data-line-number="82"><span class="co">#&gt; Cldn11_Mlc1                 NA              NA                         150</span></a>
-<a class="sourceLine" id="cb28-83" data-line-number="83"><span class="co">#&gt; Arrb1_Mtor                  NA              NA                         100</span></a>
-<a class="sourceLine" id="cb28-84" data-line-number="84"><span class="co">#&gt; Dnm1l_Fam63b                NA              NA                         100</span></a>
-<a class="sourceLine" id="cb28-85" data-line-number="85"><span class="co">#&gt;               globalLowerRangeEstimated globalUpperRangeEstimated</span></a>
-<a class="sourceLine" id="cb28-86" data-line-number="86"><span class="co">#&gt;                               &lt;numeric&gt;                 &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb28-87" data-line-number="87"><span class="co">#&gt; Dnm1l_Gucy1b3       -0.0164663524605861        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-88" data-line-number="88"><span class="co">#&gt; Bai1_Vdac3          -0.0422096057668331        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-89" data-line-number="89"><span class="co">#&gt; Igf2_Tuba1a           0.178921315869504         0.178921315869504</span></a>
-<a class="sourceLine" id="cb28-90" data-line-number="90"><span class="co">#&gt; Gm15421_Myo10       -0.0422096057668331        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-91" data-line-number="91"><span class="co">#&gt; Mtor_Tuba1a         -0.0164663524605861         0.178921315869504</span></a>
-<a class="sourceLine" id="cb28-92" data-line-number="92"><span class="co">#&gt; ...                                 ...                       ...</span></a>
-<a class="sourceLine" id="cb28-93" data-line-number="93"><span class="co">#&gt; Ildr2_Nfib          -0.0422096057668331        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-94" data-line-number="94"><span class="co">#&gt; Cst3_Mlc1             0.429443779703935         0.429443779703935</span></a>
-<a class="sourceLine" id="cb28-95" data-line-number="95"><span class="co">#&gt; Cldn11_Mlc1         -0.0422096057668331        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-96" data-line-number="96"><span class="co">#&gt; Arrb1_Mtor          -0.0164663524605861        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb28-97" data-line-number="97"><span class="co">#&gt; Dnm1l_Fam63b         0.0348910517728306         0.178921315869504</span></a>
-<a class="sourceLine" id="cb28-98" data-line-number="98"><span class="co">#&gt;                    pvalEstimated      FDREstimated</span></a>
-<a class="sourceLine" id="cb28-99" data-line-number="99"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb28-100" data-line-number="100"><span class="co">#&gt; Dnm1l_Gucy1b3                  1                 1</span></a>
-<a class="sourceLine" id="cb28-101" data-line-number="101"><span class="co">#&gt; Bai1_Vdac3    0.0533333333333333 0.513333333333333</span></a>
-<a class="sourceLine" id="cb28-102" data-line-number="102"><span class="co">#&gt; Igf2_Tuba1a                 0.68 0.997333333333333</span></a>
-<a class="sourceLine" id="cb28-103" data-line-number="103"><span class="co">#&gt; Gm15421_Myo10  0.946666666666667 0.998730158730159</span></a>
-<a class="sourceLine" id="cb28-104" data-line-number="104"><span class="co">#&gt; Mtor_Tuba1a    0.193333333333333             0.605</span></a>
-<a class="sourceLine" id="cb28-105" data-line-number="105"><span class="co">#&gt; ...                          ...               ...</span></a>
-<a class="sourceLine" id="cb28-106" data-line-number="106"><span class="co">#&gt; Ildr2_Nfib     0.953333333333333 0.998730158730159</span></a>
-<a class="sourceLine" id="cb28-107" data-line-number="107"><span class="co">#&gt; Cst3_Mlc1                   0.22             0.605</span></a>
-<a class="sourceLine" id="cb28-108" data-line-number="108"><span class="co">#&gt; Cldn11_Mlc1    0.426666666666667 0.782222222222222</span></a>
-<a class="sourceLine" id="cb28-109" data-line-number="109"><span class="co">#&gt; Arrb1_Mtor                  0.41 0.782222222222222</span></a>
-<a class="sourceLine" id="cb28-110" data-line-number="110"><span class="co">#&gt; Dnm1l_Fam63b                0.07 0.513333333333333</span></a>
-<a class="sourceLine" id="cb28-111" data-line-number="111"></a>
-<a class="sourceLine" id="cb28-112" data-line-number="112"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">slot</span>(scHOT_spatial, <span class="st">"scHOT_output"</span>)),</a>
-<a class="sourceLine" id="cb28-113" data-line-number="113">       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(pvalPermutations), <span class="dt">y =</span> <span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(pvalEstimated))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-114" data-line-number="114"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-115" data-line-number="115"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-116" data-line-number="116"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-117" data-line-number="117"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Permutation -log10(p-value)"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-118" data-line-number="118"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Estimated -log10(p-value)"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-119" data-line-number="119"><span class="st">  </span><span class="ot">NULL</span></a></code></pre></div>
+<a class="sourceLine" id="cb28-33" data-line-number="33"><span class="co">#&gt;                                higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb28-34" data-line-number="34"><span class="co">#&gt;                                      &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb28-35" data-line-number="35"><span class="co">#&gt; Dnm1l_Gucy1b3    0.1619819,0.0935048,0.3071218,...             0.276894</span></a>
+<a class="sourceLine" id="cb28-36" data-line-number="36"><span class="co">#&gt; Bai1_Vdac3     0.0173442,-0.6709547,-0.1768493,...             0.368065</span></a>
+<a class="sourceLine" id="cb28-37" data-line-number="37"><span class="co">#&gt; Igf2_Tuba1a         0.841093,0.751830,0.817549,...             0.311370</span></a>
+<a class="sourceLine" id="cb28-38" data-line-number="38"><span class="co">#&gt; Gm15421_Myo10  0.1327957,-0.0544596,-0.0364751,...             0.285366</span></a>
+<a class="sourceLine" id="cb28-39" data-line-number="39"><span class="co">#&gt; Mtor_Tuba1a    0.4097516,-0.0465381, 0.0754223,...             0.345202</span></a>
+<a class="sourceLine" id="cb28-40" data-line-number="40"><span class="co">#&gt; ...                                            ...                  ...</span></a>
+<a class="sourceLine" id="cb28-41" data-line-number="41"><span class="co">#&gt; Ildr2_Nfib     0.0684620,-0.1097042, 0.0142888,...             0.281278</span></a>
+<a class="sourceLine" id="cb28-42" data-line-number="42"><span class="co">#&gt; Cst3_Mlc1        -0.320555, 0.234777,-0.228425,...             0.289625</span></a>
+<a class="sourceLine" id="cb28-43" data-line-number="43"><span class="co">#&gt; Cldn11_Mlc1      -0.504075,-0.197786,-0.346225,...             0.321270</span></a>
+<a class="sourceLine" id="cb28-44" data-line-number="44"><span class="co">#&gt; Arrb1_Mtor          0.290687,0.420980,0.301204,...             0.323072</span></a>
+<a class="sourceLine" id="cb28-45" data-line-number="45"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722, 0.2088504, 0.0133499,...             0.364277</span></a>
+<a class="sourceLine" id="cb28-46" data-line-number="46"><span class="co">#&gt;                                 permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb28-47" data-line-number="47"><span class="co">#&gt;                                &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb28-48" data-line-number="48"><span class="co">#&gt; Dnm1l_Gucy1b3                             NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-49" data-line-number="49"><span class="co">#&gt; Bai1_Vdac3                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-50" data-line-number="50"><span class="co">#&gt; Igf2_Tuba1a                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-51" data-line-number="51"><span class="co">#&gt; Gm15421_Myo10 0.311944,0.312378,0.324099,...             0.94            0.98</span></a>
+<a class="sourceLine" id="cb28-52" data-line-number="52"><span class="co">#&gt; Mtor_Tuba1a                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-53" data-line-number="53"><span class="co">#&gt; ...                                      ...              ...             ...</span></a>
+<a class="sourceLine" id="cb28-54" data-line-number="54"><span class="co">#&gt; Ildr2_Nfib    0.310644,0.347605,0.368242,...             0.98            0.98</span></a>
+<a class="sourceLine" id="cb28-55" data-line-number="55"><span class="co">#&gt; Cst3_Mlc1     0.249664,0.273539,0.280372,...             0.22            0.70</span></a>
+<a class="sourceLine" id="cb28-56" data-line-number="56"><span class="co">#&gt; Cldn11_Mlc1                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-57" data-line-number="57"><span class="co">#&gt; Arrb1_Mtor                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-58" data-line-number="58"><span class="co">#&gt; Dnm1l_Fam63b                              NA               NA              NA</span></a>
+<a class="sourceLine" id="cb28-59" data-line-number="59"><span class="co">#&gt;               numberPermutationsEstimated globalLowerRangeEstimated</span></a>
+<a class="sourceLine" id="cb28-60" data-line-number="60"><span class="co">#&gt;                                 &lt;integer&gt;                 &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb28-61" data-line-number="61"><span class="co">#&gt; Dnm1l_Gucy1b3                         100                -0.0164664</span></a>
+<a class="sourceLine" id="cb28-62" data-line-number="62"><span class="co">#&gt; Bai1_Vdac3                            150                -0.0422096</span></a>
+<a class="sourceLine" id="cb28-63" data-line-number="63"><span class="co">#&gt; Igf2_Tuba1a                            50                 0.1789213</span></a>
+<a class="sourceLine" id="cb28-64" data-line-number="64"><span class="co">#&gt; Gm15421_Myo10                         150                -0.0422096</span></a>
+<a class="sourceLine" id="cb28-65" data-line-number="65"><span class="co">#&gt; Mtor_Tuba1a                           150                -0.0164664</span></a>
+<a class="sourceLine" id="cb28-66" data-line-number="66"><span class="co">#&gt; ...                                   ...                       ...</span></a>
+<a class="sourceLine" id="cb28-67" data-line-number="67"><span class="co">#&gt; Ildr2_Nfib                            150                -0.0422096</span></a>
+<a class="sourceLine" id="cb28-68" data-line-number="68"><span class="co">#&gt; Cst3_Mlc1                              50                 0.4294438</span></a>
+<a class="sourceLine" id="cb28-69" data-line-number="69"><span class="co">#&gt; Cldn11_Mlc1                           150                -0.0422096</span></a>
+<a class="sourceLine" id="cb28-70" data-line-number="70"><span class="co">#&gt; Arrb1_Mtor                            100                -0.0164664</span></a>
+<a class="sourceLine" id="cb28-71" data-line-number="71"><span class="co">#&gt; Dnm1l_Fam63b                          100                 0.0348911</span></a>
+<a class="sourceLine" id="cb28-72" data-line-number="72"><span class="co">#&gt;               globalUpperRangeEstimated pvalEstimated FDREstimated</span></a>
+<a class="sourceLine" id="cb28-73" data-line-number="73"><span class="co">#&gt;                               &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb28-74" data-line-number="74"><span class="co">#&gt; Dnm1l_Gucy1b3                 0.0348911     1.0000000     1.000000</span></a>
+<a class="sourceLine" id="cb28-75" data-line-number="75"><span class="co">#&gt; Bai1_Vdac3                    0.0348911     0.0533333     0.513333</span></a>
+<a class="sourceLine" id="cb28-76" data-line-number="76"><span class="co">#&gt; Igf2_Tuba1a                   0.1789213     0.6800000     0.997333</span></a>
+<a class="sourceLine" id="cb28-77" data-line-number="77"><span class="co">#&gt; Gm15421_Myo10                 0.0348911     0.9466667     0.998730</span></a>
+<a class="sourceLine" id="cb28-78" data-line-number="78"><span class="co">#&gt; Mtor_Tuba1a                   0.1789213     0.1933333     0.605000</span></a>
+<a class="sourceLine" id="cb28-79" data-line-number="79"><span class="co">#&gt; ...                                 ...           ...          ...</span></a>
+<a class="sourceLine" id="cb28-80" data-line-number="80"><span class="co">#&gt; Ildr2_Nfib                    0.0348911      0.953333     0.998730</span></a>
+<a class="sourceLine" id="cb28-81" data-line-number="81"><span class="co">#&gt; Cst3_Mlc1                     0.4294438      0.220000     0.605000</span></a>
+<a class="sourceLine" id="cb28-82" data-line-number="82"><span class="co">#&gt; Cldn11_Mlc1                   0.0348911      0.426667     0.782222</span></a>
+<a class="sourceLine" id="cb28-83" data-line-number="83"><span class="co">#&gt; Arrb1_Mtor                    0.0348911      0.410000     0.782222</span></a>
+<a class="sourceLine" id="cb28-84" data-line-number="84"><span class="co">#&gt; Dnm1l_Fam63b                  0.1789213      0.070000     0.513333</span></a>
+<a class="sourceLine" id="cb28-85" data-line-number="85"></a>
+<a class="sourceLine" id="cb28-86" data-line-number="86"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">slot</span>(scHOT_spatial, <span class="st">"scHOT_output"</span>)),</a>
+<a class="sourceLine" id="cb28-87" data-line-number="87">       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(pvalPermutations), <span class="dt">y =</span> <span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(pvalEstimated))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-88" data-line-number="88"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-89" data-line-number="89"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-90" data-line-number="90"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-91" data-line-number="91"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Permutation -log10(p-value)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-92" data-line-number="92"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Estimated -log10(p-value)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-93" data-line-number="93"><span class="st">  </span><span class="ot">NULL</span></a></code></pre></div>
 <p><img src="scHOT_files/figure-html/unnamed-chunk-27-2.png" width="700"></p>
 <p>In this example we can still see fairly good concordance between the estimated and direct permutation tests, even with a very small number of permutations.</p>
 <p>Once testing is done, we can interrogate the results with various plots. The <code>plotHigherOrderSequence</code> function will plot the points in space, coloured by the local correlation estimates, and <code>plotOrderedExpression</code> will plot the points in space, coloured by expression of each gene.</p>
@@ -899,16 +781,15 @@
 <a class="sourceLine" id="cb31-11" data-line-number="11"><span class="co">#&gt;   17.964x10.137</span></a>
 <a class="sourceLine" id="cb31-12" data-line-number="12"><span class="co">#&gt; colData names(3): x y -x</span></a>
 <a class="sourceLine" id="cb31-13" data-line-number="13"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb31-15" data-line-number="15"><span class="co">#&gt; altExpNames(0):</span></a>
-<a class="sourceLine" id="cb31-16" data-line-number="16"><span class="co">#&gt; testingScaffold dim: 22 2 </span></a>
-<a class="sourceLine" id="cb31-17" data-line-number="17"><span class="co">#&gt; weightMatrix dim: 262 262 </span></a>
-<a class="sourceLine" id="cb31-18" data-line-number="18"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
-<a class="sourceLine" id="cb31-19" data-line-number="19"><span class="co">#&gt; param names (3): higherOrderFunctionType higherOrderFunction</span></a>
-<a class="sourceLine" id="cb31-20" data-line-number="20"><span class="co">#&gt;   higherOrderSummaryFunction</span></a>
-<a class="sourceLine" id="cb31-21" data-line-number="21"><span class="co">#&gt; position type: spatial</span></a>
-<a class="sourceLine" id="cb31-22" data-line-number="22"><span class="kw">slot</span>(scHOT_spatial, <span class="st">"scHOT_output"</span>)</a>
-<a class="sourceLine" id="cb31-23" data-line-number="23"><span class="co">#&gt; DataFrame with 0 rows and 0 columns</span></a></code></pre></div>
+<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="co">#&gt; altExpNames(0):</span></a>
+<a class="sourceLine" id="cb31-15" data-line-number="15"><span class="co">#&gt; testingScaffold dim: 22 2 </span></a>
+<a class="sourceLine" id="cb31-16" data-line-number="16"><span class="co">#&gt; weightMatrix dim: 262 262 </span></a>
+<a class="sourceLine" id="cb31-17" data-line-number="17"><span class="co">#&gt; scHOT_output colnames (0):</span></a>
+<a class="sourceLine" id="cb31-18" data-line-number="18"><span class="co">#&gt; param names (3): higherOrderFunctionType higherOrderFunction</span></a>
+<a class="sourceLine" id="cb31-19" data-line-number="19"><span class="co">#&gt;   higherOrderSummaryFunction</span></a>
+<a class="sourceLine" id="cb31-20" data-line-number="20"><span class="co">#&gt; position type: spatial</span></a>
+<a class="sourceLine" id="cb31-21" data-line-number="21"><span class="kw">slot</span>(scHOT_spatial, <span class="st">"scHOT_output"</span>)</a>
+<a class="sourceLine" id="cb31-22" data-line-number="22"><span class="co">#&gt; DataFrame with 0 rows and 0 columns</span></a></code></pre></div>
 <p>We can perform <code>scHOT</code> in a single wrapper function, which will perform the steps as described above, with all parameters given at once.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">scHOT_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scHOT.html">scHOT</a></span>(scHOT_spatial,</a>
 <a class="sourceLine" id="cb32-2" data-line-number="2">                       <span class="dt">testingScaffold =</span> pairs,</a>
@@ -928,17 +809,17 @@
 <a class="sourceLine" id="cb32-16" data-line-number="16"><span class="co">#&gt; DataFrame with 22 rows and 15 columns</span></a>
 <a class="sourceLine" id="cb32-17" data-line-number="17"><span class="co">#&gt;                    gene_1      gene_2 globalHigherOrderFunction</span></a>
 <a class="sourceLine" id="cb32-18" data-line-number="18"><span class="co">#&gt;               &lt;character&gt; &lt;character&gt;                  &lt;matrix&gt;</span></a>
-<a class="sourceLine" id="cb32-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3        0.0635576723282524</span></a>
-<a class="sourceLine" id="cb32-20" data-line-number="20"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3        0.0382758186452675</span></a>
-<a class="sourceLine" id="cb32-21" data-line-number="21"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a           0.1976297004785</span></a>
-<a class="sourceLine" id="cb32-22" data-line-number="22"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10        0.0348910517728306</span></a>
-<a class="sourceLine" id="cb32-23" data-line-number="23"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a        0.0810291196325538</span></a>
+<a class="sourceLine" id="cb32-19" data-line-number="19"><span class="co">#&gt; Dnm1l_Gucy1b3       Dnm1l     Gucy1b3                 0.0635577</span></a>
+<a class="sourceLine" id="cb32-20" data-line-number="20"><span class="co">#&gt; Bai1_Vdac3           Bai1       Vdac3                 0.0382758</span></a>
+<a class="sourceLine" id="cb32-21" data-line-number="21"><span class="co">#&gt; Igf2_Tuba1a          Igf2      Tuba1a                 0.1976297</span></a>
+<a class="sourceLine" id="cb32-22" data-line-number="22"><span class="co">#&gt; Gm15421_Myo10     Gm15421       Myo10                 0.0348911</span></a>
+<a class="sourceLine" id="cb32-23" data-line-number="23"><span class="co">#&gt; Mtor_Tuba1a          Mtor      Tuba1a                 0.0810291</span></a>
 <a class="sourceLine" id="cb32-24" data-line-number="24"><span class="co">#&gt; ...                   ...         ...                       ...</span></a>
-<a class="sourceLine" id="cb32-25" data-line-number="25"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib       -0.0164663524605861</span></a>
-<a class="sourceLine" id="cb32-26" data-line-number="26"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1         0.429443779703935</span></a>
-<a class="sourceLine" id="cb32-27" data-line-number="27"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1        0.0168096226038154</span></a>
-<a class="sourceLine" id="cb32-28" data-line-number="28"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor        0.0762559501445388</span></a>
-<a class="sourceLine" id="cb32-29" data-line-number="29"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b         0.125118214144026</span></a>
+<a class="sourceLine" id="cb32-25" data-line-number="25"><span class="co">#&gt; Ildr2_Nfib          Ildr2        Nfib                -0.0164664</span></a>
+<a class="sourceLine" id="cb32-26" data-line-number="26"><span class="co">#&gt; Cst3_Mlc1            Cst3        Mlc1                 0.4294438</span></a>
+<a class="sourceLine" id="cb32-27" data-line-number="27"><span class="co">#&gt; Cldn11_Mlc1        Cldn11        Mlc1                 0.0168096</span></a>
+<a class="sourceLine" id="cb32-28" data-line-number="28"><span class="co">#&gt; Arrb1_Mtor          Arrb1        Mtor                 0.0762560</span></a>
+<a class="sourceLine" id="cb32-29" data-line-number="29"><span class="co">#&gt; Dnm1l_Fam63b        Dnm1l      Fam63b                 0.1251182</span></a>
 <a class="sourceLine" id="cb32-30" data-line-number="30"><span class="co">#&gt;               numberPermutations storePermutations</span></a>
 <a class="sourceLine" id="cb32-31" data-line-number="31"><span class="co">#&gt;                        &lt;numeric&gt;         &lt;logical&gt;</span></a>
 <a class="sourceLine" id="cb32-32" data-line-number="32"><span class="co">#&gt; Dnm1l_Gucy1b3                  0              TRUE</span></a>
@@ -952,84 +833,58 @@
 <a class="sourceLine" id="cb32-40" data-line-number="40"><span class="co">#&gt; Cldn11_Mlc1                    0              TRUE</span></a>
 <a class="sourceLine" id="cb32-41" data-line-number="41"><span class="co">#&gt; Arrb1_Mtor                    50              TRUE</span></a>
 <a class="sourceLine" id="cb32-42" data-line-number="42"><span class="co">#&gt; Dnm1l_Fam63b                   0              TRUE</span></a>
-<a class="sourceLine" id="cb32-43" data-line-number="43"><span class="co">#&gt;                                                        higherOrderSequence</span></a>
-<a class="sourceLine" id="cb32-44" data-line-number="44"><span class="co">#&gt;                                                              &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb32-45" data-line-number="45"><span class="co">#&gt; Dnm1l_Gucy1b3   0.161981945274213,0.0935047582055998,0.307121773069247,...</span></a>
-<a class="sourceLine" id="cb32-46" data-line-number="46"><span class="co">#&gt; Bai1_Vdac3    0.0173442351843226,-0.670954697960648,-0.176849283198559,...</span></a>
-<a class="sourceLine" id="cb32-47" data-line-number="47"><span class="co">#&gt; Igf2_Tuba1a      0.841092518534058,0.751829715149417,0.817549059664069,...</span></a>
-<a class="sourceLine" id="cb32-48" data-line-number="48"><span class="co">#&gt; Gm15421_Myo10 0.132795734739607,-0.0544596110686273,-0.036475075560555,...</span></a>
-<a class="sourceLine" id="cb32-49" data-line-number="49"><span class="co">#&gt; Mtor_Tuba1a    0.409751611312058,-0.046538147726021,0.0754223079129962,...</span></a>
-<a class="sourceLine" id="cb32-50" data-line-number="50"><span class="co">#&gt; ...                                                                    ...</span></a>
-<a class="sourceLine" id="cb32-51" data-line-number="51"><span class="co">#&gt; Ildr2_Nfib    0.0684620062840911,-0.109704210754198,0.0142887721802513,...</span></a>
-<a class="sourceLine" id="cb32-52" data-line-number="52"><span class="co">#&gt; Cst3_Mlc1      -0.320555376833473,0.234776738766259,-0.228425488014548,...</span></a>
-<a class="sourceLine" id="cb32-53" data-line-number="53"><span class="co">#&gt; Cldn11_Mlc1   -0.504075018521154,-0.197785806963993,-0.346224725013224,...</span></a>
-<a class="sourceLine" id="cb32-54" data-line-number="54"><span class="co">#&gt; Arrb1_Mtor       0.290686976469263,0.420980070599745,0.301204098163697,...</span></a>
-<a class="sourceLine" id="cb32-55" data-line-number="55"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722243382072,0.208850353541951,0.0133499067872466,...</span></a>
-<a class="sourceLine" id="cb32-56" data-line-number="56"><span class="co">#&gt;               higherOrderStatistic</span></a>
-<a class="sourceLine" id="cb32-57" data-line-number="57"><span class="co">#&gt;                          &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb32-58" data-line-number="58"><span class="co">#&gt; Dnm1l_Gucy1b3      0.2768944745582</span></a>
-<a class="sourceLine" id="cb32-59" data-line-number="59"><span class="co">#&gt; Bai1_Vdac3       0.368064869663849</span></a>
-<a class="sourceLine" id="cb32-60" data-line-number="60"><span class="co">#&gt; Igf2_Tuba1a      0.311370448079063</span></a>
-<a class="sourceLine" id="cb32-61" data-line-number="61"><span class="co">#&gt; Gm15421_Myo10    0.285365861860501</span></a>
-<a class="sourceLine" id="cb32-62" data-line-number="62"><span class="co">#&gt; Mtor_Tuba1a      0.345201798116256</span></a>
-<a class="sourceLine" id="cb32-63" data-line-number="63"><span class="co">#&gt; ...                            ...</span></a>
-<a class="sourceLine" id="cb32-64" data-line-number="64"><span class="co">#&gt; Ildr2_Nfib       0.281278097700734</span></a>
-<a class="sourceLine" id="cb32-65" data-line-number="65"><span class="co">#&gt; Cst3_Mlc1          0.2896250256511</span></a>
-<a class="sourceLine" id="cb32-66" data-line-number="66"><span class="co">#&gt; Cldn11_Mlc1      0.321269756520595</span></a>
-<a class="sourceLine" id="cb32-67" data-line-number="67"><span class="co">#&gt; Arrb1_Mtor       0.323072078286733</span></a>
-<a class="sourceLine" id="cb32-68" data-line-number="68"><span class="co">#&gt; Dnm1l_Fam63b     0.364277204057592</span></a>
-<a class="sourceLine" id="cb32-69" data-line-number="69"><span class="co">#&gt;                                                            permutations</span></a>
-<a class="sourceLine" id="cb32-70" data-line-number="70"><span class="co">#&gt;                                                           &lt;NumericList&gt;</span></a>
-<a class="sourceLine" id="cb32-71" data-line-number="71"><span class="co">#&gt; Dnm1l_Gucy1b3                                                        NA</span></a>
-<a class="sourceLine" id="cb32-72" data-line-number="72"><span class="co">#&gt; Bai1_Vdac3                                                           NA</span></a>
-<a class="sourceLine" id="cb32-73" data-line-number="73"><span class="co">#&gt; Igf2_Tuba1a                                                          NA</span></a>
-<a class="sourceLine" id="cb32-74" data-line-number="74"><span class="co">#&gt; Gm15421_Myo10                                                        NA</span></a>
-<a class="sourceLine" id="cb32-75" data-line-number="75"><span class="co">#&gt; Mtor_Tuba1a    0.314567724687323,0.33463945799361,0.297245483654074,...</span></a>
-<a class="sourceLine" id="cb32-76" data-line-number="76"><span class="co">#&gt; ...                                                                 ...</span></a>
-<a class="sourceLine" id="cb32-77" data-line-number="77"><span class="co">#&gt; Ildr2_Nfib                                                           NA</span></a>
-<a class="sourceLine" id="cb32-78" data-line-number="78"><span class="co">#&gt; Cst3_Mlc1                                                            NA</span></a>
-<a class="sourceLine" id="cb32-79" data-line-number="79"><span class="co">#&gt; Cldn11_Mlc1                                                          NA</span></a>
-<a class="sourceLine" id="cb32-80" data-line-number="80"><span class="co">#&gt; Arrb1_Mtor    0.299673756848239,0.280243235651176,0.321495004806518,...</span></a>
-<a class="sourceLine" id="cb32-81" data-line-number="81"><span class="co">#&gt; Dnm1l_Fam63b                                                         NA</span></a>
-<a class="sourceLine" id="cb32-82" data-line-number="82"><span class="co">#&gt;               pvalPermutations FDRPermutations numberPermutationsEstimated</span></a>
-<a class="sourceLine" id="cb32-83" data-line-number="83"><span class="co">#&gt;                      &lt;numeric&gt;       &lt;numeric&gt;                   &lt;integer&gt;</span></a>
-<a class="sourceLine" id="cb32-84" data-line-number="84"><span class="co">#&gt; Dnm1l_Gucy1b3               NA              NA                         200</span></a>
-<a class="sourceLine" id="cb32-85" data-line-number="85"><span class="co">#&gt; Bai1_Vdac3                  NA              NA                         200</span></a>
-<a class="sourceLine" id="cb32-86" data-line-number="86"><span class="co">#&gt; Igf2_Tuba1a                 NA              NA                          50</span></a>
-<a class="sourceLine" id="cb32-87" data-line-number="87"><span class="co">#&gt; Gm15421_Myo10               NA              NA                         200</span></a>
-<a class="sourceLine" id="cb32-88" data-line-number="88"><span class="co">#&gt; Mtor_Tuba1a               0.26             0.7                         250</span></a>
-<a class="sourceLine" id="cb32-89" data-line-number="89"><span class="co">#&gt; ...                        ...             ...                         ...</span></a>
-<a class="sourceLine" id="cb32-90" data-line-number="90"><span class="co">#&gt; Ildr2_Nfib                  NA              NA                         150</span></a>
-<a class="sourceLine" id="cb32-91" data-line-number="91"><span class="co">#&gt; Cst3_Mlc1                   NA              NA                         250</span></a>
-<a class="sourceLine" id="cb32-92" data-line-number="92"><span class="co">#&gt; Cldn11_Mlc1                 NA              NA                         200</span></a>
-<a class="sourceLine" id="cb32-93" data-line-number="93"><span class="co">#&gt; Arrb1_Mtor                0.42             0.7                         200</span></a>
-<a class="sourceLine" id="cb32-94" data-line-number="94"><span class="co">#&gt; Dnm1l_Fam63b                NA              NA                         250</span></a>
-<a class="sourceLine" id="cb32-95" data-line-number="95"><span class="co">#&gt;               globalLowerRangeEstimated globalUpperRangeEstimated pvalEstimated</span></a>
-<a class="sourceLine" id="cb32-96" data-line-number="96"><span class="co">#&gt;                               &lt;numeric&gt;                 &lt;numeric&gt;     &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb32-97" data-line-number="97"><span class="co">#&gt; Dnm1l_Gucy1b3        0.0434098144887706        0.0861924010629618          0.97</span></a>
-<a class="sourceLine" id="cb32-98" data-line-number="98"><span class="co">#&gt; Bai1_Vdac3           0.0434098144887706        0.0861924010629618         0.045</span></a>
-<a class="sourceLine" id="cb32-99" data-line-number="99"><span class="co">#&gt; Igf2_Tuba1a           0.178921315869504         0.178921315869504          0.54</span></a>
-<a class="sourceLine" id="cb32-100" data-line-number="100"><span class="co">#&gt; Gm15421_Myo10        0.0434098144887706        0.0861924010629618         0.955</span></a>
-<a class="sourceLine" id="cb32-101" data-line-number="101"><span class="co">#&gt; Mtor_Tuba1a          0.0434098144887706         0.178921315869504         0.192</span></a>
-<a class="sourceLine" id="cb32-102" data-line-number="102"><span class="co">#&gt; ...                                 ...                       ...           ...</span></a>
-<a class="sourceLine" id="cb32-103" data-line-number="103"><span class="co">#&gt; Ildr2_Nfib           0.0434098144887706        0.0810291196325538          0.96</span></a>
-<a class="sourceLine" id="cb32-104" data-line-number="104"><span class="co">#&gt; Cst3_Mlc1            0.0434098144887706         0.178921315869504          0.92</span></a>
-<a class="sourceLine" id="cb32-105" data-line-number="105"><span class="co">#&gt; Cldn11_Mlc1          0.0434098144887706        0.0861924010629618          0.51</span></a>
-<a class="sourceLine" id="cb32-106" data-line-number="106"><span class="co">#&gt; Arrb1_Mtor           0.0434098144887706        0.0861924010629618         0.485</span></a>
-<a class="sourceLine" id="cb32-107" data-line-number="107"><span class="co">#&gt; Dnm1l_Fam63b         0.0434098144887706         0.178921315869504         0.064</span></a>
-<a class="sourceLine" id="cb32-108" data-line-number="108"><span class="co">#&gt;                    FDREstimated</span></a>
-<a class="sourceLine" id="cb32-109" data-line-number="109"><span class="co">#&gt;                       &lt;numeric&gt;</span></a>
-<a class="sourceLine" id="cb32-110" data-line-number="110"><span class="co">#&gt; Dnm1l_Gucy1b3              0.97</span></a>
-<a class="sourceLine" id="cb32-111" data-line-number="111"><span class="co">#&gt; Bai1_Vdac3    0.469333333333333</span></a>
-<a class="sourceLine" id="cb32-112" data-line-number="112"><span class="co">#&gt; Igf2_Tuba1a   0.913846153846154</span></a>
-<a class="sourceLine" id="cb32-113" data-line-number="113"><span class="co">#&gt; Gm15421_Myo10              0.97</span></a>
-<a class="sourceLine" id="cb32-114" data-line-number="114"><span class="co">#&gt; Mtor_Tuba1a               0.616</span></a>
-<a class="sourceLine" id="cb32-115" data-line-number="115"><span class="co">#&gt; ...                         ...</span></a>
-<a class="sourceLine" id="cb32-116" data-line-number="116"><span class="co">#&gt; Ildr2_Nfib                 0.97</span></a>
-<a class="sourceLine" id="cb32-117" data-line-number="117"><span class="co">#&gt; Cst3_Mlc1                  0.97</span></a>
-<a class="sourceLine" id="cb32-118" data-line-number="118"><span class="co">#&gt; Cldn11_Mlc1   0.913846153846154</span></a>
-<a class="sourceLine" id="cb32-119" data-line-number="119"><span class="co">#&gt; Arrb1_Mtor    0.913846153846154</span></a>
-<a class="sourceLine" id="cb32-120" data-line-number="120"><span class="co">#&gt; Dnm1l_Fam63b  0.469333333333333</span></a></code></pre></div>
+<a class="sourceLine" id="cb32-43" data-line-number="43"><span class="co">#&gt;                                higherOrderSequence higherOrderStatistic</span></a>
+<a class="sourceLine" id="cb32-44" data-line-number="44"><span class="co">#&gt;                                      &lt;NumericList&gt;            &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb32-45" data-line-number="45"><span class="co">#&gt; Dnm1l_Gucy1b3    0.1619819,0.0935048,0.3071218,...             0.276894</span></a>
+<a class="sourceLine" id="cb32-46" data-line-number="46"><span class="co">#&gt; Bai1_Vdac3     0.0173442,-0.6709547,-0.1768493,...             0.368065</span></a>
+<a class="sourceLine" id="cb32-47" data-line-number="47"><span class="co">#&gt; Igf2_Tuba1a         0.841093,0.751830,0.817549,...             0.311370</span></a>
+<a class="sourceLine" id="cb32-48" data-line-number="48"><span class="co">#&gt; Gm15421_Myo10  0.1327957,-0.0544596,-0.0364751,...             0.285366</span></a>
+<a class="sourceLine" id="cb32-49" data-line-number="49"><span class="co">#&gt; Mtor_Tuba1a    0.4097516,-0.0465381, 0.0754223,...             0.345202</span></a>
+<a class="sourceLine" id="cb32-50" data-line-number="50"><span class="co">#&gt; ...                                            ...                  ...</span></a>
+<a class="sourceLine" id="cb32-51" data-line-number="51"><span class="co">#&gt; Ildr2_Nfib     0.0684620,-0.1097042, 0.0142888,...             0.281278</span></a>
+<a class="sourceLine" id="cb32-52" data-line-number="52"><span class="co">#&gt; Cst3_Mlc1        -0.320555, 0.234777,-0.228425,...             0.289625</span></a>
+<a class="sourceLine" id="cb32-53" data-line-number="53"><span class="co">#&gt; Cldn11_Mlc1      -0.504075,-0.197786,-0.346225,...             0.321270</span></a>
+<a class="sourceLine" id="cb32-54" data-line-number="54"><span class="co">#&gt; Arrb1_Mtor          0.290687,0.420980,0.301204,...             0.323072</span></a>
+<a class="sourceLine" id="cb32-55" data-line-number="55"><span class="co">#&gt; Dnm1l_Fam63b  -0.0531722, 0.2088504, 0.0133499,...             0.364277</span></a>
+<a class="sourceLine" id="cb32-56" data-line-number="56"><span class="co">#&gt;                                 permutations pvalPermutations FDRPermutations</span></a>
+<a class="sourceLine" id="cb32-57" data-line-number="57"><span class="co">#&gt;                                &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb32-58" data-line-number="58"><span class="co">#&gt; Dnm1l_Gucy1b3                             NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-59" data-line-number="59"><span class="co">#&gt; Bai1_Vdac3                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-60" data-line-number="60"><span class="co">#&gt; Igf2_Tuba1a                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-61" data-line-number="61"><span class="co">#&gt; Gm15421_Myo10                             NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-62" data-line-number="62"><span class="co">#&gt; Mtor_Tuba1a   0.314568,0.334639,0.297245,...             0.26             0.7</span></a>
+<a class="sourceLine" id="cb32-63" data-line-number="63"><span class="co">#&gt; ...                                      ...              ...             ...</span></a>
+<a class="sourceLine" id="cb32-64" data-line-number="64"><span class="co">#&gt; Ildr2_Nfib                                NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-65" data-line-number="65"><span class="co">#&gt; Cst3_Mlc1                                 NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-66" data-line-number="66"><span class="co">#&gt; Cldn11_Mlc1                               NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-67" data-line-number="67"><span class="co">#&gt; Arrb1_Mtor    0.299674,0.280243,0.321495,...             0.42             0.7</span></a>
+<a class="sourceLine" id="cb32-68" data-line-number="68"><span class="co">#&gt; Dnm1l_Fam63b                              NA               NA              NA</span></a>
+<a class="sourceLine" id="cb32-69" data-line-number="69"><span class="co">#&gt;               numberPermutationsEstimated globalLowerRangeEstimated</span></a>
+<a class="sourceLine" id="cb32-70" data-line-number="70"><span class="co">#&gt;                                 &lt;integer&gt;                 &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb32-71" data-line-number="71"><span class="co">#&gt; Dnm1l_Gucy1b3                         200                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-72" data-line-number="72"><span class="co">#&gt; Bai1_Vdac3                            200                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-73" data-line-number="73"><span class="co">#&gt; Igf2_Tuba1a                            50                 0.1789213</span></a>
+<a class="sourceLine" id="cb32-74" data-line-number="74"><span class="co">#&gt; Gm15421_Myo10                         200                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-75" data-line-number="75"><span class="co">#&gt; Mtor_Tuba1a                           250                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-76" data-line-number="76"><span class="co">#&gt; ...                                   ...                       ...</span></a>
+<a class="sourceLine" id="cb32-77" data-line-number="77"><span class="co">#&gt; Ildr2_Nfib                            150                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-78" data-line-number="78"><span class="co">#&gt; Cst3_Mlc1                             250                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-79" data-line-number="79"><span class="co">#&gt; Cldn11_Mlc1                           200                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-80" data-line-number="80"><span class="co">#&gt; Arrb1_Mtor                            200                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-81" data-line-number="81"><span class="co">#&gt; Dnm1l_Fam63b                          250                 0.0434098</span></a>
+<a class="sourceLine" id="cb32-82" data-line-number="82"><span class="co">#&gt;               globalUpperRangeEstimated pvalEstimated FDREstimated</span></a>
+<a class="sourceLine" id="cb32-83" data-line-number="83"><span class="co">#&gt;                               &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb32-84" data-line-number="84"><span class="co">#&gt; Dnm1l_Gucy1b3                 0.0861924         0.970     0.970000</span></a>
+<a class="sourceLine" id="cb32-85" data-line-number="85"><span class="co">#&gt; Bai1_Vdac3                    0.0861924         0.045     0.469333</span></a>
+<a class="sourceLine" id="cb32-86" data-line-number="86"><span class="co">#&gt; Igf2_Tuba1a                   0.1789213         0.540     0.913846</span></a>
+<a class="sourceLine" id="cb32-87" data-line-number="87"><span class="co">#&gt; Gm15421_Myo10                 0.0861924         0.955     0.970000</span></a>
+<a class="sourceLine" id="cb32-88" data-line-number="88"><span class="co">#&gt; Mtor_Tuba1a                   0.1789213         0.192     0.616000</span></a>
+<a class="sourceLine" id="cb32-89" data-line-number="89"><span class="co">#&gt; ...                                 ...           ...          ...</span></a>
+<a class="sourceLine" id="cb32-90" data-line-number="90"><span class="co">#&gt; Ildr2_Nfib                    0.0810291         0.960     0.970000</span></a>
+<a class="sourceLine" id="cb32-91" data-line-number="91"><span class="co">#&gt; Cst3_Mlc1                     0.1789213         0.920     0.970000</span></a>
+<a class="sourceLine" id="cb32-92" data-line-number="92"><span class="co">#&gt; Cldn11_Mlc1                   0.0861924         0.510     0.913846</span></a>
+<a class="sourceLine" id="cb32-93" data-line-number="93"><span class="co">#&gt; Arrb1_Mtor                    0.0861924         0.485     0.913846</span></a>
+<a class="sourceLine" id="cb32-94" data-line-number="94"><span class="co">#&gt; Dnm1l_Fam63b                  0.1789213         0.064     0.469333</span></a></code></pre></div>
 <p>Again, we can examine the results in terms of the spatial expression and the local higher order sequences.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw"><a href="../reference/plotOrderedExpression.html">plotOrderedExpression</a></span>(scHOT_spatial, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Arrb1"</span>, <span class="st">"Mtor"</span>),</a>
 <a class="sourceLine" id="cb33-2" data-line-number="2">                      <span class="dt">positionColData =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"-x"</span>, <span class="st">"y"</span>),</a>
@@ -1045,13 +900,13 @@
 <h1 class="hasAnchor">
 <a href="#misc" class="anchor"></a>Misc</h1>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2019-07-05)</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="co">#&gt; R Under development (unstable) (2020-03-15 r77975)</span></a>
 <a class="sourceLine" id="cb35-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
-<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.3</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Mojave 10.14.6</span></a>
 <a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb35-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
-<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.0.dylib</span></a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib</span></a>
 <a class="sourceLine" id="cb35-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb35-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
 <a class="sourceLine" id="cb35-11" data-line-number="11"><span class="co">#&gt; [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8</span></a>
@@ -1061,39 +916,38 @@
 <a class="sourceLine" id="cb35-15" data-line-number="15"><span class="co">#&gt; [8] methods   base     </span></a>
 <a class="sourceLine" id="cb35-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb35-17" data-line-number="17"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb35-18" data-line-number="18"><span class="co">#&gt;  [1] scater_1.14.4               scHOT_0.99.0               </span></a>
-<a class="sourceLine" id="cb35-19" data-line-number="19"><span class="co">#&gt;  [3] ggplot2_3.2.1               SingleCellExperiment_1.8.0 </span></a>
-<a class="sourceLine" id="cb35-20" data-line-number="20"><span class="co">#&gt;  [5] SummarizedExperiment_1.16.0 DelayedArray_0.12.0        </span></a>
-<a class="sourceLine" id="cb35-21" data-line-number="21"><span class="co">#&gt;  [7] BiocParallel_1.20.0         matrixStats_0.55.0         </span></a>
-<a class="sourceLine" id="cb35-22" data-line-number="22"><span class="co">#&gt;  [9] Biobase_2.46.0              GenomicRanges_1.38.0       </span></a>
-<a class="sourceLine" id="cb35-23" data-line-number="23"><span class="co">#&gt; [11] GenomeInfoDb_1.22.0         IRanges_2.20.1             </span></a>
-<a class="sourceLine" id="cb35-24" data-line-number="24"><span class="co">#&gt; [13] S4Vectors_0.24.3            BiocGenerics_0.32.0        </span></a>
+<a class="sourceLine" id="cb35-18" data-line-number="18"><span class="co">#&gt;  [1] scater_1.15.28              scHOT_0.99.0               </span></a>
+<a class="sourceLine" id="cb35-19" data-line-number="19"><span class="co">#&gt;  [3] ggplot2_3.3.0               SingleCellExperiment_1.9.2 </span></a>
+<a class="sourceLine" id="cb35-20" data-line-number="20"><span class="co">#&gt;  [5] SummarizedExperiment_1.17.3 DelayedArray_0.13.7        </span></a>
+<a class="sourceLine" id="cb35-21" data-line-number="21"><span class="co">#&gt;  [7] BiocParallel_1.21.2         matrixStats_0.56.0         </span></a>
+<a class="sourceLine" id="cb35-22" data-line-number="22"><span class="co">#&gt;  [9] Biobase_2.47.2              GenomicRanges_1.39.2       </span></a>
+<a class="sourceLine" id="cb35-23" data-line-number="23"><span class="co">#&gt; [11] GenomeInfoDb_1.23.13        IRanges_2.21.3             </span></a>
+<a class="sourceLine" id="cb35-24" data-line-number="24"><span class="co">#&gt; [13] S4Vectors_0.25.13           BiocGenerics_0.33.0        </span></a>
 <a class="sourceLine" id="cb35-25" data-line-number="25"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb35-26" data-line-number="26"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb35-27" data-line-number="27"><span class="co">#&gt;  [1] viridis_0.5.1            BiocSingular_1.2.0       viridisLite_0.3.0       </span></a>
-<a class="sourceLine" id="cb35-28" data-line-number="28"><span class="co">#&gt;  [4] DelayedMatrixStats_1.8.0 assertthat_0.2.1         GenomeInfoDbData_1.2.2  </span></a>
-<a class="sourceLine" id="cb35-29" data-line-number="29"><span class="co">#&gt;  [7] vipor_0.4.5              yaml_2.2.0               pillar_1.4.2            </span></a>
-<a class="sourceLine" id="cb35-30" data-line-number="30"><span class="co">#&gt; [10] backports_1.1.5          lattice_0.20-38          glue_1.3.1              </span></a>
-<a class="sourceLine" id="cb35-31" data-line-number="31"><span class="co">#&gt; [13] digest_0.6.23            XVector_0.26.0           polyclip_1.10-0         </span></a>
-<a class="sourceLine" id="cb35-32" data-line-number="32"><span class="co">#&gt; [16] colorspace_1.4-1         cowplot_1.0.0            htmltools_0.4.0         </span></a>
-<a class="sourceLine" id="cb35-33" data-line-number="33"><span class="co">#&gt; [19] Matrix_1.2-18            plyr_1.8.4               pkgconfig_2.0.3         </span></a>
-<a class="sourceLine" id="cb35-34" data-line-number="34"><span class="co">#&gt; [22] zlibbioc_1.32.0          purrr_0.3.3              scales_1.1.0            </span></a>
+<a class="sourceLine" id="cb35-27" data-line-number="27"><span class="co">#&gt;  [1] viridis_0.5.1            BiocSingular_1.3.2       viridisLite_0.3.0       </span></a>
+<a class="sourceLine" id="cb35-28" data-line-number="28"><span class="co">#&gt;  [4] splines_4.0.0            DelayedMatrixStats_1.9.0 assertthat_0.2.1        </span></a>
+<a class="sourceLine" id="cb35-29" data-line-number="29"><span class="co">#&gt;  [7] GenomeInfoDbData_1.2.2   vipor_0.4.5              yaml_2.2.1              </span></a>
+<a class="sourceLine" id="cb35-30" data-line-number="30"><span class="co">#&gt; [10] pillar_1.4.3             backports_1.1.5          lattice_0.20-40         </span></a>
+<a class="sourceLine" id="cb35-31" data-line-number="31"><span class="co">#&gt; [13] glue_1.3.2               digest_0.6.25            XVector_0.27.1          </span></a>
+<a class="sourceLine" id="cb35-32" data-line-number="32"><span class="co">#&gt; [16] polyclip_1.10-0          colorspace_1.4-1         htmltools_0.4.0         </span></a>
+<a class="sourceLine" id="cb35-33" data-line-number="33"><span class="co">#&gt; [19] Matrix_1.2-18            plyr_1.8.6               pkgconfig_2.0.3         </span></a>
+<a class="sourceLine" id="cb35-34" data-line-number="34"><span class="co">#&gt; [22] zlibbioc_1.33.1          purrr_0.3.3              scales_1.1.0            </span></a>
 <a class="sourceLine" id="cb35-35" data-line-number="35"><span class="co">#&gt; [25] tweenr_1.0.1             ggforce_0.3.1            tibble_2.1.3            </span></a>
-<a class="sourceLine" id="cb35-36" data-line-number="36"><span class="co">#&gt; [28] farver_2.0.1             withr_2.1.2              lazyeval_0.2.2          </span></a>
+<a class="sourceLine" id="cb35-36" data-line-number="36"><span class="co">#&gt; [28] mgcv_1.8-31              farver_2.0.3             withr_2.1.2             </span></a>
 <a class="sourceLine" id="cb35-37" data-line-number="37"><span class="co">#&gt; [31] deldir_0.1-25            magrittr_1.5             crayon_1.3.4            </span></a>
-<a class="sourceLine" id="cb35-38" data-line-number="38"><span class="co">#&gt; [34] memoise_1.1.0            evaluate_0.14            fs_1.3.1                </span></a>
-<a class="sourceLine" id="cb35-39" data-line-number="39"><span class="co">#&gt; [37] MASS_7.3-51.4            beeswarm_0.2.3           tools_3.6.1             </span></a>
-<a class="sourceLine" id="cb35-40" data-line-number="40"><span class="co">#&gt; [40] lifecycle_0.1.0          stringr_1.4.0            munsell_0.5.0           </span></a>
-<a class="sourceLine" id="cb35-41" data-line-number="41"><span class="co">#&gt; [43] irlba_2.3.3              compiler_3.6.1           pkgdown_1.4.1           </span></a>
-<a class="sourceLine" id="cb35-42" data-line-number="42"><span class="co">#&gt; [46] rsvd_1.0.2               rlang_0.4.2              scattermore_0.6         </span></a>
-<a class="sourceLine" id="cb35-43" data-line-number="43"><span class="co">#&gt; [49] grid_3.6.1               RCurl_1.95-4.12          BiocNeighbors_1.4.1     </span></a>
-<a class="sourceLine" id="cb35-44" data-line-number="44"><span class="co">#&gt; [52] rstudioapi_0.10          igraph_1.2.4.2           labeling_0.3            </span></a>
-<a class="sourceLine" id="cb35-45" data-line-number="45"><span class="co">#&gt; [55] bitops_1.0-6             rmarkdown_1.18           gtable_0.3.0            </span></a>
-<a class="sourceLine" id="cb35-46" data-line-number="46"><span class="co">#&gt; [58] reshape_0.8.8            reshape2_1.4.3           R6_2.4.1                </span></a>
-<a class="sourceLine" id="cb35-47" data-line-number="47"><span class="co">#&gt; [61] gridExtra_2.3            knitr_1.26               dplyr_0.8.3             </span></a>
-<a class="sourceLine" id="cb35-48" data-line-number="48"><span class="co">#&gt; [64] rprojroot_1.3-2          desc_1.2.0               stringi_1.4.3           </span></a>
-<a class="sourceLine" id="cb35-49" data-line-number="49"><span class="co">#&gt; [67] ggbeeswarm_0.6.0         Rcpp_1.0.3               tidyselect_0.2.5        </span></a>
-<a class="sourceLine" id="cb35-50" data-line-number="50"><span class="co">#&gt; [70] xfun_0.11</span></a></code></pre></div>
+<a class="sourceLine" id="cb35-38" data-line-number="38"><span class="co">#&gt; [34] memoise_1.1.0            evaluate_0.14            fs_1.3.2                </span></a>
+<a class="sourceLine" id="cb35-39" data-line-number="39"><span class="co">#&gt; [37] nlme_3.1-145             MASS_7.3-51.5            beeswarm_0.2.3          </span></a>
+<a class="sourceLine" id="cb35-40" data-line-number="40"><span class="co">#&gt; [40] tools_4.0.0              lifecycle_0.2.0          stringr_1.4.0           </span></a>
+<a class="sourceLine" id="cb35-41" data-line-number="41"><span class="co">#&gt; [43] munsell_0.5.0            irlba_2.3.3              compiler_4.0.0          </span></a>
+<a class="sourceLine" id="cb35-42" data-line-number="42"><span class="co">#&gt; [46] pkgdown_1.4.1            rsvd_1.0.3               rlang_0.4.5             </span></a>
+<a class="sourceLine" id="cb35-43" data-line-number="43"><span class="co">#&gt; [49] grid_4.0.0               RCurl_1.98-1.1           BiocNeighbors_1.5.2     </span></a>
+<a class="sourceLine" id="cb35-44" data-line-number="44"><span class="co">#&gt; [52] rstudioapi_0.11          igraph_1.2.4.2           bitops_1.0-6            </span></a>
+<a class="sourceLine" id="cb35-45" data-line-number="45"><span class="co">#&gt; [55] labeling_0.3             rmarkdown_2.1            gtable_0.3.0            </span></a>
+<a class="sourceLine" id="cb35-46" data-line-number="46"><span class="co">#&gt; [58] reshape_0.8.8            R6_2.4.1                 gridExtra_2.3           </span></a>
+<a class="sourceLine" id="cb35-47" data-line-number="47"><span class="co">#&gt; [61] knitr_1.28               rprojroot_1.3-2          desc_1.2.0              </span></a>
+<a class="sourceLine" id="cb35-48" data-line-number="48"><span class="co">#&gt; [64] stringi_1.4.6            ggbeeswarm_0.6.0         Rcpp_1.0.3              </span></a>
+<a class="sourceLine" id="cb35-49" data-line-number="49"><span class="co">#&gt; [67] tidyselect_1.0.0         xfun_0.12</span></a></code></pre></div>
 </div>
   </div>
 
