@@ -37,7 +37,7 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL, positionType = NULL,
     cellData <- S4Vectors::DataFrame(row.names = colnames(mat))
   }
 
-  if (!"DataFrame" %in% methods::is(cellData)) {
+  if (!is(cellData, "DataFrame")) {
     cellData <- S4Vectors::DataFrame(cellData)
   }
 
@@ -226,26 +226,23 @@ trajectoryWeightMatrix <- function(n, type = NULL, span = NULL) {
 
   if (type == "harmonic") {
     for (i in seq_len(n)) {
-      for (j in seq_len(n)) {
-        W[i, j] <- 1/(1 + abs(i - j))
-      }
+      j = seq_len(n)
+      W[i, j] <- 1/(1 + abs(i - j))
     }
   }
 
   if (type == "triangular") {
     for (i in seq_len(n)) {
-      for (j in seq_len(n)) {
-        W[i, j] <- (abs(j - i) <= spanSamples) *
-          ((spanSamples + 1) - abs(j - i))/(spanSamples + 1)
-      }
+      j = seq_len(n)
+      W[i, j] <- (abs(j - i) <= spanSamples) *
+        ((spanSamples + 1) - abs(j - i))/(spanSamples + 1)
     }
   }
 
   if (type == "block") {
     for (i in seq_len(n)) {
-      for (j in seq_len(n)) {
-        W[i, j] <- (abs(j - i) <= spanSamples) * 1
-      }
+      j = seq_len(n)
+      W[i, j] <- (abs(j - i) <= spanSamples) * 1
     }
   }
 
@@ -288,7 +285,7 @@ spatialWeightMatrix <- function(x, span = NULL) {
   if (is.null(span)) {
     span = 13/n
     if (span > 1) span = 0.5
-    message(paste0("span not specified, defaulting to ", round(span, 2)))
+    message("span not specified, defaulting to ", round(span, 2))
   }
 
   # calculate euclidean distance of points on 2D
@@ -419,7 +416,7 @@ scHOT_setWeightMatrix <- function(scHOT,
 
   # input check
 
-  if (!"scHOT" %in% methods::is(scHOT)) {
+  if (!is(scHOT, "scHOT")) {
     stop("scHOT needs to be scHOT class")
   }
 
@@ -657,7 +654,7 @@ scHOT_calculateGlobalHigherOrderFunction <- function(
     message("higherOrderFunction given will replace any stored param")
     scHOT@params$higherOrderFunction <- higherOrderFunction
   }
-  if (! "function" %in% methods::is(higherOrderFunction)) {
+  if (!is(higherOrderFunction, "function")) {
     stop("higherOrderFunction must be a function object")
   }
   if (is.null(higherOrderFunction)) {
@@ -904,7 +901,7 @@ scHOT_stripOutput <- function(scHOT, force = TRUE,
           file_name <- paste0(file_name, ".Rds")
         }
 
-        message(paste0("The current scHOT wil be stored as ", file_name))
+        message("The current scHOT wil be stored as ", file_name)
         saveRDS(scHOT, file = file_name)
 
       }

@@ -162,7 +162,7 @@ weightedSpearman = function(x, y, w = 1) {
 
   xr = rank(x[keep])
   yr = rank(y[keep])
-  return(weightedPearson(x = xr, y = yr, w =w[keep]))
+  return(weightedPearson(x = xr, y = yr, w = w[keep]))
 }
 
 
