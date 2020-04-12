@@ -805,20 +805,17 @@ scHOT_setPermutationScaffold = function(scHOT,
   scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
 
   if (numberScaffold > nrow(scHOT@testingScaffold)) {
-    message(paste0("numberScaffold set higher than the scaffold, ",
-                   "setting permutation number for all tests"))
+    message("numberScaffold set higher than the scaffold, setting permutation number for all tests")
     scHOT@scHOT_output$numberPermutations = numberPermutations
   } else {
 
     if (numberScaffold < 6) {
-      message(paste0("numberScaffold set lower than 6, ",
-                     "resetting to 6"))
+      message("numberScaffold set lower than 6, resetting to 6")
       numberScaffold <- 6
     }
 
     if (is.null(scHOT@scHOT_output$globalHigherOrderFunction)) {
-      stop(paste("need scHOT@scHOT_output$globalHigherOrderFunction to",
-                 " take random stratified sample"))
+      stop("need scHOT@scHOT_output$globalHigherOrderFunction to take random stratified sample")
     }
 
     scHOT@scHOT_output$numberPermutations = 0

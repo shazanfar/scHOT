@@ -70,8 +70,7 @@ scHOT_calculateHigherOrderTestStatistics <- function(
   if (is.null(higherOrderSummaryFunction)) {
     higherOrderSummaryFunction = scHOT@params$higherOrderSummaryFunction
     if (is.null(higherOrderSummaryFunction)) {
-      stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT
-      object's params slot, please provide one!"))
+      stop("No higherOrderSummaryFunction provided or stored in scHOT object's params slot, please provide one!")
     }
   } else {
     message("higherOrderSummaryFunction will replace any stored param")
@@ -87,8 +86,7 @@ scHOT_calculateHigherOrderTestStatistics <- function(
 
   expressionData = SummarizedExperiment::assay(scHOT, "expression")
   if (is.null(expressionData)) {
-    stop(paste0("No expressionData found, please provide an",
-                " assay(scHOT, \"expression\") slot"))
+    stop("No expressionData found, please provide an assay(scHOT, \"expression\") slot")
   }
 
   weightMatrix = scHOT@weightMatrix
@@ -222,14 +220,12 @@ scHOT_performPermutationTest <- function(
 
   higherOrderSummaryFunction <- scHOT@params$higherOrderSummaryFunction
   if (is.null(higherOrderSummaryFunction)) {
-    stop(paste0("No higherOrderSummaryFunction provided or stored in scHOT
-    object's params slot, please provide one!"))
+    stop("No higherOrderSummaryFunction provided or stored in scHOT object's params slot, please provide one!")
   }
 
   expressionData <- SummarizedExperiment::assay(scHOT, "expression")
   if (is.null(expressionData)) {
-    stop(paste0("No expressionData found, please provide",
-                " an assay(scHOT, \"expression\") slot"))
+    stop("No expressionData found, please provide an assay(scHOT, \"expression\") slot")
   }
 
   weightMatrix = scHOT@weightMatrix
@@ -405,9 +401,7 @@ estimatePvalues <- function(stats,
 
     if (usenperm_estimate) {
       if (nperm_estimate >= nrow(permstatsDF)) {
-        message(paste0("nperm_estimate given is larger than or equal to total",
-                       " number of permutations... using all",
-                       " permutations"))
+        message("nperm_estimate given is larger than or equal to total number of permutations... using all permutations")
         permstatsDF_sorted_sub = na.omit(permstatsDF)
       }
       else {
@@ -416,16 +410,14 @@ estimatePvalues <- function(stats,
       }
     } else {
       if (is.null(maxDist)) {
-        message(paste0("usenperm_estimate set as FALSE, but maxDist not",
-                       " given... defaulting to maxDist = 0.1"))
+        message("usenperm_estimate set as FALSE, but maxDist not given... defaulting to maxDist = 0.1")
         maxDist = 0.1
       }
 
       permstatsDF_sorted_sub = subset(na.omit(permstatsDF), dist <
                                         maxDist)
       if (nrow(permstatsDF_sorted_sub) == 0) {
-        message(paste0("no permutations found within given",
-                       " maxDist... using all permutations instead"))
+        message("no permutations found within given maxDist... using all permutations instead")
         permstatsDF_sorted_sub = na.omit(permstatsDF)
       }
     }
