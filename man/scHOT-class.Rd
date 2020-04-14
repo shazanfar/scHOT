@@ -3,6 +3,7 @@
 \docType{class}
 \name{scHOT-class}
 \alias{scHOT-class}
+\alias{.scHOT}
 \title{scHOT class}
 \description{
 scHOT class

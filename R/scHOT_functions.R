@@ -111,9 +111,8 @@ scHOT_calculateHigherOrderTestStatistics <- function(
   }
 
   if (nrow(scHOT@scHOT_output) == 0) {
-    scHOT@scHOT_output = DataFrame(
-      testingScaffold
-    )
+    # scHOT@scHOT_output = DataFrame(testingScaffold)
+    scHOT_output(scHOT) <- DataFrame(testingScaffold)
   }
 
   scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
@@ -339,7 +338,8 @@ scHOT_performPermutationTest <- function(
 
   DF$FDRPermutations = stats::p.adjust(DF$pvalPermutations, method = "BH")
 
-  scHOT@scHOT_output <- DF
+  # scHOT@scHOT_output <- DF
+  scHOT_output(scHOT) <- DF
 
   if (store) {
     scHOT@scHOT_output$permutations <- IRanges::NumericList(

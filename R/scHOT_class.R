@@ -57,14 +57,14 @@ check_validity <- function(object) {
 
 
 
-setClass("scHOT",
-         slots = c(testingScaffold = "matrix",
-                   weightMatrix = "matrixORdgCMatrix",
-                   scHOT_output = "data.frameORDataFrame",
-                   params = "list",
-                   positionType = "characterORNULL",
-                   positionColData = "characterORNULL"),
-         contains = "SingleCellExperiment")
+.scHOT <- setClass("scHOT",
+                   slots = c(testingScaffold = "matrix",
+                             weightMatrix = "matrixORdgCMatrix",
+                             scHOT_output = "data.frameORDataFrame",
+                             params = "list",
+                             positionType = "characterORNULL",
+                             positionColData = "characterORNULL"),
+                   contains = "SingleCellExperiment")
 
 
 #' @importFrom S4Vectors coolcat

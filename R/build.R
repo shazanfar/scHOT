@@ -44,11 +44,15 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL, positionType = NULL,
   SCE <- SingleCellExperiment(assays = S4Vectors::SimpleList(expression = mat),
                               colData = cellData)
 
-  scHOT <- methods::as(SCE, "scHOT")
+  # scHOT <- methods::as(SCE, "scHOT")
 
-  scHOT@positionType <- positionType
+  # scHOT@positionType <- positionType
 
-  scHOT@positionColData <- positionColData
+  # scHOT@positionColData <- positionColData
+
+  scHOT <- .scHOT(SCE,
+                  positionType = positionType,
+                  positionColData = positionColData)
 
   methods::validObject(scHOT)
 
@@ -110,11 +114,15 @@ scHOT_buildFromSCE <- function(sce,
                               colData = colData(sce))
 
 
-  scHOT <- methods::as(SCE, "scHOT")
+  # scHOT <- methods::as(SCE, "scHOT")
 
-  scHOT@positionType <- positionType
+  # scHOT@positionType <- positionType
 
-  scHOT@positionColData <- positionColData
+  # scHOT@positionColData <- positionColData
+
+  scHOT <- .scHOT(SCE,
+                  positionType = positionType,
+                  positionColData = positionColData)
 
   methods::validObject(scHOT)
 
@@ -165,7 +173,8 @@ scHOT_addTestingScaffold <- function(scHOT, testingScaffold) {
 
   colnames(testingScaffold) <- paste0("gene_", seq_len(ncol(testingScaffold)))
 
-  scHOT@testingScaffold <- testingScaffold
+  # scHOT@testingScaffold <- testingScaffold
+  testingScaffold(scHOT) <- testingScaffold
 
   return(scHOT)
 }
@@ -509,11 +518,15 @@ scHOT_setWeightMatrix <- function(scHOT,
 
   weightMatrix <- methods::as(weightMatrix, "dgCMatrix")
 
-  scHOT@weightMatrix <- weightMatrix
+  # scHOT@weightMatrix <- weightMatrix
+  weightMatrix(scHOT) <- weightMatrix
 
 
-  scHOT@positionType <- positionType
-  scHOT@positionColData <- positionColData
+  # scHOT@positionType <- positionType
+  positionType(scHOT) <- positionType
+  # scHOT@positionColData <- positionColData
+  positionColData(scHOT) <- positionColData
+
 
   return(scHOT)
 }
@@ -696,9 +709,8 @@ scHOT_calculateGlobalHigherOrderFunction <- function(
   }
 
   if (nrow(scHOT@scHOT_output) == 0) {
-    scHOT@scHOT_output = DataFrame(
-      testingScaffold
-    )
+    # scHOT@scHOT_output = DataFrame(testingScaffold)
+    scHOT_output(scHOT) <- DataFrame(testingScaffold)
   }
 
   scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
@@ -794,9 +806,8 @@ scHOT_setPermutationScaffold = function(scHOT,
   }
 
   if (nrow(scHOT@scHOT_output) == 0) {
-    scHOT@scHOT_output = DataFrame(
-      testingScaffold
-    )
+    # scHOT@scHOT_output = DataFrame(testingScaffold)
+    scHOT_output(scHOT) <- DataFrame(testingScaffold)
   }
 
   scHOT <- scHOT_stripOutput(scHOT, force = FALSE)
@@ -914,8 +925,49 @@ scHOT_stripOutput <- function(scHOT, force = TRUE,
 
 
 
-  scHOT@scHOT_output <- scHOT_output
+  # scHOT@scHOT_output <- scHOT_output
+  scHOT_output(scHOT) <- scHOT_output
 
   return(scHOT)
 }
 
+
+
+###################################################################
+# Accessor functions for scHOT objects
+
+#' @export
+`testingScaffold<-` = function(x, value) {
+  x@testingScaffold <- value
+  x
+}
+
+#' @export
+`weightMatrix<-` = function(x, value) {
+  x@weightMatrix <- value
+  x
+}
+
+#' @export
+`scHOT_output<-` = function(x, value) {
+  x@scHOT_output <- value
+  x
+}
+
+#' @export
+`params<-` = function(x, value) {
+  x@params <- value
+  x
+}
+
+#' @export
+`positionType<-` = function(x, value) {
+  x@positionType <- value
+  x
+}
+
+#' @export
+`positionColData<-` = function(x, value) {
+  x@positionColData <- value
+  x
+}
