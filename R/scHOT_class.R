@@ -52,10 +52,8 @@ check_validity <- function(object) {
 #' that stored the postion informaton
 #'
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
-#'
+#' @importFrom methods new
 #' @export
-
-
 
 .scHOT <- setClass("scHOT",
                    slots = c(testingScaffold = "matrix",
