@@ -26,6 +26,6 @@ assayName = "logcounts",
 positionType = "spatial",
 positionColData = c("x", "y"))
 
-scHOT_output(scHOT_spatial) <- DataFrame()
+scHOT_output(scHOT_spatial) <- data.frame()
 
 }
