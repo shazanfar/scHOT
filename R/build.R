@@ -972,6 +972,8 @@ scHOT_stripOutput <- function(scHOT, force = TRUE,
 #' @param value The value the slot should take
 #'
 #' @examples
+#' 
+#'library(SingleCellExperiment)
 #'
 #' data(MOB_subset)
 #' sce_MOB_subset <- MOB_subset$sce_MOB_subset

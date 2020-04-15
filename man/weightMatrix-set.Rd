@@ -19,6 +19,8 @@ Setter functions for scHOT objects
 }
 \examples{
 
+library(SingleCellExperiment)
+
 data(MOB_subset)
 sce_MOB_subset <- MOB_subset$sce_MOB_subset
 scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
