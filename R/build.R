@@ -25,7 +25,7 @@
 #' colnames(dat) <- paste0("cell_", 1:ncol(dat))
 #' rownames(dat) <- c("gene_1","gene_2", "gene_2")
 #'
-#' scHOT <-scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+#' scHOT <- scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
 #'
 #' @export
 
@@ -771,7 +771,7 @@ stratifiedSample = function(stats, length = 100) {
 #' pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
 #' rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
 #' scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
-#'  scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+#' scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
 #'                                        positionColData = c("x","y"),
 #'                                         positionType = "spatial",
 #'                                         nrow.out = NULL,
@@ -936,36 +936,159 @@ scHOT_stripOutput <- function(scHOT, force = TRUE,
 ###################################################################
 # Accessor functions for scHOT objects
 
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' pairs <- t(combn(rownames(sce_MOB_subset),2))
+#' rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
+#'
+#' testingScaffold(scHOT_spatial) <- pairs
+#'
+#' @return A scHOT object
+#'
 #' @export
 `testingScaffold<-` = function(x, value) {
   x@testingScaffold <- value
   x
 }
 
+
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' W <- spatialWeightMatrix(colData(scHOT_spatial)[,slot(scHOT_spatial, "positionColData")])
+#'
+#' weightMatrix(scHOT_spatial) <- W
+#'
+#' @return A scHOT object
+#'
 #' @export
 `weightMatrix<-` = function(x, value) {
   x@weightMatrix <- value
   x
 }
 
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' scHOT_output(scHOT_spatial) <- DataFrame()
+#'
+#' @return A scHOT object
+#'
 #' @export
 `scHOT_output<-` = function(x, value) {
   x@scHOT_output <- value
   x
 }
 
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' params = list(higherOrderFunction = weightedSpearman,
+#' higherOrderFunctionType = "weighted")
+#'
+#' params(scHOT_spatial) <- params
+#'
+#' @return A scHOT object
+#'
 #' @export
 `params<-` = function(x, value) {
   x@params <- value
   x
 }
 
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' positionType(scHOT_spatial) <- "spatial"
+#'
+#' @return A scHOT object
+#'
 #' @export
 `positionType<-` = function(x, value) {
   x@positionType <- value
   x
 }
 
+#' Setter functions for scHOT objects
+#'
+#' @title Setter functions for scHOT objects
+#' @param x A scHOT object
+#' @param value The value the slot should take
+#'
+#' @examples
+#'
+#' data(MOB_subset)
+#' sce_MOB_subset <- MOB_subset$sce_MOB_subset
+#' scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
+#' assayName = "logcounts",
+#' positionType = "spatial",
+#' positionColData = c("x", "y"))
+#'
+#' positionColData(scHOT_spatial) <- c("x", "y")
+#'
+#' @return A scHOT object
+#'
 #' @export
 `positionColData<-` = function(x, value) {
   x@positionColData <- value

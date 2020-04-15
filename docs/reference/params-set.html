@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>spatialWeightMatrix — spatialWeightMatrix • scHOT</title>
+<title>Setter functions for scHOT objects — params&lt;- • scHOT</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="spatialWeightMatrix — spatialWeightMatrix" />
-<meta property="og:description" content="Create weight matrix for spatial data" />
+<meta property="og:title" content="Setter functions for scHOT objects — params&lt;-" />
+<meta property="og:description" content="Setter functions for scHOT objects" />
 
 
 
@@ -106,44 +106,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>spatialWeightMatrix</h1>
+    <h1>Setter functions for scHOT objects</h1>
     
-    <div class="hidden name"><code>spatialWeightMatrix.Rd</code></div>
+    <div class="hidden name"><code>params-set.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create weight matrix for spatial data</p>
+    <p>Setter functions for scHOT objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spatialWeightMatrix</span>(<span class='no'>x</span>, <span class='kw'>span</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>params</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a matrix with rows corresponding to cells and columns
-corresponding to dimensions to calculate Euclidean distance</p></td>
+      <td><p>A scHOT object</p></td>
     </tr>
     <tr>
-      <th>span</th>
-      <td><p>proportion of samples to include on either side,
-default is 13/(number of rows in `x`), corresponding roughly
-to points within a diamond shape distance away</p></td>
+      <th>value</th>
+      <td><p>The value the slot should take</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A weighted matrix</p>
+    <p>A scHOT object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>spat_x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>50</span>)
-<span class='no'>spat_y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>50</span>)
-<span class='no'>spat_coord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>spat_x</span>, <span class='no'>spat_y</span>)
-<span class='no'>W</span> <span class='kw'>&lt;-</span> <span class='fu'>spatialWeightMatrix</span>(<span class='no'>spat_coord</span>)</div><div class='output co'>#&gt; <span class='message'>span not specified, defaulting to 0.26</span></div><div class='input'>
-</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>MOB_subset</span>)
+<span class='no'>sce_MOB_subset</span> <span class='kw'>&lt;-</span> <span class='no'>MOB_subset</span>$<span class='no'>sce_MOB_subset</span>
+<span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_buildFromSCE.html'>scHOT_buildFromSCE</a></span>(<span class='no'>sce_MOB_subset</span>,
+<span class='kw'>assayName</span> <span class='kw'>=</span> <span class='st'>"logcounts"</span>,
+<span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"spatial"</span>,
+<span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>))
+
+<span class='no'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>higherOrderFunction</span> <span class='kw'>=</span> <span class='no'>weightedSpearman</span>,
+<span class='kw'>higherOrderFunctionType</span> <span class='kw'>=</span> <span class='st'>"weighted"</span>)
+
+<span class='fu'>params</span>(<span class='no'>scHOT_spatial</span>) <span class='kw'>&lt;-</span> <span class='no'>params</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

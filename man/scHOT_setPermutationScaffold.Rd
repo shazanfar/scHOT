@@ -39,7 +39,7 @@ Set permutation scaffold
 pairs <- matrix(c("Arrb1", "Mtor", "Dnm1l", "Gucy1b3"), ncol = 2, byrow = TRUE)
 rownames(pairs) <- apply(pairs,1,paste0,collapse = "_")
 scHOT_spatial <- scHOT_addTestingScaffold(scHOT_spatial, pairs)
- scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
+scHOT_spatial <- scHOT_setWeightMatrix(scHOT_spatial,
                                        positionColData = c("x","y"),
                                         positionType = "spatial",
                                         nrow.out = NULL,

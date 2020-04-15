@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scHOT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -65,7 +65,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started: scHOT</h1>
             
-            <h4 class="date">2020-04-14</h4>
+            <h4 class="date">2020-04-15</h4>
       
       
       <div class="hidden name"><code>scHOT.Rmd</code></div>
@@ -160,9 +160,9 @@
 <span class="co">#&gt; Tacc3              TRUE    0.803192,0.801351,0.820289,...             0.930598</span>
 <span class="co">#&gt;                            permutations pvalPermutations FDRPermutations</span>
 <span class="co">#&gt;                           &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span>
-<span class="co">#&gt; Birc5    0.382773,0.502496,0.192064,...        0.0196078       0.0196078</span>
-<span class="co">#&gt; H2afz 0.0225341,0.0729645,0.1138635,...        0.0196078       0.0196078</span>
-<span class="co">#&gt; Tacc3    0.187073,0.268846,0.805411,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; Birc5    0.623641,0.331548,0.413599,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; H2afz 0.0308893,0.0314758,0.0338774,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; Tacc3    0.389036,0.512937,0.371214,...        0.0196078       0.0196078</span>
 <span class="co">#&gt;       numberPermutationsEstimated globalLowerRangeEstimated</span>
 <span class="co">#&gt;                         &lt;integer&gt;                 &lt;numeric&gt;</span>
 <span class="co">#&gt; Birc5                          50                  1.991674</span>
@@ -187,9 +187,9 @@
 <span class="co">#&gt; Tacc3              TRUE    0.803192,0.801351,0.820289,...             0.930598</span>
 <span class="co">#&gt;                            permutations pvalPermutations FDRPermutations</span>
 <span class="co">#&gt;                           &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span>
-<span class="co">#&gt; Birc5    0.382773,0.502496,0.192064,...        0.0196078       0.0196078</span>
-<span class="co">#&gt; H2afz 0.0225341,0.0729645,0.1138635,...        0.0196078       0.0196078</span>
-<span class="co">#&gt; Tacc3    0.187073,0.268846,0.805411,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; Birc5    0.623641,0.331548,0.413599,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; H2afz 0.0308893,0.0314758,0.0338774,...        0.0196078       0.0196078</span>
+<span class="co">#&gt; Tacc3    0.389036,0.512937,0.371214,...        0.0196078       0.0196078</span>
 <span class="co">#&gt;       numberPermutationsEstimated globalLowerRangeEstimated</span>
 <span class="co">#&gt;                         &lt;integer&gt;                 &lt;numeric&gt;</span>
 <span class="co">#&gt; Birc5                          50                  1.991674</span>
@@ -312,7 +312,7 @@
 <span class="co">#&gt; Permutation testing combination 2 of 3...</span>
 <span class="co">#&gt; Permutation testing combination 3 of 3...</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   3.628   0.087   3.717</span>
+<span class="co">#&gt;   3.661   0.052   3.714</span>
 
 <span class="fu">slot</span>(<span class="no">scHOT_traj</span>, <span class="st">"scHOT_output"</span>)
 <span class="co">#&gt; DataFrame with 3 rows and 9 columns</span>
@@ -328,9 +328,9 @@
 <span class="co">#&gt; 3    0.803192,0.838504,0.873359,...             0.940253</span>
 <span class="co">#&gt;                     permutations pvalPermutations FDRPermutations</span>
 <span class="co">#&gt;                    &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span>
-<span class="co">#&gt; 1 0.598711,0.297953,0.779150,...        0.0476190        0.047619</span>
+<span class="co">#&gt; 1 0.375398,0.848258,0.505463,...        0.0476190        0.047619</span>
 <span class="co">#&gt; 2                             NA        0.0196078        0.047619</span>
-<span class="co">#&gt; 3 0.138043,0.148890,0.351361,...        0.0476190        0.047619</span></pre></body></html></div>
+<span class="co">#&gt; 3 0.630360,0.464382,0.337674,...        0.0476190        0.047619</span></pre></body></html></div>
 <p>To avoid P-values identically zero, we rescale zero P-values to 1/(1+numberPermutations).</p>
 <p>We could also use the existing stored permutations to estimate P-values, since genes with a similar global higher order function are likely to have a similar null distribution. In this example case it does not show much gain computationally, but this can significantly reduce the number of permutation tests needed for large datasets and testing strategies.</p>
 <p>Running <code>scHOT_estimatePvalues</code> results in more columns in the <code>scHOT_output</code> slot, corresponding to the number of permutations used in estimating, the range of the global higher order function used for estimating, as well as the estimated P-value itself and FDR adjusted P-value. Here, we set a maximum of 10,000 permutations to be used, for genes with at most a difference of 5 in the global higher order function (the variance).</p>
@@ -351,9 +351,9 @@
 <span class="co">#&gt; 3    0.803192,0.838504,0.873359,...             0.940253</span>
 <span class="co">#&gt;                     permutations pvalPermutations FDRPermutations</span>
 <span class="co">#&gt;                    &lt;NumericList&gt;        &lt;numeric&gt;       &lt;numeric&gt;</span>
-<span class="co">#&gt; 1 0.598711,0.297953,0.779150,...        0.0476190        0.047619</span>
+<span class="co">#&gt; 1 0.375398,0.848258,0.505463,...        0.0476190        0.047619</span>
 <span class="co">#&gt; 2                             NA        0.0196078        0.047619</span>
-<span class="co">#&gt; 3 0.138043,0.148890,0.351361,...        0.0476190        0.047619</span>
+<span class="co">#&gt; 3 0.630360,0.464382,0.337674,...        0.0476190        0.047619</span>
 <span class="co">#&gt;   numberPermutationsEstimated globalLowerRangeEstimated</span>
 <span class="co">#&gt;                     &lt;integer&gt;                 &lt;numeric&gt;</span>
 <span class="co">#&gt; 1                          40                   1.99167</span>
@@ -362,7 +362,7 @@
 <span class="co">#&gt;   globalUpperRangeEstimated pvalEstimated FDREstimated</span>
 <span class="co">#&gt;                   &lt;numeric&gt;     &lt;numeric&gt;    &lt;numeric&gt;</span>
 <span class="co">#&gt; 1                    2.3466     0.0243902    0.0365854</span>
-<span class="co">#&gt; 2                    2.3466     0.9000000    0.9000000</span>
+<span class="co">#&gt; 2                    2.3466     0.9500000    0.9500000</span>
 <span class="co">#&gt; 3                    2.3466     0.0243902    0.0365854</span></pre></body></html></div>
 <p>Note that having performed the testing using the thinned weight matrix, we can still plot, but beware that not every position is sampled.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/plotHigherOrderSequence.html">plotHigherOrderSequence</a></span>(<span class="no">scHOT_traj</span>, <span class="no">gene_to_test</span>)</pre></body></html></div>
@@ -598,7 +598,7 @@
 <span class="co">#&gt; Permutation testing combination 18 of 22...</span>
 <span class="co">#&gt; Permutation testing combination 19 of 22...</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;  56.063   0.910  56.981</span>
+<span class="co">#&gt;  56.921   0.746  57.680</span>
 
 <span class="fu">slot</span>(<span class="no">scHOT_spatial</span>, <span class="st">"scHOT_output"</span>)
 <span class="co">#&gt; DataFrame with 22 rows and 10 columns</span>
@@ -916,7 +916,7 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] scater_1.15.29              scHOT_0.99.3               </span>
+<span class="co">#&gt;  [1] scater_1.15.29              scHOT_0.99.4               </span>
 <span class="co">#&gt;  [3] ggplot2_3.3.0               SingleCellExperiment_1.9.3 </span>
 <span class="co">#&gt;  [5] SummarizedExperiment_1.17.5 DelayedArray_0.13.12       </span>
 <span class="co">#&gt;  [7] matrixStats_0.56.0          Biobase_2.47.3             </span>

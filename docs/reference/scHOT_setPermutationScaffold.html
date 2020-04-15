@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scHOT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -160,7 +160,7 @@ Permutations should be stored, or discarded once used</p></td>
 <span class='no'>pairs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Arrb1"</span>, <span class='st'>"Mtor"</span>, <span class='st'>"Dnm1l"</span>, <span class='st'>"Gucy1b3"</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>pairs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>pairs</span>,<span class='fl'>1</span>,<span class='no'>paste0</span>,<span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"_"</span>)
 <span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_addTestingScaffold.html'>scHOT_addTestingScaffold</a></span>(<span class='no'>scHOT_spatial</span>, <span class='no'>pairs</span>)
- <span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_spatial</span>,
+<span class='no'>scHOT_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scHOT_setWeightMatrix.html'>scHOT_setWeightMatrix</a></span>(<span class='no'>scHOT_spatial</span>,
                                        <span class='kw'>positionColData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>,<span class='st'>"y"</span>),
                                         <span class='kw'>positionType</span> <span class='kw'>=</span> <span class='st'>"spatial"</span>,
                                         <span class='kw'>nrow.out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
