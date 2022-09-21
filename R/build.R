@@ -45,12 +45,6 @@ scHOT_buildFromMatrix <- function(mat, cellData = NULL, positionType = NULL,
   SCE <- SingleCellExperiment(assays = S4Vectors::SimpleList(expression = mat),
                               colData = cellData)
 
-  # scHOT <- methods::as(SCE, "scHOT")
-
-  # scHOT@positionType <- positionType
-
-  # scHOT@positionColData <- positionColData
-
   scHOT <- .scHOT(SCE,
                   positionType = positionType,
                   positionColData = positionColData)
@@ -108,18 +102,9 @@ scHOT_buildFromSCE <- function(sce,
                                positionType = NULL,
                                positionColData = NULL) {
 
-  # will keep the colData but nothing else
-
   SCE <- SingleCellExperiment(assays = SimpleList(expression =
                                                     assay(sce, assayName)),
                               colData = colData(sce))
-
-
-  # scHOT <- methods::as(SCE, "scHOT")
-
-  # scHOT@positionType <- positionType
-
-  # scHOT@positionColData <- positionColData
 
   scHOT <- .scHOT(SCE,
                   positionType = positionType,
@@ -506,7 +491,6 @@ scHOT_setWeightMatrix <- function(scHOT,
     if (positionType == "spatial") {
       weightMatrix = spatialWeightMatrix(as.matrix(colData(scHOT)[, positionColData]), ...)
       colnames(weightMatrix) <- colnames(scHOT)
-      # rownames(weightMatrix) <- colnames(scHOT)
     }
 
     if (!is.null(nrow.out)) {
@@ -517,17 +501,12 @@ scHOT_setWeightMatrix <- function(scHOT,
 
   }
 
-  weightMatrix <- methods::as(weightMatrix, "dgCMatrix")
+  weightMatrix <- methods::as(as(as(weightMatrix, "dMatrix"), "generalMatrix"), "CsparseMatrix")
 
-  # scHOT@weightMatrix <- weightMatrix
   weightMatrix(scHOT) <- weightMatrix
 
-
-  # scHOT@positionType <- positionType
   positionType(scHOT) <- positionType
-  # scHOT@positionColData <- positionColData
   positionColData(scHOT) <- positionColData
-
 
   return(scHOT)
 }
