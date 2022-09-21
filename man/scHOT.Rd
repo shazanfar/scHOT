@@ -120,7 +120,7 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        numberPermutations = 100,
                        higherOrderSummaryFunction = sd,
                        parallel = TRUE,
-                       BPPARAM = MulticoreParam(2),
+                       BPPARAM = BiocParallel::MulticoreParam(2),
                        verbose = TRUE,
                        span = 0.05)
 }
