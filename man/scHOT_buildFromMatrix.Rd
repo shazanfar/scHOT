@@ -32,11 +32,12 @@ A scHOT object
 Create scHOT object from a matrix
 }
 \examples{
-
 dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 colnames(dat) <- paste0("cell_", 1:ncol(dat))
 rownames(dat) <- c("gene_1","gene_2", "gene_2")
 
 scHOT <- scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+
+scHOT
 
 }

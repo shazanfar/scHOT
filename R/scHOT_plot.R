@@ -209,7 +209,8 @@ plotOrderedExpression = function(scHOT,
                                  subsetBranch = NULL,
                                  facet = FALSE,
                                  positionColData = NULL,
-                                 assayName = NULL) {
+                                 assayName = NULL,
+                                 point_size = 3) {
 
 
   # genes is character vector
@@ -373,7 +374,7 @@ plotOrderedExpression = function(scHOT,
     g <- ggplot(branch_long,  aes(x = branch_long$x,
                                   y = branch_long$y,
                                   color = branch_long$value)) +
-      geom_point(size = 3) +
+      geom_point(size = point_size) +
       # geom_point(size = 0.5, colour = "black") +
       theme_classic() +
       facet_wrap(~genes) +

@@ -23,7 +23,6 @@ doi:10.1016/j.spl.2014.09.002. This association measure
 is defined for zero-inflated, non-negative random variables.
 }
 \examples{
-
 x = pmax(0,rnorm(100))
 y = pmax(0,rnorm(100))
 w = runif(100)

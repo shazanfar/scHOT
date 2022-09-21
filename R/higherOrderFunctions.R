@@ -13,7 +13,6 @@
 #' @return \code{numeric} weighted Tau* association value between x and y
 
 #' @examples
-#'
 #' x = pmax(0,rnorm(100))
 #' y = pmax(0,rnorm(100))
 #' w = runif(100)

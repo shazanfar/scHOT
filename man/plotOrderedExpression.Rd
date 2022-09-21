@@ -14,7 +14,8 @@ plotOrderedExpression(
   subsetBranch = NULL,
   facet = FALSE,
   positionColData = NULL,
-  assayName = NULL
+  assayName = NULL,
+  point_size = 3
 )
 }
 \arguments{

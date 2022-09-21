@@ -20,12 +20,13 @@
 #' @importFrom methods as validObject is
 #'
 #' @examples
-#'
 #' dat <- rbind(rnorm(50), rnorm(50), rnorm(50))
 #' colnames(dat) <- paste0("cell_", 1:ncol(dat))
 #' rownames(dat) <- c("gene_1","gene_2", "gene_2")
 #'
 #' scHOT <- scHOT_buildFromMatrix(dat, cellData = data.frame(1:ncol(dat)))
+#' 
+#' scHOT
 #'
 #' @export
 
@@ -849,6 +850,9 @@ scHOT_setPermutationScaffold = function(scHOT,
 #' @param force A logical indicates whther forcing stripping the scHOT output
 #' @param store A logical flag on whether the scHOT should be stored as .rds file
 #' @param file_name A string indicates the file name of the scHOT will be stored
+#'
+#' @return A scHOT object with scHOT_output striped
+#'
 #' @examples
 #' data(MOB_subset)
 #' sce_MOB_subset <- MOB_subset$sce_MOB_subset
@@ -858,11 +862,6 @@ scHOT_setPermutationScaffold = function(scHOT,
 #'                                      positionColData = c("x", "y"))
 #'
 #' scHOT_spatial <- scHOT_stripOutput(scHOT_spatial)
-#'
-#' @return A scHOT object with scHOT_output striped
-#'
-#' @examples
-#'
 #'
 #' @export
 

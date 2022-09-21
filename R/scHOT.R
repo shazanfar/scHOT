@@ -69,7 +69,8 @@
 #'                        higherOrderFunctionType = "weighted",
 #'                        numberPermutations = 100,
 #'                        higherOrderSummaryFunction = sd,
-#'                        parallel = FALSE,
+#'                        parallel = TRUE,
+#'                        BPPARAM = MulticoreParam(2),
 #'                        verbose = TRUE,
 #'                        span = 0.05)
 #' @importFrom stats sd
@@ -99,35 +100,35 @@ scHOT <- function(scHOT,
                   verbose = TRUE,
                   ...
 ) {
-
-
+  
+  
   # add testing scaffold
-
-
+  
+  
   # if (ncol(testingScaffold) != 2) {
   #   stop("testingScaffold must be a matrix with two columns \n")
   # }
-
+  
   # rownames(testingScaffold) <- paste(testingScaffold[, 1], testingScaffold[, 2])
   # if (nrow(testingScaffold) == 1) {
   # rownames(testingScaffold) <- apply(testingScaffold,1,paste0, collapse = "_")
   # } else {
   rownames(testingScaffold) <- apply(testingScaffold, 1, paste, collapse = "_")
   # }
-
+  
   if (verbose) {
     cat("Adding testing scaffold \n")
   }
-
+  
   scHOT <- scHOT_addTestingScaffold(scHOT,
                                     testingScaffold = testingScaffold)
-
+  
   # set weight matrix
-
+  
   if (verbose) {
     cat("Set weight matrix \n")
   }
-
+  
   scHOT <- scHOT_setWeightMatrix(scHOT,
                                  weightMatrix = weightMatrix,
                                  positionColData = positionColData,
@@ -136,52 +137,52 @@ scHOT <- function(scHOT,
                                  averageAcrossTrajectoryTies =
                                    averageAcrossTrajectoryTies,
                                  ...)
-
+  
   if (verbose) {
-    cat("Calculate gobal higher order function \n")
+    cat("Calculating global higher order function \n")
   }
-
+  
   scHOT <- scHOT_calculateGlobalHigherOrderFunction(scHOT,
                                                     higherOrderFunction =
                                                       higherOrderFunction,
                                                     higherOrderFunctionType =
                                                       higherOrderFunctionType)
-
-
+  
+  
   if (verbose) {
-    cat("Calculate Higher Order Test Statistics \n")
+    cat("Calculating higher order test statistics \n")
   }
-
+  
   scHOT <- scHOT_setPermutationScaffold(scHOT,
                                         numberPermutations = numberPermutations,
                                         numberScaffold = numberScaffold,
                                         storePermutations = storePermutations)
-
-
-
-
+  
+  
+  
+  
   scHOT <- scHOT_calculateHigherOrderTestStatistics(scHOT,
                                                     higherOrderSummaryFunction =
                                                       higherOrderSummaryFunction)
-
+  
   if (verbose) {
     cat("Perform Permutation Test \n")
   }
-
-
-
-
+  
+  
+  
+  
   scHOT <- scHOT_performPermutationTest(scHOT,
                                         verbose = verbose,
                                         parallel = parallel,
                                         BPPARAM = BPPARAM)
-
+  
   if (storePermutations) {
-
+    
     if (verbose) {
       cat("Estimating p-values \n")
     }
-
+    
     scHOT <- scHOT_estimatePvalues(scHOT,
                                    usenperm_estimate = usenperm_estimate,
                                    nperm_estimate = nperm_estimate,
@@ -193,6 +194,6 @@ scHOT <- function(scHOT,
       cat("No permutations stored, not estimating p-values \n")
     }
   }
-
+  
   return(scHOT)
 }

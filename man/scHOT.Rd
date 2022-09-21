@@ -119,7 +119,8 @@ scHOT_spatial <- scHOT(scHOT_spatial,
                        higherOrderFunctionType = "weighted",
                        numberPermutations = 100,
                        higherOrderSummaryFunction = sd,
-                       parallel = FALSE,
+                       parallel = TRUE,
+                       BPPARAM = MulticoreParam(2),
                        verbose = TRUE,
                        span = 0.05)
 }

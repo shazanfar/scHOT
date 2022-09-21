@@ -31,6 +31,4 @@ scHOT_spatial <- scHOT_buildFromSCE(sce_MOB_subset,
 
 scHOT_spatial <- scHOT_stripOutput(scHOT_spatial)
 
-
-
 }

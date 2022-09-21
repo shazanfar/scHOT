@@ -111,7 +111,6 @@ scHOT_calculateHigherOrderTestStatistics <- function(
   }
 
   if (nrow(scHOT@scHOT_output) == 0) {
-    # scHOT@scHOT_output = DataFrame(testingScaffold)
     scHOT_output(scHOT) <- DataFrame(testingScaffold)
   }
 
@@ -125,6 +124,8 @@ scHOT_calculateHigherOrderTestStatistics <- function(
     scHOT@scHOT_output$higherOrderSequence = split(
       higherOrderSequence, seq_len(nrow(higherOrderSequence)))
   }
+  
+  
 
 
 
@@ -134,6 +135,10 @@ scHOT_calculateHigherOrderTestStatistics <- function(
   scHOT@scHOT_output$higherOrderStatistic = unlist(
     lapply(scHOT@scHOT_output$higherOrderSequence,
            higherOrderSummaryFunction, ...))
+  
+  if (any(any(is.na(scHOT@scHOT_output$higherOrderSequence)))) {
+    message("At least one value in higherOrderSequence is NA, consider increasing weightMatrix span")
+  }
 
   return(scHOT)
 }
@@ -251,8 +256,6 @@ scHOT_performPermutationTest <- function(
 
     niter = DF[i,"numberPermutations"]
 
-    if (niter == 0) next
-
     if (verbose) {
       if (nrow(DF) > 100) {
         if (i == 1 | i %% 10 == 0 | i == nrow(DF)) {
@@ -264,6 +267,8 @@ scHOT_performPermutationTest <- function(
                    " of ", nrow(DF), "...\n"))
       }
     }
+    
+    if (niter == 0) next
 
     store = DF[i,"storePermutations"]
     obs = DF[i,"higherOrderStatistic"]
@@ -285,7 +290,6 @@ scHOT_performPermutationTest <- function(
             higherOrderFunction,
             weightMatrix)
         } else {
-          # for weighted
           higherOrderSequence <- weightedFunctionOverScaffold(
             scaffold,
             exprs[,sample(nc),drop = FALSE],
@@ -327,9 +331,13 @@ scHOT_performPermutationTest <- function(
     }
 
     pval = mean(permutations >= obs, na.rm = TRUE)
-
-    if (pval == 0) {
-      pval <- 1/(length(stats::na.omit(permutations)) + 1)
+    
+    if (is.na(pval) | is.null(pval)) {
+      pval <- NA
+    } else {
+      if (pval == 0) {
+        pval <- 1/(length(stats::na.omit(permutations)) + 1)
+      }
     }
 
     DF[i,"pvalPermutations"] <- pval
@@ -338,7 +346,6 @@ scHOT_performPermutationTest <- function(
 
   DF$FDRPermutations = stats::p.adjust(DF$pvalPermutations, method = "BH")
 
-  # scHOT@scHOT_output <- DF
   scHOT_output(scHOT) <- DF
 
   if (store) {
