@@ -6,15 +6,16 @@
 
 `scHOT` is available as a [Bioconductor package](https://bioconductor.org/packages/release/bioc/html/scHOT.html)
 
-For the latest version, install the following packages using `BiocManager`:
+For the latest release, install `scHOT` using `BiocManager`:
 
 ```r
-# install.packages("BiocManager")
-BiocManager::install(c("S4Vectors", "SummarizedExperiment", "SingleCellExperiment", 
-"Matrix", "IRanges", "BiocParallel", "reshape", "ggplot2", "igraph", "grDevices", "ggforce"))
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("scHOT")
 ```
 
-Then install the latest version of `scHOT` using `devtools`:
+Alternatively, install the development version of `scHOT` using `devtools`:
 
 ```r
 library(devtools)
@@ -30,4 +31,6 @@ You can find the latest vignette at this website: https://shazanfar.github.io/sc
 
 shila.ghazanfar \<at\> sydney.edu.au
 
+## Citation
 
+Ghazanfar, S., Lin, Y., Su, X. *et al.* Investigating higher-order interactions in single-cell data with scHOT. *Nat Methods* **17**, 799--806 (2020). https://doi.org/10.1038/s41592-020-0885-x
